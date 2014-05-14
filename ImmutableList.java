@@ -1,16 +1,16 @@
+// http://www.scala-lang.org/api/2.11.0/index.html#scala.collection.immutable.List
+// http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true
+// http://docs.guava-libraries.googlecode.com/git/javadoc/com/google/common/collect/ImmutableList.html
+
 interface ImmutableList<E> implements Iterable<E> {
 
     // Constructeurs (hors interface)
-    ImmutableList<E>();        // Liste vide
-    ImmutableList<E>(List<E>); // Conversion
-    ImmutableList<E>(E...);    // Construction
-    ImmutableList<E>(E[]);     // Conversion
+    ImmutableList<E>();              // Liste vide
+    ImmutableList<E>(Collection<E>); // Conversion
+    ImmutableList<E>(E...);    	     // Construction
+    ImmutableList<E>(E[]);     	     // Conversion
 
-    // Fabriques (ajout d'un élément en tête)
-    // Scala: + operator
-    ImmutableList<E> cons(E);
-
-    // size + get = point de vue IndexedSeq en Scala
+    // size + get + isEmpty = point de vue IndexedSeq en Scala
 
     // We use Java List interface name
     boolean isEmpty();
@@ -39,6 +39,11 @@ interface ImmutableList<E> implements Iterable<E> {
     boolean any(Predicate<? super E>); // Scala: exists/find
     boolean all(Predicate<? super E>); // Scala: forall
 
+    // Fabriques (ajout d'un élément en tête)
+
+    // Scala: + operator
+    ImmutableList<E> cons(E);
+
     // Java: addAll, Scala: ++ operator
     ImmutableList<E> concat(Collection<E>);
     ImmutableList<E> concat(ImmutableList<E>);
@@ -52,8 +57,9 @@ interface ImmutableList<E> implements Iterable<E> {
     ImmutableList<E> remove(E[]);
     ImmutableList<E> remove(E...);
     ImmutableList<E> remove(E);
+    ImmutableList<E> remove(int);
 
-    // Scala: union
+    // Scala
     ImmutableList<E> union(Collection<E>);
     ImmutableList<E> union(ImmutableList<E>);
     ImmutableList<E> union(E[]);
@@ -65,9 +71,12 @@ interface ImmutableList<E> implements Iterable<E> {
     ImmutableList<E> intersect(E[]);
     ImmutableList<E> intersect(E...);
 
-    ImmutableList<F> map(Function<? super E, ? super F>); // Scala: map
-    ImmutableList<E> filter(Predicate<? super E>);        // Scala: filter
-    F reduce(Function<? super E, ? super E, ? super F>);  // Scala: reduce
+    // Scala: map
+    ImmutableList<F> map(Function<? super E, ? super F>);
+    // Scala: filter
+    ImmutableList<E> filter(Predicate<? super E>);
+    // Scala: reduce
+    F reduce(Function<? super E, ? super E, ? super F>);
 
     // Intégration : itérateurs + flots
     Iterator<E> iterator();
@@ -75,7 +84,8 @@ interface ImmutableList<E> implements Iterable<E> {
     Stream<E> parallelStream();
 
     // Object methods
-    ImmutableList<E> clone(); // clonage inutile pour des données immutables ?
+
+    ImmutableList<E> clone();
     boolean equals(ImmutableList<E>);
     int hashCode();
 
@@ -83,5 +93,3 @@ interface ImmutableList<E> implements Iterable<E> {
     E[] toArray();    // Scala && Java: toArray
     List<E> asList(); // Scala: toList, Guava: asList
 }
-
-// Autres idées : reverseIterator / reverseStream / concat(int, E..) / remove(int)
