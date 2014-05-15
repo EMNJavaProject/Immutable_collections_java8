@@ -15,7 +15,7 @@ import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.Function;
 
-interface ImmutableList<E> extends Iterable<E> {
+public interface ImmutableList<E> extends Iterable<E> {
 
     // size + get + isEmpty = point de vue IndexedSeq en Scala
 
