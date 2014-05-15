@@ -1,4 +1,6 @@
-Immutable_collections_java8
+Immutable collections Java 8 Library
 ===========================
 
-Immutable collections java 8 project
+This project is under MIT Licence.
+
+This project is an attempt to provide an implementation of immutable collections using new Java8 features.
