@@ -1,4 +1,4 @@
-package implementations.collections;
+package collections.implementations;
 
 import java.util.Collection;
 import java.util.Optional;
