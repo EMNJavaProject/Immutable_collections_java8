@@ -1,3 +1,5 @@
+package collections.interfaces;
+
 // http://www.scala-lang.org/api/2.11.0/index.html#scala.collection.immutable.List
 // http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true
 // http://docs.guava-libraries.googlecode.com/git/javadoc/com/google/common/collect/ImmutableList.html
