@@ -39,7 +39,8 @@ class Node<E> {
 	}
 }
 
-public class ImmutableLinkedList<E> /* implements ImmutableList<E> */ {
+public class ImmutableLinkedList<E> /* implements ImmutableList<E> */ 
+{
 
 	private final Node<E> head;
 	
@@ -47,15 +48,16 @@ public class ImmutableLinkedList<E> /* implements ImmutableList<E> */ {
     // Constructors
     // public ImmutableList<E>();
     // public ImmutableList<E>(Collection<E> elems);
-     public ImmutableList<E>(E... elems){
-    	 
+     @SafeVarargs
+	public ImmutableLinkedList (E... elems){
+    	 head = null;
      }
 
     // Operations
 
     // public boolean isEmpty();
     // public int size();
-     public E get(int index){
+     public E get(int index){ //TODO Perhaps put a return type ?
     	 Node<E> node = head;
     	 int i=0;
     	 while (node != null) {
@@ -69,7 +71,8 @@ public class ImmutableLinkedList<E> /* implements ImmutableList<E> */ {
     				 i++;
     			 }
     		 }
-    	 }	 
+    	 }	
+    	 return null;//TODO change this.
     }
      
     // public int indexOf(E elem);
