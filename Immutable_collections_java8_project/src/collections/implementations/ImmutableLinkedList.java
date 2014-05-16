@@ -14,64 +14,116 @@ import java.util.function.Function;
 import collections.interfaces.ImmutableList;
 
 class Node<E> {
-	private final E element;
+
+        /** The element in the list */
+        private final E element;
+
+        /** The next list node, null if this is last */
 	private final Node<E> next;
-	
-	public Node(E element, Node<E> next){
+
+	public Node(E element, Node<E> next) {
 		this.element=element;
 		this.next=next;
 	}
-	
-	public Node(E element){
+
+	public Node(E element) {
 		this(element, null);
 	}
-	
-	public E getElement(){
+
+	/**
+	 * Returns the element in the node.
+	 *
+	 * @returns the element in the node.
+	 */
+	public E getElement() {
 		return this.element;
 	}
-	
-	public Node<E> getNext(){
+
+        /** Returns the next list node, null if this is last.
+	 *
+	 * @returns the next list node, null if this is last
+	 */
+	public Node<E> getNext() {
 		return next;
 	}
-	
-	public boolean hasNext(){
-		return getNext()!=null;
+
+        /** Returns whether this node is followed by another one.
+	 *
+	 * @returns true if this node is followed by another one.
+	 */
+	public boolean hasNext() {
+		return getNext() != null;
 	}
 }
 
-public class ImmutableLinkedList<E> /* implements ImmutableList<E> */ {
+public class ImmutableLinkedList<E> implements ImmutableList<E> {
 
+        /** The first node element of the list. */
 	private final Node<E> head;
-	
-	
-    // Constructors
-    // public ImmutableList<E>();
-    // public ImmutableList<E>(Collection<E> elems);
-     public ImmutableList<E>(E... elems){
-    	 
-     }
+
+	/** The number of elements in this list. */
+	private final int size;
+
+	/**
+	 * Returns the first node element of the list.
+	 *
+	 * @returns the first node element of the list.
+	 **/
+	private Node<E> headNode() {
+	    return head;
+	}
+
+	public int size() {
+	    return size;
+	}
+	// Constructors
+	// public ImmutableLinkedList<E>();
+	// public ImmutableLinkedList<E>(Collection<E> elems);
+
+	/**
+	 * Create a linked list containing the given elements in order.
+	 *
+	 * @param elems the elements to populate this list from
+	 * @throws NullPointerException if elems is null
+	 */
+	@SuppressWarnings({"unchecked", "varags"})
+	public ImmutableLinkedList(E... elems) {
+	    if (elems == null)
+		throw new NullPointerException();
+
+	    Node<E> head = null;
+	    for (int i = elems.length-1 ; i >= 0 ; --i)
+		head = new Node<E>(elems[i], head);
+
+	    this.head = head;
+	    this.size = elems.length;
+	}
 
     // Operations
 
     // public boolean isEmpty();
-    // public int size();
-     public E get(int index){
-    	 Node<E> node = head;
-    	 int i=0;
-    	 while (node != null) {
-    		 if (i == index)
-    			 return node.getElement();
-    		 else {
-    			 if (!node.hasNext())
-    				 throw new IndexOutOfBoundsException();
-    			 else{
-    				 node = node.getNext();
-    				 i++;
-    			 }
-    		 }
-    	 }	 
-    }
-     
+
+	public E get(int index) throws IndexOutOfBoundsException {
+	    if (head == null)
+		throw new IndexOutOfBoundsException();
+
+	    Node<E> node = headNode();
+	    int i = 0;
+	    while (node != null) {
+		if (i == index)
+		    return node.getElement();
+		else {
+		    if (!node.hasNext())
+			throw new IndexOutOfBoundsException();
+		    else {
+			node = node.getNext();
+			++i;
+		    }
+		}
+	    }
+	    return node.getElement();
+	}
+
     // public int indexOf(E elem);
 
     // public E head();
@@ -99,16 +151,18 @@ public class ImmutableLinkedList<E> /* implements ImmutableList<E> */ {
     // public ImmutableList<E> concat(ImmutableList<E> elems);
     // public @SuppressWarnings({"unchecked", "varags"})
     // public ImmutableList<E> concat(E... elems);
-   /* public ImmutableList<E> concat(E elem) {
-    	Node<E> node = head;
-    	int i=0;
-   	 	while (node != null) {
-   	 			if (node.hasNext())
-   	 				
-   			 }
-   		 
-   	 }	 
-    }*/
+
+	@SuppressWarnings("unchecked")
+	public ImmutableList<E> concat(E elem) {
+	    E[] elems = (E[]) new Object[size() + 1];
+	    Node node = headNode();
+	    for (int i = 0 ; i < size() ; ++i) {
+		elems[i] = (E)node.getElement();
+		node = node.getNext();
+	    }
+	    elems[size()] = elem;
+	    return new ImmutableLinkedList<E>(elems);
+	}
 
     // public ImmutableList<E> remove(Collection<E> elems);
     // public ImmutableList<E> remove(ImmutableList<E> elems);

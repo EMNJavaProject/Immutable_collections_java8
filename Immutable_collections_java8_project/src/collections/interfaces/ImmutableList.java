@@ -15,14 +15,27 @@ import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.Function;
 
-public interface ImmutableList<E> extends Iterable<E> {
+public interface ImmutableList<E> /* extends Iterable<E> */ {
 
     // size + get + isEmpty = point de vue IndexedSeq en Scala
 
     // We use Java List interface name
     // boolean isEmpty();
-    // int size();
-    // E get(int index);
+
+    /**
+     * Returns the number of elements in this list.
+     *
+     * @returns the number of elements in this list
+     **/
+    int size();
+
+    /**
+     * Returns the element at the specified position in this list.
+     *
+     * @returns the element at the specified position in this list
+     * @throws IndexOutOfBoundsException - if the index is out of range (index < 0 || index >= size())
+     */
+    E get(int index) throws IndexOutOfBoundsException;
     // int indexOf(E elem);
 
     // head + tail + isEmpty = point de vue LinearSeq en Scala
@@ -57,7 +70,14 @@ public interface ImmutableList<E> extends Iterable<E> {
     // ImmutableList<E> concat(ImmutableList<E> elems);
     // @SuppressWarnings({"unchecked", "varags"})
     // ImmutableList<E> concat(E... elems);
-    // ImmutableList<E> concat(E elem);
+
+    /**
+     * Returns a new list containing the elements from this list followed by the elements from the given list.
+     *
+     * @param elem the list to be concatened with
+     * @returns a new list containing the elements from this list followed by the elements from the given list
+     */
+    ImmutableList<E> concat(E elem);
 
     // Java
     // ImmutableList<E> remove(Collection<E> elems);
