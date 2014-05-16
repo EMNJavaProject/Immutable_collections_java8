@@ -118,6 +118,18 @@ public class ImmutableLinkedListTest {
 	}
 
 	@Test
+	public void AnyTest() {
+		assertTrue (list.any((Integer x) -> x % 2 == 0));
+		assertFalse(list.any((Integer x) -> x < 0));
+	}
+
+	@Test
+	public void AllTest() {
+		assertTrue (list.all((Integer x) -> x < 10));
+		assertFalse(list.all((Integer x) -> x % 2 == 0));
+	}
+
+	@Test
 	public void IteratorTest() {
 		Iterator<Integer> it = list.iterator();
 

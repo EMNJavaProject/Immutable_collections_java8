@@ -89,8 +89,21 @@ public interface ImmutableList<E> extends Iterable<E> {
     // @SuppressWarnings({"unchecked", "varags"})
     // boolean containsAll(E... elems);
 
-    // boolean any(Predicate<? super E> predicate); // Scala: exists/find
-    // boolean all(Predicate<? super E> predicate); // Scala: forall
+    /**
+     * Returns whether given predicate is satisfied by at least one element of the list.
+     *
+     * @param predicate The predicate to be tested on elements of the list.
+     * @returns true if predicate is satisfied by at least one element of the list.
+     */
+    boolean any(Predicate<? super E> predicate); // Scala: exists/find
+
+    /**
+     * Returns whether given predicate is satisfied by all elements of the list.
+     *
+     * @param predicate The predicate to be tested on elements of the list.
+     * @returns true if predicate is satified by all elements of the list.
+     */
+    boolean all(Predicate<? super E> predicate); // Scala: forall
 
     // Fabriques (ajout d'un élément en tête)
 

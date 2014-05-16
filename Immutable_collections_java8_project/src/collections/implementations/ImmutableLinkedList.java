@@ -185,8 +185,19 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
     // public @SuppressWarnings({"unchecked", "varags"})
     // public boolean containsAll(E... elems);
 
-    // public boolean any(Predicate<? super E> predicate);
-    // public boolean all(Predicate<? super E> predicate);
+	public boolean any(Predicate<? super E> predicate) {
+	    for (E elem : this)
+		if (predicate.test(elem))
+		    return true;
+	    return false;
+	}
+
+	public boolean all(Predicate<? super E> predicate) {
+	    for (E elem : this)
+		if (!predicate.test(elem))
+		    return false;
+	    return true;
+	}
 
     // Factories
 
@@ -238,6 +249,7 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 
 	    return new ImmutableLinkedList<F>(elems);
 	}
+
     // public <F> ImmutableList<E> filter(Predicate<? super E> predicate);
     // public Optional<E> reduce(BinaryOperator<E> accumulator);
     // public E reduce(E identity, BinaryOperator<E> accumulator);
