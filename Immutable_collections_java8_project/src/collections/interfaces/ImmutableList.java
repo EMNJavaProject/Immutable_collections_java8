@@ -4,6 +4,7 @@ package collections.interfaces;
 // http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true
 // http://docs.guava-libraries.googlecode.com/git/javadoc/com/google/common/collect/ImmutableList.html
 
+import java.util.NoSuchElementException;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.List;
@@ -15,12 +16,16 @@ import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.Function;
 
-public interface ImmutableList<E> /* extends Iterable<E> */ {
+public interface ImmutableList<E> extends Iterable<E> {
 
     // size + get + isEmpty = point de vue IndexedSeq en Scala
 
-    // We use Java List interface name
-    // boolean isEmpty();
+    /**
+     * Returns true if this list contains no elements.
+     *
+     * @returns true if this list contains no elements
+     */
+    boolean isEmpty();
 
     /**
      * Returns the number of elements in this list.
@@ -39,12 +44,39 @@ public interface ImmutableList<E> /* extends Iterable<E> */ {
     // int indexOf(E elem);
 
     // head + tail + isEmpty = point de vue LinearSeq en Scala
-    // E head();
-    // ImmutableList<E> tail();
+
+    /**
+     * Returns the first element in the list.
+     *
+     * @returns the first element in the list.
+     * @throws NoSuchElementException if the list is empty
+     */
+    E head() throws NoSuchElementException;
+
+    /**
+     * Returns a list with all elements of this list except the first one.
+     *
+     * @returns a list with all elements of this list except the first one
+     * @throws UnsupportedOperationException if this list is empty
+     */
+    ImmutableList<E> tail() throws UnsupportedOperationException;
     // E last();
 
     // Opérations sur les listes
-    // List<E> subList(int from, int size); // Java && Guava
+
+    /**
+     * Returns a portion of this list.
+     *
+     * @param fromIndex low endpoint (inclusive) of the subList
+     * @param toIndex high endpoint (exclusive) of the subList
+     * @returns a portion of this list
+     * @throws IndexOutOfBoundsException if an endpoint index value is out of range (fromIndex < 0 || toIndex > size)
+     * @throws IllegalArgumentException if the endpoint indices are out of order (fromIndex > toIndex)
+     */
+    ImmutableList<E> subList(int fromIndex, int toIndex) throws
+	IndexOutOfBoundsException,
+	IllegalArgumentException; // Java && Guava
+
     // List<E> reverse();         		 // Guava: reverse
     // List<E> sort(Comparator<? super E> comparator); // Java: sort, Scala: sorted/sortWith
 
@@ -57,8 +89,21 @@ public interface ImmutableList<E> /* extends Iterable<E> */ {
     // @SuppressWarnings({"unchecked", "varags"})
     // boolean containsAll(E... elems);
 
-    // boolean any(Predicate<? super E> predicate); // Scala: exists/find
-    // boolean all(Predicate<? super E> predicate); // Scala: forall
+    /**
+     * Returns whether given predicate is satisfied by at least one element of the list.
+     *
+     * @param predicate The predicate to be tested on elements of the list.
+     * @returns true if predicate is satisfied by at least one element of the list.
+     */
+    boolean any(Predicate<? super E> predicate); // Scala: exists/find
+
+    /**
+     * Returns whether given predicate is satisfied by all elements of the list.
+     *
+     * @param predicate The predicate to be tested on elements of the list.
+     * @returns true if predicate is satified by all elements of the list.
+     */
+    boolean all(Predicate<? super E> predicate); // Scala: forall
 
     // Fabriques (ajout d'un élément en tête)
 
@@ -99,8 +144,14 @@ public interface ImmutableList<E> /* extends Iterable<E> */ {
     // @SuppressWarnings({"unchecked", "varags"})
     // ImmutableList<E> intersect(E... elems);
 
-    // Scala: map
-    // <F> ImmutableList<F> map(Function<? super E, ? super F> mapper);
+    /**
+     * Returns a new list consisting of the results of applying the given function to the elements of this list.
+     *
+     * @param mapper a function to apply to each element
+     * @returns the new list
+     */
+    <F> ImmutableList<F> map(Function<? super E, ? extends F> mapper); // Scala: map
+
     // Scala: filter
     // <F> ImmutableList<E> filter(Predicate<? super E> predicate);
     // Scala: reduce

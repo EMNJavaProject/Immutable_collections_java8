@@ -1,5 +1,6 @@
 package collections.implementations;
 
+import java.util.NoSuchElementException;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.List;
@@ -76,8 +77,17 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	public int size() {
 	    return size;
 	}
+
 	// Constructors
-	// public ImmutableLinkedList<E>();
+
+	/**
+	 * Create a empty linked list.
+	 */
+	public ImmutableLinkedList() {
+	    this.head = null;
+	    this.size = 0;
+	}
+
 	// public ImmutableLinkedList<E>(Collection<E> elems);
 
 	/**
@@ -92,45 +102,80 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 		throw new NullPointerException();
 
 	    Node<E> head = null;
-	    for (int i = elems.length-1 ; i >= 0 ; --i)
+	    for (int i = elems.length - 1 ; i >=0 ; --i)
 		head = new Node<E>(elems[i], head);
 
 	    this.head = head;
 	    this.size = elems.length;
 	}
 
-    // Operations
+        // Operations
 
-    // public boolean isEmpty();
+        public boolean isEmpty() {
+	    return size() == 0;
+	}
 
 	public E get(int index) throws IndexOutOfBoundsException {
-	    if (head == null)
+	    if (index < 0 || index >= size())
 		throw new IndexOutOfBoundsException();
 
-	    Node<E> node = headNode();
 	    int i = 0;
-	    while (node != null) {
+	    for (E elem : this) {
 		if (i == index)
-		    return node.getElement();
-		else {
-		    if (!node.hasNext())
-			throw new IndexOutOfBoundsException();
-		    else {
-			node = node.getNext();
-			++i;
-		    }
-		}
+		    return elem;
+		++i;
 	    }
-	    return node.getElement();
+
+	    return null; // Never happens
 	}
 
     // public int indexOf(E elem);
 
-    // public E head();
-    // public ImmutableList<E> tail();
+	public E head() throws NoSuchElementException {
+	    if (isEmpty())
+		throw new NoSuchElementException();
+	    else
+		return headNode().getElement();
+	}
+
+	public ImmutableList<E> tail() throws UnsupportedOperationException {
+	    if (isEmpty())
+		throw new UnsupportedOperationException();
+	    else
+		return subList(1, size());
+	}
+
     // public E last();
 
-    // public List<E> subList(int from, int size);
+	@SuppressWarnings("unchecked")
+	public ImmutableList<E> subList(int fromIndex, int toIndex) throws
+	    IndexOutOfBoundsException,
+	    IllegalArgumentException {
+
+	    if (fromIndex < 0 || toIndex > size())
+		throw new IndexOutOfBoundsException();
+	    if (fromIndex > toIndex)
+		throw new IllegalArgumentException();
+	    if (fromIndex == toIndex)
+		return new ImmutableLinkedList<E>();
+
+	    int i = 0;
+	    Node node = headNode();
+	    while (i != fromIndex) {
+		node = node.getNext();
+		++i;
+	    }
+
+	    E[] elems = (E[]) new Object[toIndex - fromIndex];
+	    while (i != toIndex) {
+		elems[i - fromIndex] = (E)node.getElement();
+		node = node.getNext();
+		++i;
+	    }
+
+	    return new ImmutableLinkedList<E>(elems);
+	}
+
     // public List<E> reverse();
     // public List<E> sort(Comparator<? super E> comparator);
 
@@ -140,8 +185,19 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
     // public @SuppressWarnings({"unchecked", "varags"})
     // public boolean containsAll(E... elems);
 
-    // public boolean any(Predicate<? super E> predicate);
-    // public boolean all(Predicate<? super E> predicate);
+	public boolean any(Predicate<? super E> predicate) {
+	    for (E elem : this)
+		if (predicate.test(elem))
+		    return true;
+	    return false;
+	}
+
+	public boolean all(Predicate<? super E> predicate) {
+	    for (E elem : this)
+		if (!predicate.test(elem))
+		    return false;
+	    return true;
+	}
 
     // Factories
 
@@ -156,9 +212,10 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	public ImmutableList<E> concat(E elem) {
 	    E[] elems = (E[]) new Object[size() + 1];
 	    Node node = headNode();
-	    for (int i = 0 ; i < size() ; ++i) {
-		elems[i] = (E)node.getElement();
-		node = node.getNext();
+	    int i = 0;
+	    for (E e : this) {
+		elems[i] = e;
+		++i;
 	    }
 	    elems[size()] = elem;
 	    return new ImmutableLinkedList<E>(elems);
@@ -181,14 +238,62 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
     // public @SuppressWarnings({"unchecked", "varags"})
     // public ImmutableList<E> intersect(E... elems);
 
-    // public <F> ImmutableList<F> map(Function<? super E, ? super F> mapper);
+	@SuppressWarnings("unchecked")
+	public <F> ImmutableList<F> map(Function<? super E, ? extends F> mapper) {
+	    F[] elems = (F[]) new Object[size()];
+	    int i = 0;
+	    for (E elem : this) {
+		elems[i] = mapper.apply(elem);
+		++i;
+	    }
+
+	    return new ImmutableLinkedList<F>(elems);
+	}
+
     // public <F> ImmutableList<E> filter(Predicate<? super E> predicate);
     // public Optional<E> reduce(BinaryOperator<E> accumulator);
     // public E reduce(E identity, BinaryOperator<E> accumulator);
     // public <F> F reduce(F identity, BiFunction<F, ? super E, F> accumulator, BinaryOperator<F> combiner);
 
-    // Iterators & streams
-    // public Iterator<E> iterator();
+        // Iterators & streams
+
+	class ImmutableLinkedListIterator implements Iterator<E> {
+
+	    /** Current node pointed by the iterator */
+	    private Node<E> currentNode;
+
+	    /**
+	     * Create a new iterator starting from the beginning of the linked list.
+	     */
+	    public ImmutableLinkedListIterator() {
+		currentNode = headNode();
+	    }
+
+	    public boolean hasNext() {
+		return currentNode != null;
+	    }
+
+	    public E next() throws NoSuchElementException {
+		if (currentNode == null)
+		    throw new NoSuchElementException();
+
+		E elem = currentNode.getElement();
+		currentNode = currentNode.getNext();
+		return elem;
+	    }
+
+	    public void remove() throws
+		UnsupportedOperationException,
+		IllegalStateException {
+		throw new UnsupportedOperationException();
+	    }
+	}
+
+	public Iterator<E> iterator() {
+	    return new ImmutableLinkedListIterator();
+	}
+
+
     // public Stream<E> stream();
     // public Stream<E> parallelStream();
 
