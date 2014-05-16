@@ -57,6 +57,19 @@ public class ImmutableLinkedListTest {
 		assertEquals(1, (int)list.head());
 	}
 
+	@Test
+	public void TailTest() {
+		ImmutableList<Integer> tail = list.tail();
+		assertEquals(2, (int)tail.get(0));
+		assertEquals(3, (int)tail.get(1));
+		assertEquals(2, tail.size());
+	}
+
+	@Test(expected=UnsupportedOperationException.class)
+	public void TailExceptionTest() {
+		emptyList.tail();
+	}
+
 	@Test(expected=NoSuchElementException.class)
 	public void HeadExceptionTest() {
 		emptyList.head();

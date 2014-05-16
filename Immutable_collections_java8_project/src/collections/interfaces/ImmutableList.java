@@ -46,14 +46,20 @@ public interface ImmutableList<E> /* extends Iterable<E> */ {
     // head + tail + isEmpty = point de vue LinearSeq en Scala
 
     /**
-     * Return the first element in the list.
+     * Returns the first element in the list.
      *
      * @returns the first element in the list.
      * @throws NoSuchElementException if the list is empty
      */
     E head() throws NoSuchElementException;
 
-    // ImmutableList<E> tail();
+    /**
+     * Returns a list with all elements of this list except the first one.
+     *
+     * @returns a list with all elements of this list except the first one
+     * @throws UnsupportedOperationException if this list is empty
+     */
+    ImmutableList<E> tail() throws UnsupportedOperationException;
     // E last();
 
     // Opérations sur les listes
