@@ -76,8 +76,17 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	public int size() {
 	    return size;
 	}
+
 	// Constructors
-	// public ImmutableLinkedList<E>();
+
+	/**
+	 * Create a empty linked list.
+	 */
+	public ImmutableLinkedList() {
+	    this.head = null;
+	    this.size = 0;
+	}
+
 	// public ImmutableLinkedList<E>(Collection<E> elems);
 
 	/**
@@ -99,9 +108,11 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	    this.size = elems.length;
 	}
 
-    // Operations
+        // Operations
 
-    // public boolean isEmpty();
+        public boolean isEmpty() {
+	    return size() == 0;
+	}
 
 	public E get(int index) throws IndexOutOfBoundsException {
 	    if (head == null)

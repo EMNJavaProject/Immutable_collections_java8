@@ -19,8 +19,12 @@ public interface ImmutableList<E> /* extends Iterable<E> */ {
 
     // size + get + isEmpty = point de vue IndexedSeq en Scala
 
-    // We use Java List interface name
-    // boolean isEmpty();
+    /**
+     * Returns true if this list contains no elements.
+     *
+     * @returns true if this list contains no elements
+     */
+    boolean isEmpty();
 
     /**
      * Returns the number of elements in this list.

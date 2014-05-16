@@ -1,6 +1,8 @@
 package test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -11,10 +13,12 @@ import collections.interfaces.ImmutableList;
 public class ImmutableLinkedListTest {
 
 	private ImmutableList<Integer> list;
+	private ImmutableList<Integer> emptyList;
 
 	@Before
 	public void setUp() {
-		list = new ImmutableLinkedList<Integer>(1, 2, 3);
+		list      = new ImmutableLinkedList<Integer>(1, 2, 3);
+		emptyList = new ImmutableLinkedList<Integer>();
 	}
 
 	@Test(expected=NullPointerException.class)
@@ -22,6 +26,13 @@ public class ImmutableLinkedListTest {
 		new ImmutableLinkedList<Integer>((Integer[])null);
 	}
 
+	@Test
+	public void isEmptyTest() {
+		assertFalse(list.isEmpty());
+		assertTrue(emptyList.isEmpty());
+	}
+
+	@Test
 	public void GetTest(){
 		assertEquals(1, (int)list.get(0));
 		assertEquals(2, (int)list.get(1));
