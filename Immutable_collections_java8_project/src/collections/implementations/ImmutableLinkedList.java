@@ -149,17 +149,8 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	public ImmutableList<E> tail() throws UnsupportedOperationException {
 	    if (isEmpty())
 		throw new UnsupportedOperationException();
-	    else if (size() == 1)
-		return new ImmutableLinkedList();
-	    else {
-		E[] elems = (E[]) new Object[size() - 1];
-		Node node = headNode().getNext();
-		for (int i = 0 ; i < size() - 1 ; ++i) {
-		    elems[i] = (E)node.getElement();
-		    node = node.getNext();
-		}
-		return new ImmutableLinkedList<E>(elems);
-	    }
+	    else
+		return subList(1, size());
 	}
 
     // public E last();
