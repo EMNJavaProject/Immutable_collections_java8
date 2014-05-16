@@ -46,8 +46,8 @@ public class ImmutableLinkedList<E> /* implements ImmutableList<E> */
 	
 	
     // Constructors
-    // public ImmutableList<E>();
-    // public ImmutableList<E>(Collection<E> elems);
+    // public ImmutableList();
+    // public ImmutableList(Collection<E> elems);
      @SafeVarargs
 	public ImmutableLinkedList (E... elems){
     	 head = null;
