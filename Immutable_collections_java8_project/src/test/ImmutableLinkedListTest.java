@@ -109,6 +109,15 @@ public class ImmutableLinkedListTest {
 	}
 
 	@Test
+	public void MapTest() {
+		ImmutableList<Integer> mappedList = list.map((Integer x) -> x * 2);
+		assertEquals(mappedList.size(), list.size());
+		assertEquals((int)mappedList.get(0), (int)2 * list.get(0));
+		assertEquals((int)mappedList.get(1), (int)2 * list.get(1));
+		assertEquals((int)mappedList.get(2), (int)2 * list.get(2));
+	}
+
+	@Test
 	public void IteratorTest() {
 		Iterator<Integer> it = list.iterator();
 

@@ -227,7 +227,17 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
     // public @SuppressWarnings({"unchecked", "varags"})
     // public ImmutableList<E> intersect(E... elems);
 
-    // public <F> ImmutableList<F> map(Function<? super E, ? super F> mapper);
+	@SuppressWarnings("unchecked")
+	public <F> ImmutableList<F> map(Function<? super E, ? extends F> mapper) {
+	    F[] elems = (F[]) new Object[size()];
+	    int i = 0;
+	    for (E elem : this) {
+		elems[i] = mapper.apply(elem);
+		++i;
+	    }
+
+	    return new ImmutableLinkedList<F>(elems);
+	}
     // public <F> ImmutableList<E> filter(Predicate<? super E> predicate);
     // public Optional<E> reduce(BinaryOperator<E> accumulator);
     // public E reduce(E identity, BinaryOperator<E> accumulator);

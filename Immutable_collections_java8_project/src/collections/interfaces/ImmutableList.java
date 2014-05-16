@@ -131,8 +131,14 @@ public interface ImmutableList<E> extends Iterable<E> {
     // @SuppressWarnings({"unchecked", "varags"})
     // ImmutableList<E> intersect(E... elems);
 
-    // Scala: map
-    // <F> ImmutableList<F> map(Function<? super E, ? super F> mapper);
+    /**
+     * Returns a new list consisting of the results of applying the given function to the elements of this list.
+     *
+     * @param mapper a function to apply to each element
+     * @returns the new list
+     */
+    <F> ImmutableList<F> map(Function<? super E, ? extends F> mapper); // Scala: map
+
     // Scala: filter
     // <F> ImmutableList<E> filter(Predicate<? super E> predicate);
     // Scala: reduce
