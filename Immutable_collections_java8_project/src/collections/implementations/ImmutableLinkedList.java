@@ -102,7 +102,7 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 		throw new NullPointerException();
 
 	    Node<E> head = null;
-	    for (int i = elems.length-1 ; i >= 0 ; --i)
+	    for (int i = elems.length - 1 ; i >=0 ; --i)
 		head = new Node<E>(elems[i], head);
 
 	    this.head = head;
@@ -116,24 +116,17 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	}
 
 	public E get(int index) throws IndexOutOfBoundsException {
-	    if (head == null)
+	    if (index < 0 || index >= size())
 		throw new IndexOutOfBoundsException();
 
-	    Node<E> node = headNode();
 	    int i = 0;
-	    while (node != null) {
+	    for (E elem : this) {
 		if (i == index)
-		    return node.getElement();
-		else {
-		    if (!node.hasNext())
-			throw new IndexOutOfBoundsException();
-		    else {
-			node = node.getNext();
-			++i;
-		    }
-		}
+		    return elem;
+		++i;
 	    }
-	    return node.getElement();
+
+	    return null; // Never happens
 	}
 
     // public int indexOf(E elem);
@@ -145,7 +138,6 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 		return headNode().getElement();
 	}
 
-	@SuppressWarnings("unchecked")
 	public ImmutableList<E> tail() throws UnsupportedOperationException {
 	    if (isEmpty())
 		throw new UnsupportedOperationException();
@@ -209,9 +201,10 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	public ImmutableList<E> concat(E elem) {
 	    E[] elems = (E[]) new Object[size() + 1];
 	    Node node = headNode();
-	    for (int i = 0 ; i < size() ; ++i) {
-		elems[i] = (E)node.getElement();
-		node = node.getNext();
+	    int i = 0;
+	    for (E e : this) {
+		elems[i] = e;
+		++i;
 	    }
 	    elems[size()] = elem;
 	    return new ImmutableLinkedList<E>(elems);
