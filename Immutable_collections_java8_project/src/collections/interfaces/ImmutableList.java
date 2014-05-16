@@ -4,6 +4,7 @@ package collections.interfaces;
 // http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true
 // http://docs.guava-libraries.googlecode.com/git/javadoc/com/google/common/collect/ImmutableList.html
 
+import java.util.NoSuchElementException;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.List;
@@ -43,7 +44,15 @@ public interface ImmutableList<E> /* extends Iterable<E> */ {
     // int indexOf(E elem);
 
     // head + tail + isEmpty = point de vue LinearSeq en Scala
-    // E head();
+
+    /**
+     * Return the first element in the list.
+     *
+     * @returns the first element in the list.
+     * @throws NoSuchElementException if the list is empty
+     */
+    E head() throws NoSuchElementException;
+
     // ImmutableList<E> tail();
     // E last();
 

@@ -1,5 +1,7 @@
 package test;
 
+import java.util.NoSuchElementException;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
@@ -48,6 +50,16 @@ public class ImmutableLinkedListTest {
 	@Test
 	public void SizeTest() {
 		assertEquals(3, list.size());
+	}
+
+	@Test
+	public void HeadTest() {
+		assertEquals(1, (int)list.head());
+	}
+
+	@Test(expected=NoSuchElementException.class)
+	public void HeadExceptionTest() {
+		emptyList.head();
 	}
 
 	@Test

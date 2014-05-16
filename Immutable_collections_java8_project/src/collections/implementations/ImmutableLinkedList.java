@@ -1,5 +1,6 @@
 package collections.implementations;
 
+import java.util.NoSuchElementException;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.List;
@@ -137,7 +138,12 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 
     // public int indexOf(E elem);
 
-    // public E head();
+	public E head() throws NoSuchElementException {
+	    if (isEmpty())
+		throw new NoSuchElementException();
+	    else
+		return headNode().getElement();
+	}
     // public ImmutableList<E> tail();
     // public E last();
 
