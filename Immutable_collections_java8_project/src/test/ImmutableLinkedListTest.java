@@ -1,5 +1,6 @@
 package test;
 
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import static org.junit.Assert.assertEquals;
@@ -105,5 +106,27 @@ public class ImmutableLinkedListTest {
 	@Test(expected=IllegalArgumentException.class)
 	public void SubListExceptionTest3() {
 		list.subList(2, 1);
+	}
+
+	@Test
+	public void IteratorTest() {
+		Iterator<Integer> it = list.iterator();
+
+		assertTrue(it.hasNext()); assertEquals(1, (int)it.next());
+		assertTrue(it.hasNext()); assertEquals(2, (int)it.next());
+		assertTrue(it.hasNext()); assertEquals(3, (int)it.next());
+		assertFalse(it.hasNext());
+	}
+
+	@Test(expected=NoSuchElementException.class)
+	public void IteratorExceptionTest1() {
+		Iterator<Integer> it = emptyList.iterator();
+		it.next();
+	}
+
+	@Test(expected=UnsupportedOperationException.class)
+	public void IteratorExceptionTest2() {
+		Iterator<Integer> it = list.iterator();
+		it.remove();
 	}
 }

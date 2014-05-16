@@ -240,8 +240,45 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
     // public E reduce(E identity, BinaryOperator<E> accumulator);
     // public <F> F reduce(F identity, BiFunction<F, ? super E, F> accumulator, BinaryOperator<F> combiner);
 
-    // Iterators & streams
-    // public Iterator<E> iterator();
+        // Iterators & streams
+
+	class ImmutableLinkedListIterator implements Iterator<E> {
+
+	    /** Current node pointed by the iterator */
+	    private Node<E> currentNode;
+
+	    /**
+	     * Create a new iterator starting from the beginning of the linked list.
+	     */
+	    public ImmutableLinkedListIterator() {
+		currentNode = headNode();
+	    }
+
+	    public boolean hasNext() {
+		return currentNode != null;
+	    }
+
+	    public E next() throws NoSuchElementException {
+		if (currentNode == null)
+		    throw new NoSuchElementException();
+
+		E elem = currentNode.getElement();
+		currentNode = currentNode.getNext();
+		return elem;
+	    }
+
+	    public void remove() throws
+		UnsupportedOperationException,
+		IllegalStateException {
+		throw new UnsupportedOperationException();
+	    }
+	}
+
+	public Iterator<E> iterator() {
+	    return new ImmutableLinkedListIterator();
+	}
+
+
     // public Stream<E> stream();
     // public Stream<E> parallelStream();
 
