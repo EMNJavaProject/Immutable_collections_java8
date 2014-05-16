@@ -35,7 +35,7 @@ public class ImmutableLinkedListTest {
 	}
 
 	@Test
-	public void GetTest(){
+	public void GetTest() {
 		assertEquals(1, (int)list.get(0));
 		assertEquals(2, (int)list.get(1));
 		assertEquals(3, (int)list.get(2));
@@ -79,5 +79,31 @@ public class ImmutableLinkedListTest {
 	public void AddTest() {
 		list = list.concat(4);
 		assertEquals(4, (int)list.get(3));
+	}
+
+	@Test
+	public void SubListTest() {
+		ImmutableList<Integer> empty = list.subList(0, 0);
+		assertTrue(empty.isEmpty());
+
+		ImmutableList<Integer> subList = list.subList(1, 3);
+		assertEquals(2, subList.size());
+		assertEquals(2, (int)subList.get(0));
+		assertEquals(3, (int)subList.get(1));
+	}
+
+	@Test(expected=IndexOutOfBoundsException.class)
+	public void SubListExceptionTest1() {
+		list.subList(-1, 1);
+	}
+
+	@Test(expected=IndexOutOfBoundsException.class)
+	public void SubListExceptionTest2() {
+		list.subList(0, list.size()+1);
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void SubListExceptionTest3() {
+		list.subList(2, 1);
 	}
 }

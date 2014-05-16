@@ -164,7 +164,35 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 
     // public E last();
 
-    // public List<E> subList(int from, int size);
+	@SuppressWarnings("unchecked")
+	public ImmutableList<E> subList(int fromIndex, int toIndex) throws
+	    IndexOutOfBoundsException,
+	    IllegalArgumentException {
+
+	    if (fromIndex < 0 || toIndex > size())
+		throw new IndexOutOfBoundsException();
+	    if (fromIndex > toIndex)
+		throw new IllegalArgumentException();
+	    if (fromIndex == toIndex)
+		return new ImmutableLinkedList<E>();
+
+	    int i = 0;
+	    Node node = headNode();
+	    while (i != fromIndex) {
+		node = node.getNext();
+		++i;
+	    }
+
+	    E[] elems = (E[]) new Object[toIndex - fromIndex];
+	    while (i != toIndex) {
+		elems[i - fromIndex] = (E)node.getElement();
+		node = node.getNext();
+		++i;
+	    }
+
+	    return new ImmutableLinkedList<E>(elems);
+	}
+
     // public List<E> reverse();
     // public List<E> sort(Comparator<? super E> comparator);
 

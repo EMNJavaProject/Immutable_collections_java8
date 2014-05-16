@@ -63,7 +63,20 @@ public interface ImmutableList<E> /* extends Iterable<E> */ {
     // E last();
 
     // Opérations sur les listes
-    // List<E> subList(int from, int size); // Java && Guava
+
+    /**
+     * Returns a portion of this list.
+     *
+     * @param fromIndex low endpoint (inclusive) of the subList
+     * @param toIndex high endpoint (exclusive) of the subList
+     * @returns a portion of this list
+     * @throws IndexOutOfBoundsException if an endpoint index value is out of range (fromIndex < 0 || toIndex > size)
+     * @throws IllegalArgumentException if the endpoint indices are out of order (fromIndex > toIndex)
+     */
+    ImmutableList<E> subList(int fromIndex, int toIndex) throws
+	IndexOutOfBoundsException,
+	IllegalArgumentException; // Java && Guava
+
     // List<E> reverse();         		 // Guava: reverse
     // List<E> sort(Comparator<? super E> comparator); // Java: sort, Scala: sorted/sortWith
 
