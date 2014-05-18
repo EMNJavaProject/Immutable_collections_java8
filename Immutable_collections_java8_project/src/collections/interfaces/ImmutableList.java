@@ -131,10 +131,15 @@ public interface ImmutableList<E> extends Iterable<E> {
      */
     boolean all(Predicate<? super E> predicate); // Scala: forall
 
-    // Fabriques (ajout d'un élément en tête)
+    // Factories
 
-    // Scala: + operator
-    // ImmutableList<E> cons(E elem);
+    /**
+     * Return a new list with the elements of this list appended to given element.
+     *
+     * @param elem The first element of the new list
+     * @return a new list with the elements of this list appended to given element.
+     */
+    ImmutableList<E> cons(E elem); // Scala: + operator
 
     // Java: addAll, Scala: ++ operator
     // ImmutableList<E> concat(Collection<E> elems);

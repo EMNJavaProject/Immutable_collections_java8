@@ -197,4 +197,14 @@ public class ImmutableLinkedListTest {
 		assertFalse(list.containsAll(new ImmutableLinkedList<Integer>(1, 2, 4)));
 		assertFalse(list.containsAll(new ImmutableLinkedList<Integer>(1, 2, null)));
 	}
+
+	@Test
+	public void consTest() {
+		list = list.cons(4);
+		assertEquals(4, list.size());
+		assertEquals(4, (int)list.get(0));
+		assertEquals(1, (int)list.get(1));
+		assertEquals(2, (int)list.get(2));
+		assertEquals(3, (int)list.get(3));
+	}
 }

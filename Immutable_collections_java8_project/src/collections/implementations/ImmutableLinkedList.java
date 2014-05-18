@@ -222,9 +222,21 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	    return true;
 	}
 
-    // Factories
+	// Factories
 
-    // public ImmutableList<E> cons(E elem);
+	@SuppressWarnings("unchecked")
+	public ImmutableList<E> cons(E elem) {
+	    E[] elems = (E[]) new Object[size()+1];
+	    elems[0] = elem;
+
+	    int i = 1;
+	    for (E e : this) {
+		elems[i] = e;
+		++i;
+	    }
+
+	    return new ImmutableLinkedList(elems);
+	}
 
     // public ImmutableList<E> concat(Collection<E> elems);
     // public ImmutableList<E> concat(ImmutableList<E> elems);
