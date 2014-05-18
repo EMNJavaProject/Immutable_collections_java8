@@ -88,7 +88,16 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	    this.size = 0;
 	}
 
-	// public ImmutableLinkedList<E>(Collection<E> elems);
+	/**
+	 * Create a linked list containing the given elements in order.
+	 *
+	 * @param elems collection of elements to populate this list from
+	 * @throws NullPointerException if elems is null
+	 */
+	@SuppressWarnings("unchecked")
+	public ImmutableLinkedList(Collection<E> elems) {
+	    this((E[])elems.toArray());
+	}
 
 	/**
 	 * Create a linked list containing the given elements in order.
@@ -179,11 +188,25 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
     // public List<E> reverse();
     // public List<E> sort(Comparator<? super E> comparator);
 
-    // public boolean contains(E elem);
-    // public boolean containsAll(Collection<E> elems);
-    // public boolean containsAll(ImmutableList<E> elems);
-    // public @SuppressWarnings({"unchecked", "varags"})
-    // public boolean containsAll(E... elems);
+	public boolean contains(E elem) {
+	    return any((E other) ->
+		       other == null ?
+		       elem  == null :
+		       other.equals(elem));
+	}
+
+	public boolean containsAll(Collection<E> elems) {
+	    return containsAll(new ImmutableLinkedList<E>(elems));
+	}
+
+	public boolean containsAll(ImmutableList<E> elems) {
+	    return elems.all((E elem) -> contains(elem));
+	}
+
+	public @SuppressWarnings({"unchecked", "varags"})
+	boolean containsAll(E... elems) {
+	    return containsAll(new ImmutableLinkedList<E>(elems));
+	}
 
 	public boolean any(Predicate<? super E> predicate) {
 	    for (E elem : this)

@@ -80,14 +80,40 @@ public interface ImmutableList<E> extends Iterable<E> {
     // List<E> reverse();         		 // Guava: reverse
     // List<E> sort(Comparator<? super E> comparator); // Java: sort, Scala: sorted/sortWith
 
-    // Scala, Java, Guava
-    // boolean contains(E elem);
-    // Java
-    // boolean containsAll(Collection<E> elems);
-    // boolean containsAll(ImmutableList<E> elems);
+    /**
+     * Returns true if this list contains the specified element. More formally,
+     * returns true if and only if this list contains at least one element e
+     * such that <code>(o==null ? e==null : o.equals(e))</code>.
+     *
+     * @param elem the element to look for
+     * @return true if it is found
+     */
+    boolean contains(E elem); // Scala, Java, Guava
 
-    // @SuppressWarnings({"unchecked", "varags"})
-    // boolean containsAll(E... elems);
+    /**
+     * Returns true if this list contains all of the elements of the specified collection.
+     *
+     * @param elems the elements to look for
+     * @return true if this list contains all of the elements of the specified collection
+     */
+    boolean containsAll(Collection<E> elems);
+
+    /**
+     * Returns true if this list contains all of the elements of the specified list.
+     *
+     * @param elems the elements to look for
+     * @return true if this list contains all of the elements of the specified list
+     */
+    boolean containsAll(ImmutableList<E> elems);
+
+    /**
+     * Returns true if this list contains all of the given elements
+     *
+     * @param elems the elements to look for
+     * @return true if this list contains all of the given elements
+     */
+    @SuppressWarnings({"unchecked", "varags"})
+    boolean containsAll(E... elems);
 
     /**
      * Returns whether given predicate is satisfied by at least one element of the list.

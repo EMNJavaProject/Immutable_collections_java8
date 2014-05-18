@@ -1,5 +1,7 @@
 package test;
 
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -149,5 +151,50 @@ public class ImmutableLinkedListTest {
 	public void IteratorExceptionTest2() {
 		Iterator<Integer> it = list.iterator();
 		it.remove();
+	}
+
+	@Test
+	public void ContainsTest() {
+		assertTrue(list.contains(1));
+		assertTrue(list.contains(2));
+		assertTrue(list.contains(3));
+
+		assertFalse(list.contains(4));
+
+		assertFalse(list.contains(null));
+		list = list.concat(null);
+		assertTrue(list.contains(null));
+	}
+
+	@Test
+	public void ContainsAllTest1() {
+		assertTrue(list.containsAll(1, 2, 3));
+		assertTrue(list.containsAll(1, 2));
+		assertFalse(list.containsAll(1, 2, 4));
+		assertFalse(list.containsAll(1, 2, null));
+	}
+
+	@Test
+	public void ContainsAllTest2() {
+		List<Integer> otherList = new ArrayList<Integer>();
+		otherList.add(1);
+		otherList.add(2);
+
+
+		assertTrue (list.containsAll(otherList));
+
+		otherList.add(3);
+		assertTrue (list.containsAll(otherList));
+
+		otherList.add(4);
+		assertFalse(list.containsAll(otherList));
+	}
+
+	@Test
+	public void ContainsAllTest3() {
+		assertTrue (list.containsAll(new ImmutableLinkedList<Integer>(1, 2, 3)));
+		assertTrue (list.containsAll(new ImmutableLinkedList<Integer>(1, 2)));
+		assertFalse(list.containsAll(new ImmutableLinkedList<Integer>(1, 2, 4)));
+		assertFalse(list.containsAll(new ImmutableLinkedList<Integer>(1, 2, null)));
 	}
 }
