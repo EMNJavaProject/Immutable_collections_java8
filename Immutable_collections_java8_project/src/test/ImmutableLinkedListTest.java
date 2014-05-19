@@ -207,4 +207,13 @@ public class ImmutableLinkedListTest {
 		assertEquals(2, (int)list.get(2));
 		assertEquals(3, (int)list.get(3));
 	}
+
+	@Test
+	public void EqualsTest() {
+		assertEquals(emptyList, new ImmutableLinkedList<Integer>());
+		assertFalse(emptyList.equals(list));
+
+		assertFalse(list.equals(new ImmutableLinkedList<Integer>(1, 2, 3, 4)));
+		assertEquals(list, new ImmutableLinkedList<Integer>(1, 2, 3));
+	}
 }

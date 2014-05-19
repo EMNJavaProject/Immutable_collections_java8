@@ -188,11 +188,19 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
     // public List<E> reverse();
     // public List<E> sort(Comparator<? super E> comparator);
 
+	/**
+	 * Compare two objects according to Collection semantics.
+	 *
+	 * @param o1 the first object
+	 * @param o2 the second object
+	 * @return o1 == null ? o2 == null : o1.equals(o2)
+	   */
+	static final boolean equals(Object o1, Object o2) {
+	    return o1 == null ? o2 == null : o1.equals(o2);
+	}
+
 	public boolean contains(E elem) {
-	    return any((E other) ->
-		       other == null ?
-		       elem  == null :
-		       other.equals(elem));
+	    return any((E other) -> equals(elem, other));
 	}
 
 	public boolean containsAll(Collection<E> elems) {
@@ -334,7 +342,27 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 
     // Object methods
     // public ImmutableList<E> clone();
-    // public boolean equals(Object o);
+
+	public boolean equals(Object o) {
+	    if (! (o instanceof ImmutableList))
+		return false;
+
+	    ImmutableList other = (ImmutableList) o;
+
+	    if (size() != other.size())
+		return false;
+
+	    Iterator<E> it1 = iterator();
+	    Iterator it2 = other.iterator();
+
+	    while (it1.hasNext()) {
+		if (!equals(it1.next(), it2.next()))
+		    return false;
+	    }
+
+	    return true;
+	}
+
     // public int hashCode();
 
     // Conversions
