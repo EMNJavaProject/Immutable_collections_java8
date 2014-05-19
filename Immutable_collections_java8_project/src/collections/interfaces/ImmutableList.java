@@ -196,8 +196,14 @@ public interface ImmutableList<E> extends Iterable<E> {
      */
     <F> ImmutableList<F> map(Function<? super E, ? extends F> mapper); // Scala: map
 
-    // Scala: filter
-    // <F> ImmutableList<E> filter(Predicate<? super E> predicate);
+    /**
+     * Returns a list consisting of the elements of this list that match the given predicate.
+     *
+     * @param predicate The predicate to be tested on elements of the list.
+     * @return a list consisting of the elements of this list that match the given predicate.
+     */
+    ImmutableList<E> filter(Predicate<? super E> predicate);    // Scala: filter
+
     // Scala: reduce
     // Optional<E> reduce(BinaryOperator<E> accumulator);
     // E reduce(E identity, BinaryOperator<E> accumulator);

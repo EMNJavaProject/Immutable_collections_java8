@@ -307,7 +307,14 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	    return new ImmutableLinkedList<F>(elems);
 	}
 
-    // public <F> ImmutableList<E> filter(Predicate<? super E> predicate);
+	public ImmutableList<E> filter(Predicate<? super E> predicate) {
+	    ImmutableList<E> res = new ImmutableLinkedList<E>();
+	    for (E elem : this)
+		if (predicate.test(elem))
+		    res = res.concat(elem);
+	    return res;
+	}
+
     // public Optional<E> reduce(BinaryOperator<E> accumulator);
     // public E reduce(E identity, BinaryOperator<E> accumulator);
     // public <F> F reduce(F identity, BiFunction<F, ? super E, F> accumulator, BinaryOperator<F> combiner);

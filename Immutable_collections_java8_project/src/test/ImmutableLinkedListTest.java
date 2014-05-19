@@ -126,6 +126,18 @@ public class ImmutableLinkedListTest {
 	}
 
 	@Test
+	public void FilterTest() {
+		ImmutableList<Integer> filteredList = list.filter((Integer x) -> x % 2 != 0);
+		assertEquals(filteredList, new ImmutableLinkedList<Integer>(1, 3));
+
+		filteredList = list.filter((Integer x) -> true);
+		assertEquals(filteredList, list);
+
+		filteredList = list.filter((Integer x) -> false);
+		assertEquals(filteredList, emptyList);
+	}
+
+	@Test
 	public void AnyTest() {
 		assertTrue (list.any((Integer x) -> x % 2 == 0));
 		assertFalse(list.any((Integer x) -> x < 0));
