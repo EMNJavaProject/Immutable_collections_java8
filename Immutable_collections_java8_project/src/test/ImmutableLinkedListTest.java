@@ -209,6 +209,12 @@ public class ImmutableLinkedListTest {
 	}
 
 	@Test
+	public void reverseTest() {
+		assertEquals(emptyList, emptyList.reverse());
+		assertEquals(new ImmutableLinkedList<Integer>(3, 2, 1), list.reverse());
+	}
+
+	@Test
 	public void EqualsTest() {
 		assertEquals(emptyList, new ImmutableLinkedList<Integer>());
 		assertFalse(emptyList.equals(list));

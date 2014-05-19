@@ -77,7 +77,13 @@ public interface ImmutableList<E> extends Iterable<E> {
 	IndexOutOfBoundsException,
 	IllegalArgumentException; // Java && Guava
 
-    // List<E> reverse();         		 // Guava: reverse
+    /**
+     * Returns a new list with the elements of this list in reverse order.
+     *
+     * @return a new list with the elements of this list in reverse order.
+     */
+    ImmutableList<E> reverse(); // Guava: reverse
+
     // List<E> sort(Comparator<? super E> comparator); // Java: sort, Scala: sorted/sortWith
 
     /**

@@ -185,7 +185,13 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	    return new ImmutableLinkedList<E>(elems);
 	}
 
-    // public List<E> reverse();
+	public ImmutableList<E> reverse() {
+	    if (isEmpty())
+		return this;
+	    else
+		return tail().reverse().concat(head());
+	}
+
     // public List<E> sort(Comparator<? super E> comparator);
 
 	/**
