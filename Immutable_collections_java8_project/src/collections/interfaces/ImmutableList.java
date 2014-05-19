@@ -41,7 +41,14 @@ public interface ImmutableList<E> extends Iterable<E> {
      * @throws IndexOutOfBoundsException - if the index is out of range (index < 0 || index >= size())
      */
     E get(int index) throws IndexOutOfBoundsException;
-    // int indexOf(E elem);
+
+    /**
+     * Returns the first index where the element is located in the list, or -1.
+     *
+     * @param o the element to look for
+     * @return its position, or -1 if not found
+     */
+    int indexOf(E elem);
 
     // head + tail + isEmpty = point de vue LinearSeq en Scala
 

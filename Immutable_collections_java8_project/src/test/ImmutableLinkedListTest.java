@@ -38,6 +38,12 @@ public class ImmutableLinkedListTest {
 	}
 
 	@Test
+	public void indexOf() {
+		assertEquals(1 , list.indexOf(2));
+		assertEquals(-1, list.indexOf(4));
+	}
+
+	@Test
 	public void GetTest() {
 		assertEquals(1, (int)list.get(0));
 		assertEquals(2, (int)list.get(1));

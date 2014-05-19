@@ -138,7 +138,15 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	    return null; // Never happens
 	}
 
-    // public int indexOf(E elem);
+	public int indexOf(E elem) {
+	    int i = 0;
+	    for (E other : this)
+		if (equals(elem, other))
+		    return i;
+		else
+		    ++i;
+	    return -1;
+	}
 
 	public E head() throws NoSuchElementException {
 	    if (isEmpty())
