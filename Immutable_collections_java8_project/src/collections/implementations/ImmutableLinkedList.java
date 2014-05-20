@@ -62,6 +62,9 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
         /** The first node element of the list. */
 	private final Node<E> head;
 
+	/** The last node element of the list. */
+	private final Node<E> last;
+
 	/** The number of elements in this list. */
 	private final int size;
 
@@ -72,6 +75,15 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	 **/
 	private Node<E> headNode() {
 	    return head;
+	}
+
+	/**
+	 * Returns the last node element of the list.
+	 *
+	 * @returns the last node element of the list.
+	 **/
+	private Node<E> lastNode() {
+	    return last;
 	}
 
 	public int size() {
@@ -85,6 +97,7 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	 */
 	public ImmutableLinkedList() {
 	    this.head = null;
+	    this.last = null;
 	    this.size = 0;
 	}
 
@@ -110,8 +123,10 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	    if (elems == null)
 		throw new NullPointerException();
 
-	    Node<E> head = null;
-	    for (int i = elems.length - 1 ; i >=0 ; --i)
+	    Node<E> head = new Node<E>(elems[elems.length - 1]);
+	    this.last = head;
+
+	    for (int i = elems.length - 2 ; i >=0 ; --i)
 		head = new Node<E>(elems[i], head);
 
 	    this.head = head;
@@ -162,7 +177,12 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 		return subList(1, size());
 	}
 
-    // public E last();
+	public E last() throws NoSuchElementException {
+	    if (isEmpty())
+		throw new NoSuchElementException();
+	    else
+		return lastNode().getElement();
+	}
 
 	@SuppressWarnings("unchecked")
 	public ImmutableList<E> subList(int fromIndex, int toIndex) throws

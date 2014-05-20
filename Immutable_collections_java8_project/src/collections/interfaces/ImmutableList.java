@@ -67,7 +67,14 @@ public interface ImmutableList<E> extends Iterable<E> {
      * @throws UnsupportedOperationException if this list is empty
      */
     ImmutableList<E> tail() throws UnsupportedOperationException;
-    // E last();
+
+    /**
+     * Returns the last element of the list.
+     *
+     * @returns the last element in the list
+     * @throws NoSuchElementException if the list is empty
+     */
+    E last() throws NoSuchElementException;;
 
     // Opérations sur les listes
 
