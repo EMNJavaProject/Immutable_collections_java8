@@ -41,7 +41,14 @@ public interface ImmutableList<E> extends Iterable<E> {
      * @throws IndexOutOfBoundsException - if the index is out of range (index < 0 || index >= size())
      */
     E get(int index) throws IndexOutOfBoundsException;
-    // int indexOf(E elem);
+
+    /**
+     * Returns the first index where the element is located in the list, or -1.
+     *
+     * @param o the element to look for
+     * @return its position, or -1 if not found
+     */
+    int indexOf(E elem);
 
     // head + tail + isEmpty = point de vue LinearSeq en Scala
 
@@ -60,7 +67,14 @@ public interface ImmutableList<E> extends Iterable<E> {
      * @throws UnsupportedOperationException if this list is empty
      */
     ImmutableList<E> tail() throws UnsupportedOperationException;
-    // E last();
+
+    /**
+     * Returns the last element of the list.
+     *
+     * @returns the last element in the list
+     * @throws NoSuchElementException if the list is empty
+     */
+    E last() throws NoSuchElementException;;
 
     // Opérations sur les listes
 
@@ -77,17 +91,49 @@ public interface ImmutableList<E> extends Iterable<E> {
 	IndexOutOfBoundsException,
 	IllegalArgumentException; // Java && Guava
 
-    // List<E> reverse();         		 // Guava: reverse
+    /**
+     * Returns a new list with the elements of this list in reverse order.
+     *
+     * @return a new list with the elements of this list in reverse order.
+     */
+    ImmutableList<E> reverse(); // Guava: reverse
+
     // List<E> sort(Comparator<? super E> comparator); // Java: sort, Scala: sorted/sortWith
 
-    // Scala, Java, Guava
-    // boolean contains(E elem);
-    // Java
-    // boolean containsAll(Collection<E> elems);
-    // boolean containsAll(ImmutableList<E> elems);
+    /**
+     * Returns true if this list contains the specified element. More formally,
+     * returns true if and only if this list contains at least one element e
+     * such that <code>(o==null ? e==null : o.equals(e))</code>.
+     *
+     * @param elem the element to look for
+     * @return true if it is found
+     */
+    boolean contains(E elem); // Scala, Java, Guava
 
-    // @SuppressWarnings({"unchecked", "varags"})
-    // boolean containsAll(E... elems);
+    /**
+     * Returns true if this list contains all of the elements of the specified collection.
+     *
+     * @param elems the elements to look for
+     * @return true if this list contains all of the elements of the specified collection
+     */
+    boolean containsAll(Collection<E> elems);
+
+    /**
+     * Returns true if this list contains all of the elements of the specified list.
+     *
+     * @param elems the elements to look for
+     * @return true if this list contains all of the elements of the specified list
+     */
+    boolean containsAll(ImmutableList<E> elems);
+
+    /**
+     * Returns true if this list contains all of the given elements
+     *
+     * @param elems the elements to look for
+     * @return true if this list contains all of the given elements
+     */
+    @SuppressWarnings({"unchecked", "varags"})
+    boolean containsAll(E... elems);
 
     /**
      * Returns whether given predicate is satisfied by at least one element of the list.
@@ -105,10 +151,15 @@ public interface ImmutableList<E> extends Iterable<E> {
      */
     boolean all(Predicate<? super E> predicate); // Scala: forall
 
-    // Fabriques (ajout d'un élément en tête)
+    // Factories
 
-    // Scala: + operator
-    // ImmutableList<E> cons(E elem);
+    /**
+     * Return a new list with the elements of this list appended to given element.
+     *
+     * @param elem The first element of the new list
+     * @return a new list with the elements of this list appended to given element.
+     */
+    ImmutableList<E> cons(E elem); // Scala: + operator
 
     // Java: addAll, Scala: ++ operator
     // ImmutableList<E> concat(Collection<E> elems);
@@ -152,8 +203,14 @@ public interface ImmutableList<E> extends Iterable<E> {
      */
     <F> ImmutableList<F> map(Function<? super E, ? extends F> mapper); // Scala: map
 
-    // Scala: filter
-    // <F> ImmutableList<E> filter(Predicate<? super E> predicate);
+    /**
+     * Returns a list consisting of the elements of this list that match the given predicate.
+     *
+     * @param predicate The predicate to be tested on elements of the list.
+     * @return a list consisting of the elements of this list that match the given predicate.
+     */
+    ImmutableList<E> filter(Predicate<? super E> predicate);    // Scala: filter
+
     // Scala: reduce
     // Optional<E> reduce(BinaryOperator<E> accumulator);
     // E reduce(E identity, BinaryOperator<E> accumulator);
@@ -167,7 +224,22 @@ public interface ImmutableList<E> extends Iterable<E> {
     // Object methods
 
     // ImmutableList<E> clone();
-    // boolean equals(Object o);
+
+    /**
+     * Compares the specified object with this list for equality. Returns true
+     * if and only if the specified object is also a list, both lists have the
+     * same size, and all corresponding pairs of elements in the two lists are
+     * equal. (Two elements e1 and e2 are equal if
+     * <code>(e1==null ? e2==null : e1.equals(e2)).)</code> In other words, two
+     * lists are defined to be equal if they contain the same elements in the
+     * same order. This definition ensures that the equals method works properly
+     * across different implementations of the ImmutableList interface.
+     *
+     * @param o the object to be compared for equality with this list
+     * @return if the specified object is equal to this list
+     */
+    boolean equals(Object o);
+
     // int hashCode();
 
     // Conversions

@@ -1,5 +1,7 @@
 package test;
 
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -36,6 +38,12 @@ public class ImmutableLinkedListTest {
 	}
 
 	@Test
+	public void indexOf() {
+		assertEquals(1 , list.indexOf(2));
+		assertEquals(-1, list.indexOf(4));
+	}
+
+	@Test
 	public void GetTest() {
 		assertEquals(1, (int)list.get(0));
 		assertEquals(2, (int)list.get(1));
@@ -58,6 +66,21 @@ public class ImmutableLinkedListTest {
 		assertEquals(1, (int)list.head());
 	}
 
+	@Test(expected=NoSuchElementException.class)
+	public void HeadExceptionTest() {
+		emptyList.head();
+	}
+
+	@Test
+	public void LastTest() {
+		assertEquals(3, (int)list.last());
+	}
+
+	@Test(expected=NoSuchElementException.class)
+	public void LastExceptionTest() {
+		emptyList.last();
+	}
+
 	@Test
 	public void TailTest() {
 		ImmutableList<Integer> tail = list.tail();
@@ -69,11 +92,6 @@ public class ImmutableLinkedListTest {
 	@Test(expected=UnsupportedOperationException.class)
 	public void TailExceptionTest() {
 		emptyList.tail();
-	}
-
-	@Test(expected=NoSuchElementException.class)
-	public void HeadExceptionTest() {
-		emptyList.head();
 	}
 
 	@Test
@@ -118,6 +136,18 @@ public class ImmutableLinkedListTest {
 	}
 
 	@Test
+	public void FilterTest() {
+		ImmutableList<Integer> filteredList = list.filter((Integer x) -> x % 2 != 0);
+		assertEquals(filteredList, new ImmutableLinkedList<Integer>(1, 3));
+
+		filteredList = list.filter((Integer x) -> true);
+		assertEquals(filteredList, list);
+
+		filteredList = list.filter((Integer x) -> false);
+		assertEquals(filteredList, emptyList);
+	}
+
+	@Test
 	public void AnyTest() {
 		assertTrue (list.any((Integer x) -> x % 2 == 0));
 		assertFalse(list.any((Integer x) -> x < 0));
@@ -149,5 +179,75 @@ public class ImmutableLinkedListTest {
 	public void IteratorExceptionTest2() {
 		Iterator<Integer> it = list.iterator();
 		it.remove();
+	}
+
+	@Test
+	public void ContainsTest() {
+		assertTrue(list.contains(1));
+		assertTrue(list.contains(2));
+		assertTrue(list.contains(3));
+
+		assertFalse(list.contains(4));
+
+		assertFalse(list.contains(null));
+		list = list.concat(null);
+		assertTrue(list.contains(null));
+	}
+
+	@Test
+	public void ContainsAllTest1() {
+		assertTrue(list.containsAll(1, 2, 3));
+		assertTrue(list.containsAll(1, 2));
+		assertFalse(list.containsAll(1, 2, 4));
+		assertFalse(list.containsAll(1, 2, null));
+	}
+
+	@Test
+	public void ContainsAllTest2() {
+		List<Integer> otherList = new ArrayList<Integer>();
+		otherList.add(1);
+		otherList.add(2);
+
+
+		assertTrue (list.containsAll(otherList));
+
+		otherList.add(3);
+		assertTrue (list.containsAll(otherList));
+
+		otherList.add(4);
+		assertFalse(list.containsAll(otherList));
+	}
+
+	@Test
+	public void ContainsAllTest3() {
+		assertTrue (list.containsAll(new ImmutableLinkedList<Integer>(1, 2, 3)));
+		assertTrue (list.containsAll(new ImmutableLinkedList<Integer>(1, 2)));
+		assertFalse(list.containsAll(new ImmutableLinkedList<Integer>(1, 2, 4)));
+		assertFalse(list.containsAll(new ImmutableLinkedList<Integer>(1, 2, null)));
+	}
+
+	@Test
+	public void consTest() {
+		list = list.cons(4);
+		assertEquals(4, list.size());
+		assertEquals(4, (int)list.get(0));
+		assertEquals(1, (int)list.get(1));
+		assertEquals(2, (int)list.get(2));
+		assertEquals(3, (int)list.get(3));
+	}
+
+	@Test
+	public void reverseTest() {
+		assertEquals(emptyList, emptyList.reverse());
+		assertEquals(new ImmutableLinkedList<Integer>(3, 2, 1), list.reverse());
+	}
+
+	@Test
+	public void EqualsTest() {
+		assertEquals(emptyList, new ImmutableLinkedList<Integer>());
+		assertFalse(emptyList.equals(list));
+
+		assertFalse(list.equals(new ImmutableLinkedList<Integer>(1, 2, 3, 4)));
+		assertEquals(list, new ImmutableLinkedList<Integer>(1, 2, 3));
 	}
 }

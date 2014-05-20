@@ -62,6 +62,9 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
         /** The first node element of the list. */
 	private final Node<E> head;
 
+	/** The last node element of the list. */
+	private final Node<E> last;
+
 	/** The number of elements in this list. */
 	private final int size;
 
@@ -72,6 +75,15 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	 **/
 	private Node<E> headNode() {
 	    return head;
+	}
+
+	/**
+	 * Returns the last node element of the list.
+	 *
+	 * @returns the last node element of the list.
+	 **/
+	private Node<E> lastNode() {
+	    return last;
 	}
 
 	public int size() {
@@ -85,10 +97,20 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	 */
 	public ImmutableLinkedList() {
 	    this.head = null;
+	    this.last = null;
 	    this.size = 0;
 	}
 
-	// public ImmutableLinkedList<E>(Collection<E> elems);
+	/**
+	 * Create a linked list containing the given elements in order.
+	 *
+	 * @param elems collection of elements to populate this list from
+	 * @throws NullPointerException if elems is null
+	 */
+	@SuppressWarnings("unchecked")
+	public ImmutableLinkedList(Collection<E> elems) {
+	    this((E[])elems.toArray());
+	}
 
 	/**
 	 * Create a linked list containing the given elements in order.
@@ -101,8 +123,10 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	    if (elems == null)
 		throw new NullPointerException();
 
-	    Node<E> head = null;
-	    for (int i = elems.length - 1 ; i >=0 ; --i)
+	    Node<E> head = new Node<E>(elems[elems.length - 1]);
+	    this.last = head;
+
+	    for (int i = elems.length - 2 ; i >=0 ; --i)
 		head = new Node<E>(elems[i], head);
 
 	    this.head = head;
@@ -129,7 +153,15 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	    return null; // Never happens
 	}
 
-    // public int indexOf(E elem);
+	public int indexOf(E elem) {
+	    int i = 0;
+	    for (E other : this)
+		if (equals(elem, other))
+		    return i;
+		else
+		    ++i;
+	    return -1;
+	}
 
 	public E head() throws NoSuchElementException {
 	    if (isEmpty())
@@ -145,7 +177,12 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 		return subList(1, size());
 	}
 
-    // public E last();
+	public E last() throws NoSuchElementException {
+	    if (isEmpty())
+		throw new NoSuchElementException();
+	    else
+		return lastNode().getElement();
+	}
 
 	@SuppressWarnings("unchecked")
 	public ImmutableList<E> subList(int fromIndex, int toIndex) throws
@@ -176,14 +213,42 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	    return new ImmutableLinkedList<E>(elems);
 	}
 
-    // public List<E> reverse();
+	public ImmutableList<E> reverse() {
+	    if (isEmpty())
+		return this;
+	    else
+		return tail().reverse().concat(head());
+	}
+
     // public List<E> sort(Comparator<? super E> comparator);
 
-    // public boolean contains(E elem);
-    // public boolean containsAll(Collection<E> elems);
-    // public boolean containsAll(ImmutableList<E> elems);
-    // public @SuppressWarnings({"unchecked", "varags"})
-    // public boolean containsAll(E... elems);
+	/**
+	 * Compare two objects according to Collection semantics.
+	 *
+	 * @param o1 the first object
+	 * @param o2 the second object
+	 * @return o1 == null ? o2 == null : o1.equals(o2)
+	   */
+	static final boolean equals(Object o1, Object o2) {
+	    return o1 == null ? o2 == null : o1.equals(o2);
+	}
+
+	public boolean contains(E elem) {
+	    return any((E other) -> equals(elem, other));
+	}
+
+	public boolean containsAll(Collection<E> elems) {
+	    return containsAll(new ImmutableLinkedList<E>(elems));
+	}
+
+	public boolean containsAll(ImmutableList<E> elems) {
+	    return elems.all((E elem) -> contains(elem));
+	}
+
+	public @SuppressWarnings({"unchecked", "varags"})
+	boolean containsAll(E... elems) {
+	    return containsAll(new ImmutableLinkedList<E>(elems));
+	}
 
 	public boolean any(Predicate<? super E> predicate) {
 	    for (E elem : this)
@@ -199,9 +264,21 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	    return true;
 	}
 
-    // Factories
+	// Factories
 
-    // public ImmutableList<E> cons(E elem);
+	@SuppressWarnings("unchecked")
+	public ImmutableList<E> cons(E elem) {
+	    E[] elems = (E[]) new Object[size()+1];
+	    elems[0] = elem;
+
+	    int i = 1;
+	    for (E e : this) {
+		elems[i] = e;
+		++i;
+	    }
+
+	    return new ImmutableLinkedList(elems);
+	}
 
     // public ImmutableList<E> concat(Collection<E> elems);
     // public ImmutableList<E> concat(ImmutableList<E> elems);
@@ -250,7 +327,14 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	    return new ImmutableLinkedList<F>(elems);
 	}
 
-    // public <F> ImmutableList<E> filter(Predicate<? super E> predicate);
+	public ImmutableList<E> filter(Predicate<? super E> predicate) {
+	    ImmutableList<E> res = new ImmutableLinkedList<E>();
+	    for (E elem : this)
+		if (predicate.test(elem))
+		    res = res.concat(elem);
+	    return res;
+	}
+
     // public Optional<E> reduce(BinaryOperator<E> accumulator);
     // public E reduce(E identity, BinaryOperator<E> accumulator);
     // public <F> F reduce(F identity, BiFunction<F, ? super E, F> accumulator, BinaryOperator<F> combiner);
@@ -299,7 +383,27 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 
     // Object methods
     // public ImmutableList<E> clone();
-    // public boolean equals(Object o);
+
+	public boolean equals(Object o) {
+	    if (! (o instanceof ImmutableList))
+		return false;
+
+	    ImmutableList other = (ImmutableList) o;
+
+	    if (size() != other.size())
+		return false;
+
+	    Iterator<E> it1 = iterator();
+	    Iterator it2 = other.iterator();
+
+	    while (it1.hasNext()) {
+		if (!equals(it1.next(), it2.next()))
+		    return false;
+	    }
+
+	    return true;
+	}
+
     // public int hashCode();
 
     // Conversions
