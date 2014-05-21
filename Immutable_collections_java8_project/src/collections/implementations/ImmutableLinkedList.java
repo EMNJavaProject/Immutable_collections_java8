@@ -335,9 +335,19 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	    return res;
 	}
 
-    // public Optional<E> reduce(BinaryOperator<E> accumulator);
-    // public E reduce(E identity, BinaryOperator<E> accumulator);
-    // public <F> F reduce(F identity, BiFunction<F, ? super E, F> accumulator, BinaryOperator<F> combiner);
+	public Optional<E> reduce(BinaryOperator<E> accumulator) {
+	    switch (size()) {
+	    case 0 : return Optional.empty();
+	    case 1 : return Optional.of(head());
+	    default :
+
+		E result = head();
+		for (E elem : tail()) {
+		    result = accumulator.apply(result, elem);
+		}
+		return Optional.of(result);
+	    }
+	}
 
         // Iterators & streams
 

@@ -1,6 +1,7 @@
 package test;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -145,6 +146,26 @@ public class ImmutableLinkedListTest {
 
 		filteredList = list.filter((Integer x) -> false);
 		assertEquals(filteredList, emptyList);
+	}
+
+	@Test
+	public void ReduceTest() {
+		Optional<Integer> reduced = list.reduce((Integer x, Integer y) -> x + y);
+		assertEquals(6, (int)reduced.get());
+
+		reduced = list.reduce((Integer x, Integer y) -> y);
+		assertEquals(3, (int)reduced.get());
+
+		reduced = emptyList.reduce((Integer x, Integer y) -> x + y);
+		assertEquals(Optional.empty(), reduced);
+
+		reduced = emptyList.concat(4).reduce((Integer x, Integer y) -> x + y);
+		assertEquals(4, (int)reduced.get());
+	}
+
+	@Test(expected=NullPointerException.class)
+	public void ReduceExceptionTest() {
+		list.reduce((Integer x, Integer y) -> null);
 	}
 
 	@Test

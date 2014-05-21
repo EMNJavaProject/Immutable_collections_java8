@@ -212,9 +212,17 @@ public interface ImmutableList<E> extends Iterable<E> {
     ImmutableList<E> filter(Predicate<? super E> predicate);    // Scala: filter
 
     // Scala: reduce
-    // Optional<E> reduce(BinaryOperator<E> accumulator);
-    // E reduce(E identity, BinaryOperator<E> accumulator);
-    // <F> F reduce(F identity, BiFunction<F, ? super E, F> accumulator, BinaryOperator<F> combiner);
+
+    /**
+     * Performs a reduction on the elements of this list, using an associative
+     * accumulation function, and returns an Optional describing the reduced
+     * value, if any.
+     *
+     * @param accumulator An associative function for combining two values
+     * @return an Optional describing the result of the reduction
+     * @throws NullPointerException - if the result of the reduction is null
+     */
+    Optional<E> reduce(BinaryOperator<E> accumulator);
 
     // Intégration : itérateurs + flots
     // Iterator<E> iterator();
