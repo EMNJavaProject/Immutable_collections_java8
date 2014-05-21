@@ -248,8 +248,8 @@ public class ImmutableLinkedListTest {
 	}
 
 	@Test
-	public void consTest() {
-		list = list.add(4);
+	public void addFirstTest() {
+		list = ((ImmutableLinkedList<Integer>)list).addFirst(4);
 		assertEquals(4, list.size());
 		assertEquals(4, (int)list.get(0));
 		assertEquals(1, (int)list.get(1));

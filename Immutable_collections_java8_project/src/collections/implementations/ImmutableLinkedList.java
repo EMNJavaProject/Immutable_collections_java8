@@ -304,7 +304,7 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 			elems[i] = e;
 			++i;
 		}
-		
+
 		return new ImmutableLinkedList<E>(elems);
 	}
 

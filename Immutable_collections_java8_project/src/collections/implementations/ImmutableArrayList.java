@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
@@ -84,11 +85,42 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 
 
 
+	class ImmutableArrayListIterator implements Iterator<E> {
 
+		/** Current node pointed by the iterator */
+		private int index;
+		private int size;
+
+		/**
+		 * Create a new iterator starting from the beginning of the linked list.
+		 */
+		public ImmutableArrayListIterator() {
+			index = 0;
+			size = size();
+		}
+
+		public boolean hasNext() {
+			return index < size-1 ? true : false;
+		}
+
+		public E next() throws NoSuchElementException {
+			if(index >= size)
+				return null;
+			
+			E elem = getArray()[index];
+			++index;
+			return elem;
+		}
+
+		public void remove() throws
+		UnsupportedOperationException,
+		IllegalStateException {
+			throw new UnsupportedOperationException();
+		}
+	}
 
 	public Iterator<E> iterator() {
-		// TODO Auto-generated method stub
-		return null;
+		return new ImmutableArrayListIterator();
 
 	}
 
