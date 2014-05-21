@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import javax.management.ImmutableDescriptor;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
@@ -14,12 +16,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import collections.implementations.ImmutableLinkedList;
+import collections.interfaces.IImmutableLinkedList;
 import collections.interfaces.ImmutableList;
 
 public class ImmutableLinkedListTest {
 
-	private ImmutableList<Integer> list;
-	private ImmutableList<Integer> emptyList;
+	private IImmutableLinkedList<Integer> list;
+	private IImmutableLinkedList<Integer> emptyList;
 
 	@Before
 	public void setUp() {
@@ -97,7 +100,7 @@ public class ImmutableLinkedListTest {
 
 	@Test
 	public void AddTest() {
-		list = list.concat(4);
+		list = list.add(4);
 		assertEquals(4, (int)list.get(3));
 	}
 
@@ -159,7 +162,7 @@ public class ImmutableLinkedListTest {
 		reduced = emptyList.reduce((Integer x, Integer y) -> x + y);
 		assertEquals(Optional.empty(), reduced);
 
-		reduced = emptyList.concat(4).reduce((Integer x, Integer y) -> x + y);
+		reduced = emptyList.add(4).reduce((Integer x, Integer y) -> x + y);
 		assertEquals(4, (int)reduced.get());
 	}
 
@@ -211,7 +214,7 @@ public class ImmutableLinkedListTest {
 		assertFalse(list.contains(4));
 
 		assertFalse(list.contains(null));
-		list = list.concat(null);
+		list = list.add(null);
 		assertTrue(list.contains(null));
 	}
 
@@ -249,7 +252,7 @@ public class ImmutableLinkedListTest {
 
 	@Test
 	public void consTest() {
-		list = list.cons(4);
+		list = list.add(4);
 		assertEquals(4, list.size());
 		assertEquals(4, (int)list.get(0));
 		assertEquals(1, (int)list.get(1));

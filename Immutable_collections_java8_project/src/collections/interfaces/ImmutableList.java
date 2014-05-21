@@ -4,17 +4,11 @@ package collections.interfaces;
 // http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true
 // http://docs.guava-libraries.googlecode.com/git/javadoc/com/google/common/collect/ImmutableList.html
 
-import java.util.NoSuchElementException;
 import java.util.Collection;
 import java.util.Optional;
-import java.util.List;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.stream.Stream;
 import java.util.function.BinaryOperator;
-import java.util.function.BiFunction;
-import java.util.function.Predicate;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 public interface ImmutableList<E> extends Iterable<E> {
 
@@ -48,33 +42,12 @@ public interface ImmutableList<E> extends Iterable<E> {
      * @param o the element to look for
      * @return its position, or -1 if not found
      */
-    int indexOf(E elem);
+    int indexOf(E elem) throws ClassCastException, NullPointerException;
 
     // head + tail + isEmpty = point de vue LinearSeq en Scala
 
-    /**
-     * Returns the first element in the list.
-     *
-     * @returns the first element in the list.
-     * @throws NoSuchElementException if the list is empty
-     */
-    E head() throws NoSuchElementException;
-
-    /**
-     * Returns a list with all elements of this list except the first one.
-     *
-     * @returns a list with all elements of this list except the first one
-     * @throws UnsupportedOperationException if this list is empty
-     */
-    ImmutableList<E> tail() throws UnsupportedOperationException;
-
-    /**
-     * Returns the last element of the list.
-     *
-     * @returns the last element in the list
-     * @throws NoSuchElementException if the list is empty
-     */
-    E last() throws NoSuchElementException;;
+   
+   
 
     // Opérations sur les listes
 
@@ -132,7 +105,7 @@ public interface ImmutableList<E> extends Iterable<E> {
      * @param elems the elements to look for
      * @return true if this list contains all of the given elements
      */
-    @SuppressWarnings({"unchecked", "varags"})
+    @SuppressWarnings({"unchecked"})
     boolean containsAll(E... elems);
 
     /**
@@ -173,7 +146,16 @@ public interface ImmutableList<E> extends Iterable<E> {
      * @param elem the list to be concatened with
      * @returns a new list containing the elements from this list followed by the elements from the given list
      */
-    ImmutableList<E> concat(E elem);
+    ImmutableList<E> add(E elem);
+    
+    /**
+     * Returns a new list containing the specified element inserted at the specified position in this list (optional operation). 
+     * Shifts the element currently at that position (if any) and any subsequent elements to the right (adds one to their indices).
+     * @param index at which the specified element is to be inserted
+     * @param element to be inserted
+     * @return a new list containing the the new element at the given position
+     */
+    ImmutableList<E> add(int index, E elem);
 
     // Java
     // ImmutableList<E> remove(Collection<E> elems);

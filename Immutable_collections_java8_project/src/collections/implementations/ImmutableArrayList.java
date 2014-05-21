@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 
 import collections.interfaces.ImmutableList;
 
-public class ImmutableArrayList<E> //implements ImmutableList<E>
+public class ImmutableArrayList<E> //implements ImmutableArrayList<E>
 {
 
 	private final E[] _array;

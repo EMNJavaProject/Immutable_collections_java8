@@ -12,6 +12,7 @@ import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.Function;
 
+import collections.interfaces.IImmutableLinkedList;
 import collections.interfaces.ImmutableList;
 
 class Node<E> {
@@ -57,7 +58,7 @@ class Node<E> {
 	}
 }
 
-public class ImmutableLinkedList<E> implements ImmutableList<E> {
+public class ImmutableLinkedList<E> implements IImmutableLinkedList<E> {
 
         /** The first node element of the list. */
 	private final Node<E> head;
@@ -170,11 +171,11 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 		return headNode().getElement();
 	}
 
-	public ImmutableList<E> tail() throws UnsupportedOperationException {
+	public IImmutableLinkedList<E> tail() throws UnsupportedOperationException {
 	    if (isEmpty())
 		throw new UnsupportedOperationException();
 	    else
-		return subList(1, size());
+		return (IImmutableLinkedList<E>) subList(1, size());
 	}
 
 	public E last() throws NoSuchElementException {
@@ -217,7 +218,7 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	    if (isEmpty())
 		return this;
 	    else
-		return tail().reverse().concat(head());
+		return tail().reverse().add(head());
 	}
 
     // public List<E> sort(Comparator<? super E> comparator);
@@ -286,7 +287,7 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
     // public ImmutableList<E> concat(E... elems);
 
 	@SuppressWarnings("unchecked")
-	public ImmutableList<E> concat(E elem) {
+	public IImmutableLinkedList<E> add(E elem) {
 	    E[] elems = (E[]) new Object[size() + 1];
 	    Node node = headNode();
 	    int i = 0;
@@ -331,7 +332,7 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	    ImmutableList<E> res = new ImmutableLinkedList<E>();
 	    for (E elem : this)
 		if (predicate.test(elem))
-		    res = res.concat(elem);
+		    res = res.add(elem);
 	    return res;
 	}
 
@@ -412,6 +413,14 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	    }
 
 	    return true;
+	}
+
+	
+
+	@Override
+	public ImmutableList<E> add(int index, E elem) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
     // public int hashCode();
