@@ -1,15 +1,15 @@
 package test;
 
-import java.util.List;
-import java.util.stream.Stream;
-import java.util.Optional;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Stream;
 import java.util.NoSuchElementException;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
+import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -65,27 +65,27 @@ public class ImmutableLinkedListTest {
 
 	@Test
 	public void HeadTest() {
-		assertEquals(1, (int)list.head());
+		assertEquals(1, (int)((ImmutableLinkedList<Integer>)list).head());
 	}
 
 	@Test(expected=NoSuchElementException.class)
 	public void HeadExceptionTest() {
-		emptyList.head();
+		((ImmutableLinkedList<Integer>)emptyList).head();
 	}
 
 	@Test
 	public void LastTest() {
-		assertEquals(3, (int)list.last());
+		assertEquals(3, (int)((ImmutableLinkedList<Integer>)list).last());
 	}
 
 	@Test(expected=NoSuchElementException.class)
 	public void LastExceptionTest() {
-		emptyList.last();
+		((ImmutableLinkedList<Integer>)emptyList).last();
 	}
 
 	@Test
 	public void TailTest() {
-		ImmutableList<Integer> tail = list.tail();
+		ImmutableList<Integer> tail = ((ImmutableLinkedList<Integer>)list).tail();
 		assertEquals(2, (int)tail.get(0));
 		assertEquals(3, (int)tail.get(1));
 		assertEquals(2, tail.size());
@@ -93,12 +93,12 @@ public class ImmutableLinkedListTest {
 
 	@Test(expected=UnsupportedOperationException.class)
 	public void TailExceptionTest() {
-		emptyList.tail();
+		((ImmutableLinkedList<Integer>)emptyList).tail();
 	}
 
 	@Test
 	public void AddTest() {
-		list = list.concat(4);
+		list = list.add(4);
 		assertEquals(4, (int)list.get(3));
 	}
 
@@ -160,7 +160,7 @@ public class ImmutableLinkedListTest {
 		reduced = emptyList.reduce((Integer x, Integer y) -> x + y);
 		assertEquals(Optional.empty(), reduced);
 
-		reduced = emptyList.concat(4).reduce((Integer x, Integer y) -> x + y);
+		reduced = emptyList.add(4).reduce((Integer x, Integer y) -> x + y);
 		assertEquals(4, (int)reduced.get());
 	}
 
@@ -212,7 +212,7 @@ public class ImmutableLinkedListTest {
 		assertFalse(list.contains(4));
 
 		assertFalse(list.contains(null));
-		list = list.concat(null);
+		list = list.add(null);
 		assertTrue(list.contains(null));
 	}
 
@@ -249,8 +249,8 @@ public class ImmutableLinkedListTest {
 	}
 
 	@Test
-	public void consTest() {
-		list = list.cons(4);
+	public void addFirstTest() {
+		list = ((ImmutableLinkedList<Integer>)list).addFirst(4);
 		assertEquals(4, list.size());
 		assertEquals(4, (int)list.get(0));
 		assertEquals(1, (int)list.get(1));

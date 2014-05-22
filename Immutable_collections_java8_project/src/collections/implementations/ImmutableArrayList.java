@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
@@ -13,7 +14,7 @@ import java.util.stream.Stream;
 
 import collections.interfaces.ImmutableList;
 
-public class ImmutableArrayList<E> //implements ImmutableList<E>
+public class ImmutableArrayList<E> implements ImmutableList<E>
 {
 
 	private final E[] _array;
@@ -23,6 +24,7 @@ public class ImmutableArrayList<E> //implements ImmutableList<E>
 	/**
 	 * Constructs an empty list with an initial capacity of 0.
 	 */
+	@SuppressWarnings("unchecked")
 	public ImmutableArrayList ()
 	{
 		_array = (E[]) new Object[0];
@@ -34,6 +36,7 @@ public class ImmutableArrayList<E> //implements ImmutableList<E>
 	 * <p>If the specified collection is null, constructs an empty ArrayList with a capacity of 0.
 	 * @param elems - the collection whose elements are to be placed into this list
 	 */
+	@SuppressWarnings("unchecked")
 	public ImmutableArrayList (E... elems)
 	{
 		if(elems == null )
@@ -54,6 +57,7 @@ public class ImmutableArrayList<E> //implements ImmutableList<E>
 	 * <p>If the specified collection is null, constructs an empty ArrayList with a capacity of 0.
 	 * @param elems - the collection whose elements are to be placed into this list
 	 */
+	@SuppressWarnings("unchecked")
 	public ImmutableArrayList(Collection<E> elems)
 	{
 		if(elems == null )
@@ -81,11 +85,42 @@ public class ImmutableArrayList<E> //implements ImmutableList<E>
 
 
 
+	class ImmutableArrayListIterator implements Iterator<E> {
 
+		/** Current node pointed by the iterator */
+		private int index;
+		private int size;
+
+		/**
+		 * Create a new iterator starting from the beginning of the linked list.
+		 */
+		public ImmutableArrayListIterator() {
+			index = 0;
+			size = size();
+		}
+
+		public boolean hasNext() {
+			return index < size-1 ? true : false;
+		}
+
+		public E next() throws NoSuchElementException {
+			if(index >= size)
+				return null;
+			
+			E elem = getArray()[index];
+			++index;
+			return elem;
+		}
+
+		public void remove() throws
+		UnsupportedOperationException,
+		IllegalStateException {
+			throw new UnsupportedOperationException();
+		}
+	}
 
 	public Iterator<E> iterator() {
-		// TODO Auto-generated method stub
-		return null;
+		return new ImmutableArrayListIterator();
 
 	}
 
@@ -132,19 +167,22 @@ public class ImmutableArrayList<E> //implements ImmutableList<E>
 	}
 
 
-	public List<E> subList(int from, int size) {
+	@Override
+	public ImmutableList<E> subList(int fromIndex, int toIndex)
+			throws IndexOutOfBoundsException, IllegalArgumentException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 
-	public List<E> reverse() {
+	@Override
+	public ImmutableList<E> reverse() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 
-	public List<E> sort(Comparator<? super E> comparator) {
+	public ImmutableList<E> sort(Comparator<? super E> comparator) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -168,6 +206,7 @@ public class ImmutableArrayList<E> //implements ImmutableList<E>
 	}
 
 
+	@SuppressWarnings("unchecked")
 	public boolean containsAll(E... elems) {
 		// TODO Auto-generated method stub
 		return false;
@@ -203,7 +242,7 @@ public class ImmutableArrayList<E> //implements ImmutableList<E>
 		return null;
 	}
 
-
+	@SuppressWarnings("unchecked")
 	public ImmutableList<E> concat(E... elems) {
 		// TODO Auto-generated method stub
 		return null;
@@ -227,7 +266,7 @@ public class ImmutableArrayList<E> //implements ImmutableList<E>
 		return null;
 	}
 
-
+	@SuppressWarnings("unchecked")
 	public ImmutableList<E> remove(E... elems) {
 		// TODO Auto-generated method stub
 		return null;
@@ -257,7 +296,7 @@ public class ImmutableArrayList<E> //implements ImmutableList<E>
 		return null;
 	}
 
-
+	@SuppressWarnings("unchecked")
 	public ImmutableList<E> union(E... elems) {
 		// TODO Auto-generated method stub
 		return null;
@@ -276,22 +315,25 @@ public class ImmutableArrayList<E> //implements ImmutableList<E>
 	}
 
 
+	@SuppressWarnings("unchecked")
 	public ImmutableList<E> intersect(E... elems) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 
-	public <F> ImmutableList<F> map(Function<? super E, ? super F> mapper) {
+	public <F> ImmutableList<F> map(Function<? super E, ? extends F> mapper) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 
-	public <F> ImmutableList<E> filter(Predicate<? super E> predicate) {
+	@Override
+	public ImmutableList<E> filter(Predicate<? super E> predicate) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 
 
 	public Optional<E> reduce(BinaryOperator<E> accumulator) {
@@ -341,6 +383,23 @@ public class ImmutableArrayList<E> //implements ImmutableList<E>
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
+
+
+
+	@Override
+	public ImmutableList<E> add(E elem) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ImmutableList<E> add(int index, E elem) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 
 
