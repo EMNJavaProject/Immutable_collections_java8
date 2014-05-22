@@ -35,7 +35,7 @@ public class ImmutableArrayList<E> //implements ImmutableList<E>
 	 * @param elems - the collection whose elements are to be placed into this list
 	 */
 	public ImmutableArrayList (E... elems)
-	{	
+	{
 		if(elems == null )
 		{
 			_array = (E[]) new Object[0];
@@ -95,14 +95,14 @@ public class ImmutableArrayList<E> //implements ImmutableList<E>
 	}
 
 
-	public int size() { //TODO à tester.
+	public int size() { //TODO Ã  tester.
 		return _length;
 	}
 
 
 	public E get(int index) { //TODO a tester
 		if(index >0 && index < _length)
-			return _array[index];	
+			return _array[index];
 		else
 			return null;
 	}
@@ -113,127 +113,127 @@ public class ImmutableArrayList<E> //implements ImmutableList<E>
 		return 0;
 	}
 
-	
+
 	public E head() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	
+
 	public ImmutableList<E> tail() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	
+
 	public E last() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	
+
 	public List<E> subList(int from, int size) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	
+
 	public List<E> reverse() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	
+
 	public List<E> sort(Comparator<? super E> comparator) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	
+
 	public boolean contains(E elem) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	
+
 	public boolean containsAll(Collection<E> elems) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	
+
 	public boolean containsAll(ImmutableList<E> elems) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	
+
 	public boolean containsAll(E... elems) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	
+
 	public boolean any(Predicate<? super E> predicate) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	
+
 	public boolean all(Predicate<? super E> predicate) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	
+
 	public ImmutableList<E> cons(E elem) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	
+
 	public ImmutableList<E> concat(Collection<E> elems) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	
+
 	public ImmutableList<E> concat(ImmutableList<E> elems) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	
+
 	public ImmutableList<E> concat(E... elems) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	
+
 	public ImmutableList<E> concat(E elem) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	
+
 	public ImmutableList<E> remove(Collection<E> elems) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	
+
 	public ImmutableList<E> remove(ImmutableList<E> elems) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	
+
 	public ImmutableList<E> remove(E... elems) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	
+
 	public ImmutableList<E> remove(E elem) {
 		// TODO Auto-generated method stub
 		return null;
@@ -245,55 +245,55 @@ public class ImmutableArrayList<E> //implements ImmutableList<E>
 		return null;
 	}
 
-	
+
 	public ImmutableList<E> union(Collection<E> elems) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	
+
 	public ImmutableList<E> union(ImmutableList<E> elems) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	
+
 	public ImmutableList<E> union(E... elems) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	
+
 	public ImmutableList<E> intersect(Collection<E> elems) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	
+
 	public ImmutableList<E> intersect(ImmutableList<E> elems) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	
+
 	public ImmutableList<E> intersect(E... elems) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	
+
 	public <F> ImmutableList<F> map(Function<? super E, ? super F> mapper) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	
+
 	public <F> ImmutableList<E> filter(Predicate<? super E> predicate) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	
+
 	public Optional<E> reduce(BinaryOperator<E> accumulator) {
 		// TODO Auto-generated method stub
 		return null;
@@ -312,39 +312,39 @@ public class ImmutableArrayList<E> //implements ImmutableList<E>
 		return null;
 	}
 
-	
+
 	public Stream<E> stream() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	
+
 	public Stream<E> parallelStream() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	
+
 	public ImmutableList<E> clone() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	
+
 	public E[] toArray() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	
+
 	public List<E> asList() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	
-	
 
-	
+
+
+
 
 }
