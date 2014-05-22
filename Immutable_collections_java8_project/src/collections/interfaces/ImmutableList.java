@@ -226,8 +226,20 @@ public interface ImmutableList<E> extends Iterable<E> {
 
     // Intégration : itérateurs + flots
     // Iterator<E> iterator();
-    // Stream<E> stream();
-    // Stream<E> parallelStream();
+
+    /**
+     * Returns a sequential Stream with this collection as its source.
+     *
+     * @return a sequential Stream over the elements in this collection
+     */
+    Stream<E> stream();
+
+    /**
+     * Returns a parallel Stream with this collection as its source.
+     *
+     * @return a parallel Stream over the elements in this collection
+     */
+    Stream<E> parallelStream();
 
     // Object methods
 

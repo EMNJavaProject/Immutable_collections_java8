@@ -1,6 +1,7 @@
 package test;
 
 import java.util.List;
+import java.util.stream.Stream;
 import java.util.Optional;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -270,5 +271,35 @@ public class ImmutableLinkedListTest {
 
 		assertFalse(list.equals(new ImmutableLinkedList<Integer>(1, 2, 3, 4)));
 		assertEquals(list, new ImmutableLinkedList<Integer>(1, 2, 3));
+	}
+
+	@Test
+	public void StreamTest() {
+		assertEquals(6, (int)list.stream()        .reduce((Integer x, Integer y) -> x + y).get());
+		assertEquals(6, (int)list.parallelStream().reduce((Integer x, Integer y) -> x + y).get());
+
+		assertEquals(12, (int)list.stream()
+			     .map   ((Integer x) -> x * 2)
+			     .reduce((Integer x, Integer y) -> x + y).get());
+		assertEquals(12, (int)list.parallelStream()
+			     .map   ((Integer x) -> x * 2)
+			     .reduce((Integer x, Integer y) -> x + y).get());
+
+		assertEquals(3, (int)list.stream()        .max((Integer x, Integer y) -> x.compareTo(y)).get());
+		assertEquals(3, (int)list.parallelStream().max((Integer x, Integer y) -> x.compareTo(y)).get());
+
+		assertEquals(6, Stream.concat(list.stream()        , list.stream()).count());
+		assertEquals(6, Stream.concat(list.parallelStream(), list.parallelStream()).count());
+		assertEquals(6, Stream.concat(list.stream()        , list.parallelStream()).count());
+		assertEquals(6, Stream.concat(list.parallelStream(), list.stream()).count());
+
+		assertEquals(list.stream().findFirst().get(), list.reverse().stream().sorted().findFirst().get());
+		assertEquals(list.parallelStream().findFirst().get(), list.reverse().parallelStream().sorted().findFirst().get());
+
+		assertEquals(1, (int)list.stream().findFirst().get());
+		assertEquals(1, (int)list.parallelStream().findFirst().get());
+
+		assertEquals(2, list.stream().limit(2).count());
+		assertEquals(2, list.parallelStream().limit(2).count());
 	}
 }
