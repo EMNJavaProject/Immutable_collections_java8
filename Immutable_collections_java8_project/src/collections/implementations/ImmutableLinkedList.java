@@ -2,11 +2,14 @@ package collections.implementations;
 
 import java.util.NoSuchElementException;
 import java.util.Collection;
+import java.util.Spliterators;
+import java.util.Spliterator;
 import java.util.Optional;
 import java.util.List;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 import java.util.function.BinaryOperator;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -387,9 +390,22 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	    return new ImmutableLinkedListIterator();
 	}
 
+	public Spliterator<E> spliterator() {
+	    return Spliterators.spliterator(iterator(),
+					    size(),
+					    Spliterator.IMMUTABLE |
+					    Spliterator.ORDERED   |
+					    Spliterator.SIZED     |
+					    Spliterator.SUBSIZED);
+	}
 
-    // public Stream<E> stream();
-    // public Stream<E> parallelStream();
+	public Stream<E> stream() {
+	    return StreamSupport.stream(spliterator(), false);
+	}
+
+	public Stream<E> parallelStream() {
+	    return StreamSupport.stream(spliterator(), true);
+	}
 
     // Object methods
     // public ImmutableList<E> clone();
