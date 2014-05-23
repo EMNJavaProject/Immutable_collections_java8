@@ -385,7 +385,7 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 				if (i == this.size()-1)
 					throw new IllegalArgumentException();
 				newElems[i] = e;
-				i++;	
+				i++;
 			}
 		}
 
@@ -404,7 +404,7 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 
 		newElems = (E[]) new Object[size() -1];
 		i = 0;
-		remove = false;    	
+		remove = false;
 		for ( E e :this){
 			if(!remove && i==index)
 				remove = true;
@@ -567,9 +567,23 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 		return true;
 	}
 
-	public int hashCode(){
-		//TODO Method
-		return -1;
+	/**
+	 * Hash an object.
+	 *
+	 * @param o the object to hash
+	 * @return o1 == null ? 0 : o1.hashCode()
+	 */
+	static final int hashCode(Object o) {
+		return o == null ? 0 : o.hashCode();
+	}
+
+	public int hashCode() {
+		int hashCode = 1;
+		Iterator<E> itr = iterator();
+		int pos = size();
+		while (--pos >= 0)
+			hashCode = 31 * hashCode + hashCode(itr.next());
+		return hashCode;
 	}
 
 	// Conversions
@@ -600,5 +614,3 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	}
 
 }
-
-

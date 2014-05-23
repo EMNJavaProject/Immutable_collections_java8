@@ -290,7 +290,7 @@ public abstract class ImmutableListTest {
 		assertEquals(2, list.stream().limit(2).count());
 		assertEquals(2, list.parallelStream().limit(2).count());
 	}
-	
+
 	@Test
 	public void removeTest1() {
 		assertEquals(new ImmutableLinkedList<Integer>(2, 3),list.remove(0));
@@ -315,7 +315,7 @@ public abstract class ImmutableListTest {
 		assertEquals(new ImmutableLinkedList<Integer>(1, 2, 3, 4, 5, 6),list.concat(otherList));
 	}
 
-	
+
 	@Test(expected=ArrayIndexOutOfBoundsException.class)
 	public void removeTest2(){
 		list.remove(3);
@@ -332,10 +332,18 @@ public abstract class ImmutableListTest {
 		assertFalse(list==list.clone());
 	}
 
-	@Test 
+	@Test
+	public void hashCodeTest() {
+		assertFalse(emptyList.hashCode() == list.hashCode());
+
+		assertEquals(list.hashCode(), factory.create(1, 2, 3).hashCode());
+		assertEquals(emptyList.hashCode(), factory.create().hashCode());
+	}
+
+	@Test
 	public void toarrayTest(){
 		Integer[] array= { 1 ,2 ,3 };
-		Integer[] array2 =  new Integer[array.length]; 
+		Integer[] array2 =  new Integer[array.length];
 		array2=list.toArray(array2);
 		assertEquals(array2[0],array[0]);
 		assertEquals(array2[1],array[1]);
