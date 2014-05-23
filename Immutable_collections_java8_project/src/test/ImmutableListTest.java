@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
@@ -339,6 +340,24 @@ public abstract class ImmutableListTest {
 		assertEquals(array2[0],array[0]);
 		assertEquals(array2[1],array[1]);
 		assertEquals(array2[2],array[2]);
+	}
+	
+	@Test
+	public void asListTest(){
+		List<Integer> myList = new ArrayList<Integer>();
+		List<Integer> myList2 = new ArrayList<Integer>();
+		myList.add(1);
+		myList.add(2);
+		myList.add(3);
+		myList2= list.asList();
+		
+		assertEquals(myList,myList2);
+	}
+	
+	@Test
+	public void sortTest(){
+		Comparator<Integer> comp = (Integer x, Integer y) -> x.compareTo(y);
+		assertEquals(list.sort(comp),list.reverse().sort(comp));
 	}
 
 }

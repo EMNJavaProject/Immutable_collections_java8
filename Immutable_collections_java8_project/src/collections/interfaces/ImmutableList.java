@@ -72,7 +72,11 @@ public interface ImmutableList<E> extends Iterable<E> {
 	 */
 	ImmutableList<E> reverse(); // Guava: reverse
 
-
+	/**
+	 * Sorts this list using the supplied Comparator to compare elements.
+	 * @param comparator
+	 * @return the list 
+	 */
 	ImmutableList<E> sort(Comparator<? super E> comparator); // Java: sort, Scala: sorted/sortWith
 	//TODO Javadoc   List<E> sort(Comparator<? super E> comparator);
 
@@ -312,5 +316,10 @@ public interface ImmutableList<E> extends Iterable<E> {
 	 * @return an array containing the elements of the list
 	 */
 	<E> E[] toArray(E[] a);
-	// List<E> asList(); // Scala: toList, Guava: asList
+	/**
+	 * Returns a list containing all of the elements in this list in proper sequence
+	 * 
+	 * @return a list containing all of the elements in this list in proper sequence
+	 */
+	List<E> asList(); // Scala: toList, Guava: asList
 }

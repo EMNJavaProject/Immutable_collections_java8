@@ -1,5 +1,7 @@
 package collections.implementations;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Spliterators;
 import java.util.Spliterator;
@@ -240,10 +242,12 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 			return tail().reverse().concat(head());
 	}
 
-	public ImmutableList<E> sort(Comparator<? super E> comparator)
-	{
-		//TODO Method
-		return null;
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public ImmutableList<E> sort(Comparator<? super E> comparator){
+		E[] a = (E[]) new Object[size()];
+		a =this.toArray((E[]) a);
+		Arrays.sort((E[]) a,(Comparator) comparator);
+		return new ImmutableLinkedList<E>(a);
 	}
 
 	/**
@@ -519,20 +523,20 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	}
 
 	public Spliterator<E> spliterator() {
-	    return Spliterators.spliterator(iterator(),
-					    size(),
-					    Spliterator.IMMUTABLE |
-					    Spliterator.ORDERED   |
-					    Spliterator.SIZED     |
-					    Spliterator.SUBSIZED);
+		return Spliterators.spliterator(iterator(),
+				size(),
+				Spliterator.IMMUTABLE |
+				Spliterator.ORDERED   |
+				Spliterator.SIZED     |
+				Spliterator.SUBSIZED);
 	}
 
 	public Stream<E> stream() {
-	    return StreamSupport.stream(spliterator(), false);
+		return StreamSupport.stream(spliterator(), false);
 	}
 
 	public Stream<E> parallelStream() {
-	    return StreamSupport.stream(spliterator(), true);
+		return StreamSupport.stream(spliterator(), true);
 	}
 
 	// Object methods
@@ -563,8 +567,7 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 		return true;
 	}
 
-	public int hashCode()
-	{
+	public int hashCode(){
 		//TODO Method
 		return -1;
 	}
@@ -586,7 +589,15 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 		}
 		return a;
 	}
-	// public List<E> asList();
+
+	public List<E> asList(){
+		List<E> myList = new ArrayList<E>();
+
+		for (E e : this){
+			myList.add(e);
+		}
+		return myList;
+	}
 
 }
 
