@@ -243,11 +243,6 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 		// return null;
 	// }
 
-	@Override
-	public ImmutableList<E> concat(int index, E elem) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	public ImmutableList<E> concat(E elem) {
 		// TODO Auto-generated method stub
@@ -380,6 +375,18 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 
 
 	public List<E> asList() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ImmutableList<E> concat(E... elems) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <E> E[] toArray(E[] a) {
 		// TODO Auto-generated method stub
 		return null;
 	}

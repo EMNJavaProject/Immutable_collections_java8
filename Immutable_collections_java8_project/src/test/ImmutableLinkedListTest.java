@@ -56,4 +56,5 @@ public class ImmutableLinkedListTest extends ImmutableListTest {
 	public void TailExceptionTest() {
 		((ImmutableLinkedList<Integer>)emptyList).tail();
 	}
+
 }

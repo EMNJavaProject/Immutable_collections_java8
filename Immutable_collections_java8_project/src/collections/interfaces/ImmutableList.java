@@ -139,10 +139,30 @@ public interface ImmutableList<E> extends Iterable<E> {
 
 	//TODO Javadocs
 	// Java: addAll, Scala: ++ operator
+	/**
+	 * Returns a new list containing the elements from this list followed by the elements from the given list.
+	 *
+	 * @param elems the list to be concatened with
+	 * @returns a new list containing the elements from this list followed by the elements from the given list
+	 */
 	ImmutableList<E> concat(Collection<E> elems);
+
+	/**
+	 * Returns a new list containing the elements from this list followed by the elements from the given list.
+	 *
+	 * @param elems the list to be concatened with
+	 * @returns a new list containing the elements from this list followed by the elements from the given list
+	 */
 	ImmutableList<E> concat(ImmutableList<E> elems);
-	// @SuppressWarnings({"unchecked"})
-	// ImmutableList<E> concat(E... elems); TODO:
+
+	/**
+	 * Returns a new list containing the elements from this list followed by the elements from the given list.
+	 *
+	 * @param elems the list to be concatened with
+	 * @returns a new list containing the elements from this list followed by the elements from the given list
+	 */
+	@SuppressWarnings({"unchecked"})
+	ImmutableList<E> concat(E... elems);
 
 	/**
 	 * Returns a new list containing the elements from this list followed by the elements from the given list.
@@ -152,23 +172,12 @@ public interface ImmutableList<E> extends Iterable<E> {
 	 */
 	ImmutableList<E> concat(E elem);
 
-	/**
-	 * Returns a new list containing the specified element inserted at the specified position in this list (optional operation).
-	 * Shifts the element currently at that position (if any) and any subsequent elements to the right (adds one to their indices).
-	 * @param index at which the specified element is to be inserted
-	 * @param element to be inserted
-	 * @return a new list containing the the new element at the given position
-	 */
-	ImmutableList<E> concat(int index, E elem);
 
 	//TODO Javadocs
 	// Java
 	ImmutableList<E> remove(Collection<E> elems);
-	ImmutableList<E> remove(ImmutableList<E> elems);
 	@SuppressWarnings({"unchecked"})
-	ImmutableList<E> remove(E... elems);
-	ImmutableList<E> remove(E elem);
-	ImmutableList<E> remove(int index);
+
 
 	//TODO Javadocs
 	// Scala
@@ -176,6 +185,19 @@ public interface ImmutableList<E> extends Iterable<E> {
 	ImmutableList<E> union(ImmutableList<E> elems);
 	@SuppressWarnings({"unchecked"})
 	ImmutableList<E> union(E... elems);
+	/**
+	 * Returns a new list without all the elements of the specified elements from this list
+	 * @param elems - elements to be removed from this list, if present
+	 * @return  a new list without all the elements of the specified elements from this list
+	 */
+	ImmutableList<E> remove(ImmutableList<E> elems);
+	@SuppressWarnings({"unchecked"})
+	/**
+	 * Returns a new list without all the element of the specified elements from this list
+	 * @param elems - elements to be removed from this list, if present
+	 * @return  a new list without all the element of the specified elements from this list
+	 */
+	ImmutableList<E> remove(E... elems);
 
 	//TODO Javadocs
 	// Scala: intersect, Java: retainsAll
@@ -183,6 +205,20 @@ public interface ImmutableList<E> extends Iterable<E> {
 	ImmutableList<E> intersect(ImmutableList<E> elems);
 	@SuppressWarnings({"unchecked"})
 	ImmutableList<E> intersect(E... elems);
+	
+	/**
+	 * Returns a new list without the first occurrence of the specified element from this list
+	 * @param elem - element to be removed from this list, if present
+	 * @return  a new list without the first occurrence of the specified element from this list
+	 */
+	ImmutableList<E> remove(E elem)throws IllegalArgumentException;
+
+	/**
+	 * Returns a new list without the element at the specified position in this list
+	 * @param index - the index of the element to be removed
+	 * @return  a new list without the element at the specified position in this list
+	 */
+	ImmutableList<E> remove(int index)throws ArrayIndexOutOfBoundsException;
 
 	/**
 	 * Returns a new list consisting of the results of applying the given function to the elements of this list.
@@ -215,7 +251,9 @@ public interface ImmutableList<E> extends Iterable<E> {
 
 	//TODO Javadocs
 	// Intégration : itérateurs + flots
-	Iterator<E> iterator();
+	// Iterator<E> iterator();
+	// Stream<E> stream();
+	// Stream<E> parallelStream();
 
 	/**
 	 * Returns a sequential Stream with this collection as its source.
@@ -234,7 +272,6 @@ public interface ImmutableList<E> extends Iterable<E> {
 	//TODO Javadocs
 	// Object methods
 	ImmutableList<E> clone();
-
 	/**
 	 * Compares the specified object with this list for equality. Returns true
 	 * if and only if the specified object is also a list, both lists have the
@@ -255,6 +292,25 @@ public interface ImmutableList<E> extends Iterable<E> {
 
 	//TODO Javadocs
 	// Conversions
-	E[] toArray();    // Scala && Java: toArray
-	List<E> asList(); // Scala: toList, Guava: asList
+	/**
+	 * Returns an array containing all of the elements in this list in proper sequence (from first to last element).
+	 * The returned array will be "safe" in that no references to it are maintained by this list. (In other words, this method must allocate a new array). The caller is thus free to modify the returned array.
+	 * This method acts as bridge between array-based and collection-based APIs.
+	 * 
+	 * @return an array containing all of the elements in this list in proper sequence
+	 */
+	E[] toArray();// Scala && Java: toArray
+	/**
+	 * Returns an array containing all of the elements in this list in proper sequence (from first to last element); the runtime type of the returned array is that of the specified array. If the list fits in the specified array, it is returned therein. Otherwise, a new array is allocated with the runtime type of the specified array and the size of this list.
+	 * If the list fits in the specified array with room to spare (i.e., the array has more elements than the list), the element in the array immediately following the end of the list is set to null. (This is useful in determining the length of the list only if the caller knows that the list does not contain any null elements.)
+	 * Like the toArray() method, this method acts as bridge between array-based and collection-based APIs. Further, this method allows precise control over the runtime type of the output array, and may, under certain circumstances, be used to save allocation costs.
+	 * Suppose x is a list known to contain only strings. The following code can be used to dump the list into a newly allocated array of String:
+     * String[] y = x.toArray(new String[0]);
+	 * Note that toArray(new Object[0]) is identical in function to toArray().
+	 * 
+	 * @param a -the array into which the elements of the list are to be stored, if it is big enough; otherwise, a new array of the same runtime type is allocated for this purpose.
+	 * @return an array containing the elements of the list
+	 */
+	<E> E[] toArray(E[] a);
+	// List<E> asList(); // Scala: toList, Guava: asList
 }

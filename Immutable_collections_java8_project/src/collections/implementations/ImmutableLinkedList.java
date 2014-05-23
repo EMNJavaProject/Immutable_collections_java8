@@ -188,7 +188,7 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 		if (isEmpty())
 			throw new UnsupportedOperationException();
 		else
-			return  subList(1, size());
+			return subList(1, size());
 	}
 
 	/**
@@ -305,23 +305,28 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 		return new ImmutableLinkedList(elems);
 	}
 
-	public ImmutableList<E> concat(Collection<E> elems)
-	{
-		//TODO Method
-		return null;
+	public ImmutableList<E> concat(Collection<E> elems){
+		ImmutableList<E> list = this;
+		for (E elem: elems){
+			list = list.concat(elem);
+		}
+		return list;
 	}
-	public ImmutableList<E> concat(ImmutableList<E> elems)
-	{
-		//TODO Method
-		return null;
+	public ImmutableList<E> concat(ImmutableList<E> elems){
+		ImmutableList<E> list = this;
+		for (int i = 0 ; i <elems.size() ; ++i){
+			list = list.concat(elems.get(i));
+		}
+		return list;
 	}
-
-	// @SuppressWarnings({"unchecked"})
-	// public ImmutableList<E> concat(E... elems)
-	// {
-		//TODO Method
-		// return null;
-	// }
+	@SuppressWarnings({"unchecked"})
+	public ImmutableList<E> concat(E... elems){
+		ImmutableList<E> list = this;
+		for (int i = 0 ; i <elems.length ; ++i){
+			list = list.concat(elems[i]);
+		}
+		return list;
+	}
 
 	@SuppressWarnings("unchecked")
 	public ImmutableList<E> concat(E elem) {
@@ -335,36 +340,76 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 		return new ImmutableLinkedList<E>(elems);
 	}
 
-	public ImmutableList<E> concat(int index, E elem) {
-		// TODO Auto-generated method stub
-		return null;
+	public ImmutableList<E> remove(Collection<E> elems){
+		ImmutableList<E> list = this;
+		for (E elem: elems){
+			list = list.remove(elem);
+		}
+		return list;
+
 	}
 
-	public ImmutableList<E> remove(Collection<E> elems)
-	{
-		//TODO Method
-		return null;
+	public ImmutableList<E> remove(ImmutableList<E> elems){
+		ImmutableList<E> list = this;
+		for (int i = 0 ; i <elems.size() ; ++i){
+			list = list.remove(elems.get(i));
+		}
+		return list;
 	}
-	public ImmutableList<E> remove(ImmutableList<E> elems)
-	{
-		//TODO Method
-		return null;
-	}
+
 	@SuppressWarnings({"unchecked"})
-	public ImmutableList<E> remove(E... elems)
-	{
-		//TODO Method
-		return null;
+	public ImmutableList<E> remove(E... elems){
+		ImmutableList<E> list = this;
+		for (int i = 0 ; i <elems.length ; ++i){
+			list = list.remove(elems[i]);
+		}
+		return list;
 	}
-	public ImmutableList<E> remove(E elem)
-	{
-		//TODO Method
-		return null;
+
+	@SuppressWarnings("unchecked")
+	public ImmutableList<E> remove(E elem){
+		E[] newElems;
+		int i;
+		boolean remove;
+		newElems = (E[]) new Object[size() - 1];
+		i = 0;
+		remove = false;
+		for ( E e :this){
+			if(!remove && equals(elem,e))
+				remove = true;
+			else{
+				if (i == this.size()-1)
+					throw new IllegalArgumentException();
+				newElems[i] = e;
+				i++;	
+			}
+		}
+
+
+		return new ImmutableLinkedList<E>(newElems);
 	}
-	public ImmutableList<E> remove(int index)
-	{
-		//TODO Method
-		return null;
+
+	@SuppressWarnings("unchecked")
+	public ImmutableList<E> remove(int index){
+		E[] newElems;
+		int i;
+		boolean remove;
+
+		if (index >= size() || index < 0)
+			throw new ArrayIndexOutOfBoundsException();
+
+		newElems = (E[]) new Object[size() -1];
+		i = 0;
+		remove = false;    	
+		for ( E e :this){
+			if(!remove && i==index)
+				remove = true;
+			else{
+				newElems[i] = e;
+				++i;
+			}
+		}
+		return new ImmutableLinkedList<E>(newElems);
 	}
 
 	public ImmutableList<E> union(Collection<E> elems)
@@ -491,23 +536,24 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	}
 
 	// Object methods
-	public ImmutableList<E> clone()
-	{
-		//TODO Method
-		return null;
+	public ImmutableList<E> clone(){
+		return subList(0, size());
 	}
+
 
 	public boolean equals(Object o) {
 		if (! (o instanceof ImmutableList))
 			return false;
 
-		ImmutableList<?> other = (ImmutableList<?>) o;
+		@SuppressWarnings("rawtypes")
+		ImmutableList other = (ImmutableList) o;
 
 		if (size() != other.size())
 			return false;
 
 		Iterator<E> it1 = iterator();
-		Iterator<?> it2 = other.iterator();
+		@SuppressWarnings("rawtypes")
+		Iterator it2 = other.iterator();
 
 		while (it1.hasNext()) {
 			if (!equals(it1.next(), it2.next()))
@@ -524,14 +570,24 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	}
 
 	// Conversions
-	public E[] toArray()
-	{
-		//TODO Method
-		return null;
+	@SuppressWarnings("unchecked")
+	public E[] toArray(){
+		return toArray((E[]) new Object[size()]);
 	}
-	public List<E> asList()
-	{
-		//TODO Method
-		return null;
+
+	@SuppressWarnings({ "unchecked", "hiding" })
+	public <E> E[] toArray(E[] a){
+		int i;
+		E[] result;
+		i=0;
+		result = a  ;
+		for (Node<E> x = (Node<E>) this.head; x != null; x = x.getNext()){
+			result[i++] = x.getElement();
+		}
+		return a;
 	}
+	// public List<E> asList();
+
 }
+
+

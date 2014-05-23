@@ -43,7 +43,7 @@ class ImmutableArrayListFactory<E> implements ImmutableListFactory<E> {
 	}
 }
 
-public class ImmutableListTest {
+public abstract class ImmutableListTest {
 
 	protected ImmutableList<Integer> list;
 	protected ImmutableList<Integer> emptyList;
@@ -289,4 +289,56 @@ public class ImmutableListTest {
 		assertEquals(2, list.stream().limit(2).count());
 		assertEquals(2, list.parallelStream().limit(2).count());
 	}
+	
+	@Test
+	public void removeTest1() {
+		assertEquals(new ImmutableLinkedList<Integer>(2, 3),list.remove(0));
+		assertEquals(new ImmutableLinkedList<Integer>(2, 3),list.remove(new Integer(1)));
+		assertEquals(new ImmutableLinkedList<Integer>(3),list.remove(new Integer(1),new Integer(2)));
+		assertEquals(new ImmutableLinkedList<Integer>(2),list.remove(new ImmutableLinkedList<Integer>(1,3)));
+		List<Integer> otherList = new ArrayList<Integer>();
+		otherList.add(1);
+		otherList.add(3);
+		assertEquals(new ImmutableLinkedList<Integer>(2),list.remove(otherList));
+	}
+
+	@Test
+	public void ConcatTest() {
+		list = list.concat(4);
+		assertEquals(4, (int)list.get(3));
+		assertEquals(new ImmutableLinkedList<Integer>(1, 2, 3, 4, 5, 6),list.concat(new Integer(5),new Integer(6)));
+		assertEquals(new ImmutableLinkedList<Integer>(1, 2, 3, 4, 5, 6),list.concat(new ImmutableLinkedList<Integer>(5,6)));
+		List<Integer> otherList = new ArrayList<Integer>();
+		otherList.add(5);
+		otherList.add(6);
+		assertEquals(new ImmutableLinkedList<Integer>(1, 2, 3, 4, 5, 6),list.concat(otherList));
+	}
+
+	
+	@Test(expected=ArrayIndexOutOfBoundsException.class)
+	public void removeTest2(){
+		list.remove(3);
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void removeTest3(){
+		list.remove(new Integer(4));
+	}
+
+	@Test
+	public void cloneTest(){
+		assertEquals(list.clone(),list);
+		assertFalse(list==list.clone());
+	}
+
+	@Test 
+	public void toarrayTest(){
+		Integer[] array= { 1 ,2 ,3 };
+		Integer[] array2 =  new Integer[array.length]; 
+		array2=list.toArray(array2);
+		assertEquals(array2[0],array[0]);
+		assertEquals(array2[1],array[1]);
+		assertEquals(array2[2],array[2]);
+	}
+
 }
