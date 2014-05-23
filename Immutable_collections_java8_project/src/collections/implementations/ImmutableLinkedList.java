@@ -165,7 +165,6 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 		return -1;
 	}
 
-
 	/**
 	 * Returns the first element in the list.
 	 *
@@ -238,7 +237,7 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 		if (isEmpty())
 			return this;
 		else
-			return tail().reverse().add(head());
+			return tail().reverse().concat(head());
 	}
 
 	public ImmutableList<E> sort(Comparator<? super E> comparator)
@@ -291,14 +290,9 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 
 	// Factories
 
-	/**
-	 * Returns a new list containing the elements from this list followed by the elements from the given list.
-	 *
-	 * @param elem the list to be concatened with
-	 * @returns a new list containing the elements from this list followed by the elements from the given list
-	 */
 	@SuppressWarnings("unchecked")
-	public ImmutableList<E> addFirst(E elem) {
+	public ImmutableList<E> cons(E elem) {
+
 		E[] elems = (E[]) new Object[size()+1];
 		elems[0] = elem;
 
@@ -308,10 +302,8 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 			++i;
 		}
 
-		return new ImmutableLinkedList<E>(elems);
+		return new ImmutableLinkedList(elems);
 	}
-
-
 
 	public ImmutableList<E> concat(Collection<E> elems)
 	{
@@ -323,17 +315,16 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 		//TODO Method
 		return null;
 	}
-	@SuppressWarnings({"unchecked"})
-	public ImmutableList<E> concat(E... elems)
-	{
+
+	// @SuppressWarnings({"unchecked"})
+	// public ImmutableList<E> concat(E... elems)
+	// {
 		//TODO Method
-		return null;
-	}
-
-
+		// return null;
+	// }
 
 	@SuppressWarnings("unchecked")
-	public ImmutableList<E> add(E elem) {
+	public ImmutableList<E> concat(E elem) {
 		E[] elems = (E[]) new Object[size() + 1];
 		int i = 0;
 		for (E e : this) {
@@ -344,8 +335,7 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 		return new ImmutableLinkedList<E>(elems);
 	}
 
-	@Override
-	public ImmutableList<E> add(int index, E elem) {
+	public ImmutableList<E> concat(int index, E elem) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -377,10 +367,6 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 		return null;
 	}
 
-
-
-
-
 	public ImmutableList<E> union(Collection<E> elems)
 	{
 		//TODO Method
@@ -397,9 +383,6 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 		//TODO Method
 		return null;
 	}
-
-
-
 
 	public ImmutableList<E> intersect(Collection<E> elems)
 	{
@@ -418,11 +401,6 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 		return null;
 	}
 
-
-
-
-
-
 	@SuppressWarnings("unchecked")
 	public <F> ImmutableList<F> map(Function<? super E, ? extends F> mapper) {
 		F[] elems = (F[]) new Object[size()];
@@ -439,7 +417,7 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 		ImmutableList<E> res = new ImmutableLinkedList<E>();
 		for (E elem : this)
 			if (predicate.test(elem))
-				res = res.add(elem);
+				res = res.concat(elem);
 		return res;
 	}
 
@@ -510,7 +488,7 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 
 	public Stream<E> parallelStream() {
 	    return StreamSupport.stream(spliterator(), true);
-	}		
+	}
 
 	// Object methods
 	public ImmutableList<E> clone()
@@ -539,16 +517,11 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 		return true;
 	}
 
-
-
-
-
 	public int hashCode()
 	{
 		//TODO Method
 		return -1;
 	}
-
 
 	// Conversions
 	public E[] toArray()
@@ -561,6 +534,4 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 		//TODO Method
 		return null;
 	}
-
-
 }

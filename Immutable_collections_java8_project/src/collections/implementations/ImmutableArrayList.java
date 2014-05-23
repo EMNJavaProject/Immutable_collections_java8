@@ -72,8 +72,6 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 		}
 	}
 
-
-
 	/**
 	 * Private accessor to get the inner array.
 	 * @return the inner array.
@@ -81,9 +79,6 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 	private E[] getArray() {
 		return _array;
 	}
-
-
-
 
 	class ImmutableArrayListIterator implements Iterator<E> {
 
@@ -106,7 +101,7 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 		public E next() throws NoSuchElementException {
 			if(index >= size)
 				return null;
-			
+
 			E elem = getArray()[index];
 			++index;
 			return elem;
@@ -242,12 +237,17 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
-	public ImmutableList<E> concat(E... elems) {
+	// @SuppressWarnings("unchecked")
+	// public ImmutableList<E> concat(E... elems) {
+		// TODO Auto-generated method stub
+		// return null;
+	// }
+
+	@Override
+	public ImmutableList<E> concat(int index, E elem) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 
 	public ImmutableList<E> concat(E elem) {
 		// TODO Auto-generated method stub
@@ -383,27 +383,4 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-
-
-
-
-	@Override
-	public ImmutableList<E> add(E elem) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ImmutableList<E> add(int index, E elem) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-
-
-
-
-
 }

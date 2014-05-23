@@ -16,7 +16,8 @@ import java.util.stream.Stream;
 
 public interface ImmutableList<E> extends Iterable<E> {
 
-	// size + get + isEmpty = point de vue IndexedSeq en Scala
+	// size + get  + isEmpty = point de vue IndexedSeq en Scala
+	// head + tail + isEmpty = point de vue LinearSeq en Scala
 
 	/**
 	 * Returns true if this list contains no elements.
@@ -47,10 +48,6 @@ public interface ImmutableList<E> extends Iterable<E> {
 	 * @return its position, or -1 if not found
 	 */
 	int indexOf(E elem) throws ClassCastException, NullPointerException;
-
-	// head + tail + isEmpty = point de vue LinearSeq en Scala
-
-
 
 
 	// Opérations sur les listes
@@ -138,14 +135,14 @@ public interface ImmutableList<E> extends Iterable<E> {
 	 * @param elem The first element of the new list
 	 * @return a new list with the elements of this list appended to given element.
 	 */
-	//ImmutableList<E> cons(E elem); // Scala: + operator
+	ImmutableList<E> cons(E elem); // Scala: + operator
 
 	//TODO Javadocs
 	// Java: addAll, Scala: ++ operator
 	ImmutableList<E> concat(Collection<E> elems);
 	ImmutableList<E> concat(ImmutableList<E> elems);
-	@SuppressWarnings({"unchecked"})
-	ImmutableList<E> concat(E... elems);
+	// @SuppressWarnings({"unchecked"})
+	// ImmutableList<E> concat(E... elems); TODO:
 
 	/**
 	 * Returns a new list containing the elements from this list followed by the elements from the given list.
@@ -153,16 +150,16 @@ public interface ImmutableList<E> extends Iterable<E> {
 	 * @param elem the list to be concatened with
 	 * @returns a new list containing the elements from this list followed by the elements from the given list
 	 */
-	ImmutableList<E> add(E elem);
+	ImmutableList<E> concat(E elem);
 
 	/**
-	 * Returns a new list containing the specified element inserted at the specified position in this list (optional operation). 
+	 * Returns a new list containing the specified element inserted at the specified position in this list (optional operation).
 	 * Shifts the element currently at that position (if any) and any subsequent elements to the right (adds one to their indices).
 	 * @param index at which the specified element is to be inserted
 	 * @param element to be inserted
 	 * @return a new list containing the the new element at the given position
 	 */
-	ImmutableList<E> add(int index, E elem);
+	ImmutableList<E> concat(int index, E elem);
 
 	//TODO Javadocs
 	// Java
@@ -220,19 +217,19 @@ public interface ImmutableList<E> extends Iterable<E> {
 	// Intégration : itérateurs + flots
 	Iterator<E> iterator();
 
-    /**
-     * Returns a sequential Stream with this collection as its source.
-     *
-     * @return a sequential Stream over the elements in this collection
-     */
-    Stream<E> stream();
+	/**
+	 * Returns a sequential Stream with this collection as its source.
+	 *
+	 * @return a sequential Stream over the elements in this collection
+	 */
+	Stream<E> stream();
 
-    /**
-     * Returns a parallel Stream with this collection as its source.
-     *
-     * @return a parallel Stream over the elements in this collection
-     */
-    Stream<E> parallelStream();
+	/**
+	 * Returns a parallel Stream with this collection as its source.
+	 *
+	 * @return a parallel Stream over the elements in this collection
+	 */
+	Stream<E> parallelStream();
 
 	//TODO Javadocs
 	// Object methods
