@@ -16,10 +16,10 @@ import collections.interfaces.ImmutableList;
 
 class Node<E> {
 
-        /** The element in the list */
-        private final E element;
+	/** The element in the list */
+	private final E element;
 
-        /** The next list node, null if this is last */
+	/** The next list node, null if this is last */
 	private final Node<E> next;
 
 	public Node(E element, Node<E> next) {
@@ -40,7 +40,7 @@ class Node<E> {
 		return this.element;
 	}
 
-        /** Returns the next list node, null if this is last.
+	/** Returns the next list node, null if this is last.
 	 *
 	 * @returns the next list node, null if this is last
 	 */
@@ -48,7 +48,7 @@ class Node<E> {
 		return next;
 	}
 
-        /** Returns whether this node is followed by another one.
+	/** Returns whether this node is followed by another one.
 	 *
 	 * @returns true if this node is followed by another one.
 	 */
@@ -59,7 +59,7 @@ class Node<E> {
 
 public class ImmutableLinkedList<E> implements ImmutableList<E> {
 
-        /** The first node element of the list. */
+	/** The first node element of the list. */
 	private final Node<E> head;
 
 	/** The last node element of the list. */
@@ -74,7 +74,7 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	 * @returns the first node element of the list.
 	 **/
 	private Node<E> headNode() {
-	    return head;
+		return head;
 	}
 
 	/**
@@ -83,11 +83,11 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	 * @returns the last node element of the list.
 	 **/
 	private Node<E> lastNode() {
-	    return last;
+		return last;
 	}
 
 	public int size() {
-	    return size;
+		return size;
 	}
 
 	// Constructors
@@ -96,9 +96,9 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	 * Create a empty linked list.
 	 */
 	public ImmutableLinkedList() {
-	    this.head = null;
-	    this.last = null;
-	    this.size = 0;
+		this.head = null;
+		this.last = null;
+		this.size = 0;
 	}
 
 	/**
@@ -109,7 +109,7 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	 */
 	@SuppressWarnings("unchecked")
 	public ImmutableLinkedList(Collection<E> elems) {
-	    this((E[])elems.toArray());
+		this((E[])elems.toArray());
 	}
 
 	/**
@@ -120,107 +120,107 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	 */
 	@SuppressWarnings({"unchecked", "varags"})
 	public ImmutableLinkedList(E... elems) {
-	    if (elems == null)
-		throw new NullPointerException();
+		if (elems == null)
+			throw new NullPointerException();
 
-	    Node<E> head = new Node<E>(elems[elems.length - 1]);
-	    this.last = head;
+		Node<E> head = new Node<E>(elems[elems.length - 1]);
+		this.last = head;
 
-	    for (int i = elems.length - 2 ; i >=0 ; --i)
-		head = new Node<E>(elems[i], head);
+		for (int i = elems.length - 2 ; i >=0 ; --i)
+			head = new Node<E>(elems[i], head);
 
-	    this.head = head;
-	    this.size = elems.length;
+		this.head = head;
+		this.size = elems.length;
 	}
 
-        // Operations
+	// Operations
 
-        public boolean isEmpty() {
-	    return size() == 0;
+	public boolean isEmpty() {
+		return size() == 0;
 	}
 
 	public E get(int index) throws IndexOutOfBoundsException {
-	    if (index < 0 || index >= size())
-		throw new IndexOutOfBoundsException();
+		if (index < 0 || index >= size())
+			throw new IndexOutOfBoundsException();
 
-	    int i = 0;
-	    for (E elem : this) {
-		if (i == index)
-		    return elem;
-		++i;
-	    }
+		int i = 0;
+		for (E elem : this) {
+			if (i == index)
+				return elem;
+			++i;
+		}
 
-	    return null; // Never happens
+		return null; // Never happens
 	}
 
 	public int indexOf(E elem) {
-	    int i = 0;
-	    for (E other : this)
-		if (equals(elem, other))
-		    return i;
-		else
-		    ++i;
-	    return -1;
+		int i = 0;
+		for (E other : this)
+			if (equals(elem, other))
+				return i;
+			else
+				++i;
+		return -1;
 	}
 
 	public E head() throws NoSuchElementException {
-	    if (isEmpty())
-		throw new NoSuchElementException();
-	    else
-		return headNode().getElement();
+		if (isEmpty())
+			throw new NoSuchElementException();
+		else
+			return headNode().getElement();
 	}
 
 	public ImmutableList<E> tail() throws UnsupportedOperationException {
-	    if (isEmpty())
-		throw new UnsupportedOperationException();
-	    else
-		return subList(1, size());
+		if (isEmpty())
+			throw new UnsupportedOperationException();
+		else
+			return subList(1, size());
 	}
 
 	public E last() throws NoSuchElementException {
-	    if (isEmpty())
-		throw new NoSuchElementException();
-	    else
-		return lastNode().getElement();
+		if (isEmpty())
+			throw new NoSuchElementException();
+		else
+			return lastNode().getElement();
 	}
 
 	@SuppressWarnings("unchecked")
 	public ImmutableList<E> subList(int fromIndex, int toIndex) throws
-	    IndexOutOfBoundsException,
-	    IllegalArgumentException {
+	IndexOutOfBoundsException,
+	IllegalArgumentException {
 
-	    if (fromIndex < 0 || toIndex > size())
-		throw new IndexOutOfBoundsException();
-	    if (fromIndex > toIndex)
-		throw new IllegalArgumentException();
-	    if (fromIndex == toIndex)
-		return new ImmutableLinkedList<E>();
+		if (fromIndex < 0 || toIndex > size())
+			throw new IndexOutOfBoundsException();
+		if (fromIndex > toIndex)
+			throw new IllegalArgumentException();
+		if (fromIndex == toIndex)
+			return new ImmutableLinkedList<E>();
 
-	    int i = 0;
-	    Node node = headNode();
-	    while (i != fromIndex) {
-		node = node.getNext();
-		++i;
-	    }
+		int i = 0;
+		Node node = headNode();
+		while (i != fromIndex) {
+			node = node.getNext();
+			++i;
+		}
 
-	    E[] elems = (E[]) new Object[toIndex - fromIndex];
-	    while (i != toIndex) {
-		elems[i - fromIndex] = (E)node.getElement();
-		node = node.getNext();
-		++i;
-	    }
+		E[] elems = (E[]) new Object[toIndex - fromIndex];
+		while (i != toIndex) {
+			elems[i - fromIndex] = (E)node.getElement();
+			node = node.getNext();
+			++i;
+		}
 
-	    return new ImmutableLinkedList<E>(elems);
+		return new ImmutableLinkedList<E>(elems);
 	}
 
 	public ImmutableList<E> reverse() {
-	    if (isEmpty())
-		return this;
-	    else
-		return tail().reverse().concat(head());
+		if (isEmpty())
+			return this;
+		else
+			return tail().reverse().concat(head());
 	}
 
-    // public List<E> sort(Comparator<? super E> comparator);
+	// public List<E> sort(Comparator<? super E> comparator);
 
 	/**
 	 * Compare two objects according to Collection semantics.
@@ -228,185 +228,279 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	 * @param o1 the first object
 	 * @param o2 the second object
 	 * @return o1 == null ? o2 == null : o1.equals(o2)
-	   */
+	 */
 	static final boolean equals(Object o1, Object o2) {
-	    return o1 == null ? o2 == null : o1.equals(o2);
+		return o1 == null ? o2 == null : o1.equals(o2);
 	}
 
 	public boolean contains(E elem) {
-	    return any((E other) -> equals(elem, other));
+		return any((E other) -> equals(elem, other));
 	}
 
 	public boolean containsAll(Collection<E> elems) {
-	    return containsAll(new ImmutableLinkedList<E>(elems));
+		return containsAll(new ImmutableLinkedList<E>(elems));
 	}
 
 	public boolean containsAll(ImmutableList<E> elems) {
-	    return elems.all((E elem) -> contains(elem));
+		return elems.all((E elem) -> contains(elem));
 	}
 
 	public @SuppressWarnings({"unchecked", "varags"})
 	boolean containsAll(E... elems) {
-	    return containsAll(new ImmutableLinkedList<E>(elems));
+		return containsAll(new ImmutableLinkedList<E>(elems));
 	}
 
 	public boolean any(Predicate<? super E> predicate) {
-	    for (E elem : this)
-		if (predicate.test(elem))
-		    return true;
-	    return false;
+		for (E elem : this)
+			if (predicate.test(elem))
+				return true;
+		return false;
 	}
 
 	public boolean all(Predicate<? super E> predicate) {
-	    for (E elem : this)
-		if (!predicate.test(elem))
-		    return false;
-	    return true;
+		for (E elem : this)
+			if (!predicate.test(elem))
+				return false;
+		return true;
 	}
 
 	// Factories
 
 	@SuppressWarnings("unchecked")
 	public ImmutableList<E> cons(E elem) {
-	    E[] elems = (E[]) new Object[size()+1];
-	    elems[0] = elem;
+		E[] elems = (E[]) new Object[size()+1];
+		elems[0] = elem;
 
-	    int i = 1;
-	    for (E e : this) {
-		elems[i] = e;
-		++i;
-	    }
+		int i = 1;
+		for (E e : this) {
+			elems[i] = e;
+			++i;
+		}
 
-	    return new ImmutableLinkedList(elems);
+		return new ImmutableLinkedList(elems);
 	}
 
-    // public ImmutableList<E> concat(Collection<E> elems);
-    // public ImmutableList<E> concat(ImmutableList<E> elems);
-    // public @SuppressWarnings({"unchecked", "varags"})
-    // public ImmutableList<E> concat(E... elems);
+	public ImmutableList<E> concat(Collection<E> elems){
+		ImmutableList<E> list = this;
+		for (E elem: elems){
+			list = list.concat(elem);
+		}
+		return list;
+	}
+	public ImmutableList<E> concat(ImmutableList<E> elems){
+		ImmutableList<E> list = this;
+		for (int i = 0 ; i <elems.size() ; ++i){
+			list = list.concat(elems.get(i));
+		}
+		return list;
+	}
+	@SuppressWarnings({"unchecked"})
+	public ImmutableList<E> concat(E... elems){
+		ImmutableList<E> list = this;
+		for (int i = 0 ; i <elems.length ; ++i){
+			list = list.concat(elems[i]);
+		}
+		return list;
+	}
 
 	@SuppressWarnings("unchecked")
 	public ImmutableList<E> concat(E elem) {
-	    E[] elems = (E[]) new Object[size() + 1];
-	    Node node = headNode();
-	    int i = 0;
-	    for (E e : this) {
-		elems[i] = e;
-		++i;
-	    }
-	    elems[size()] = elem;
-	    return new ImmutableLinkedList<E>(elems);
+		E[] elems = (E[]) new Object[size() + 1];
+		int i = 0;
+		for (E e : this) {
+			elems[i] = e;
+			++i;
+		}
+		elems[size()] = elem;
+		return new ImmutableLinkedList<E>(elems);
 	}
 
-    // public ImmutableList<E> remove(Collection<E> elems);
-    // public ImmutableList<E> remove(ImmutableList<E> elems);
-    // public @SuppressWarnings({"unchecked", "varags"})
-    // public ImmutableList<E> remove(E... elems);
-    // public ImmutableList<E> remove(E elem);
-    // public ImmutableList<E> remove(int index);
+	public ImmutableList<E> remove(Collection<E> elems){
+		ImmutableList<E> list = this;
+		for (E elem: elems){
+			list = list.remove(elem);
+		}
+		return list;
 
-    // public ImmutableList<E> union(Collection<E> elems);
-    // public ImmutableList<E> union(ImmutableList<E> elems);
-    // public @SuppressWarnings({"unchecked", "varags"})
-    // public ImmutableList<E> union(E... elems);
+	}
 
-    // public ImmutableList<E> intersect(Collection<E> elems);
-    // public ImmutableList<E> intersect(ImmutableList<E> elems);
-    // public @SuppressWarnings({"unchecked", "varags"})
-    // public ImmutableList<E> intersect(E... elems);
+	public ImmutableList<E> remove(ImmutableList<E> elems){
+		ImmutableList<E> list = this;
+		for (int i = 0 ; i <elems.size() ; ++i){
+			list = list.remove(elems.get(i));
+		}
+		return list;
+	}
+
+	@SuppressWarnings({"unchecked"})
+	public ImmutableList<E> remove(E... elems){
+		ImmutableList<E> list = this;
+		for (int i = 0 ; i <elems.length ; ++i){
+			list = list.remove(elems[i]);
+		}
+		return list;
+	}
+
+	@SuppressWarnings("unchecked")
+	public ImmutableList<E> remove(E elem){
+		E[] newElems;
+		int i;
+		boolean remove;
+		newElems = (E[]) new Object[size() - 1];
+		i = 0;
+		remove = false;
+		for ( E e :this){
+			if(!remove && equals(elem,e))
+				remove = true;
+			else{
+				if (i == this.size()-1)
+					throw new IllegalArgumentException();
+				newElems[i] = e;
+				i++;	
+			}
+		}
+
+
+		return new ImmutableLinkedList<E>(newElems);
+	}
+
+	@SuppressWarnings("unchecked")
+	public ImmutableList<E> remove(int index){
+		E[] newElems;
+		int i;
+		boolean remove;
+
+		if (index >= size() || index < 0)
+			throw new ArrayIndexOutOfBoundsException();
+
+		newElems = (E[]) new Object[size() -1];
+		i = 0;
+		remove = false;    	
+		for ( E e :this){
+			if(!remove && i==index)
+				remove = true;
+			else{
+				newElems[i] = e;
+				++i;
+			}
+		}
+		return new ImmutableLinkedList<E>(newElems);
+	}
+
 
 	@SuppressWarnings("unchecked")
 	public <F> ImmutableList<F> map(Function<? super E, ? extends F> mapper) {
-	    F[] elems = (F[]) new Object[size()];
-	    int i = 0;
-	    for (E elem : this) {
-		elems[i] = mapper.apply(elem);
-		++i;
-	    }
+		F[] elems = (F[]) new Object[size()];
+		int i = 0;
+		for (E elem : this) {
+			elems[i] = mapper.apply(elem);
+			++i;
+		}
 
-	    return new ImmutableLinkedList<F>(elems);
+		return new ImmutableLinkedList<F>(elems);
 	}
 
 	public ImmutableList<E> filter(Predicate<? super E> predicate) {
-	    ImmutableList<E> res = new ImmutableLinkedList<E>();
-	    for (E elem : this)
-		if (predicate.test(elem))
-		    res = res.concat(elem);
-	    return res;
+		ImmutableList<E> res = new ImmutableLinkedList<E>();
+		for (E elem : this)
+			if (predicate.test(elem))
+				res = res.concat(elem);
+		return res;
 	}
 
-    // public Optional<E> reduce(BinaryOperator<E> accumulator);
-    // public E reduce(E identity, BinaryOperator<E> accumulator);
-    // public <F> F reduce(F identity, BiFunction<F, ? super E, F> accumulator, BinaryOperator<F> combiner);
+	// public Optional<E> reduce(BinaryOperator<E> accumulator);
+	// public E reduce(E identity, BinaryOperator<E> accumulator);
+	// public <F> F reduce(F identity, BiFunction<F, ? super E, F> accumulator, BinaryOperator<F> combiner);
 
-        // Iterators & streams
+	// Iterators & streams
 
 	class ImmutableLinkedListIterator implements Iterator<E> {
 
-	    /** Current node pointed by the iterator */
-	    private Node<E> currentNode;
+		/** Current node pointed by the iterator */
+		private Node<E> currentNode;
 
-	    /**
-	     * Create a new iterator starting from the beginning of the linked list.
-	     */
-	    public ImmutableLinkedListIterator() {
-		currentNode = headNode();
-	    }
+		/**
+		 * Create a new iterator starting from the beginning of the linked list.
+		 */
+		public ImmutableLinkedListIterator() {
+			currentNode = headNode();
+		}
 
-	    public boolean hasNext() {
-		return currentNode != null;
-	    }
+		public boolean hasNext() {
+			return currentNode != null;
+		}
 
-	    public E next() throws NoSuchElementException {
-		if (currentNode == null)
-		    throw new NoSuchElementException();
+		public E next() throws NoSuchElementException {
+			if (currentNode == null)
+				throw new NoSuchElementException();
 
-		E elem = currentNode.getElement();
-		currentNode = currentNode.getNext();
-		return elem;
-	    }
+			E elem = currentNode.getElement();
+			currentNode = currentNode.getNext();
+			return elem;
+		}
 
-	    public void remove() throws
+		public void remove() throws
 		UnsupportedOperationException,
 		IllegalStateException {
-		throw new UnsupportedOperationException();
-	    }
+			throw new UnsupportedOperationException();
+		}
 	}
 
 	public Iterator<E> iterator() {
-	    return new ImmutableLinkedListIterator();
+		return new ImmutableLinkedListIterator();
 	}
 
 
-    // public Stream<E> stream();
-    // public Stream<E> parallelStream();
+	// public Stream<E> stream();
+	// public Stream<E> parallelStream();
 
-    // Object methods
-    // public ImmutableList<E> clone();
+	// Object methods
+	public ImmutableList<E> clone(){
+		return subList(0, size());
+	}
 
 	public boolean equals(Object o) {
-	    if (! (o instanceof ImmutableList))
-		return false;
+		if (! (o instanceof ImmutableList))
+			return false;
 
-	    ImmutableList other = (ImmutableList) o;
+		@SuppressWarnings("rawtypes")
+		ImmutableList other = (ImmutableList) o;
 
-	    if (size() != other.size())
-		return false;
+		if (size() != other.size())
+			return false;
 
-	    Iterator<E> it1 = iterator();
-	    Iterator it2 = other.iterator();
+		Iterator<E> it1 = iterator();
+		@SuppressWarnings("rawtypes")
+		Iterator it2 = other.iterator();
 
-	    while (it1.hasNext()) {
-		if (!equals(it1.next(), it2.next()))
-		    return false;
-	    }
+		while (it1.hasNext()) {
+			if (!equals(it1.next(), it2.next()))
+				return false;
+		}
 
-	    return true;
+		return true;
 	}
 
-    // public int hashCode();
+	// public int hashCode();
 
-    // Conversions
-    // public E[] toArray();
-    // public List<E> asList();
+	// Conversions
+	@SuppressWarnings("unchecked")
+	public E[] toArray(){
+		return toArray((E[]) new Object[size()]);
+	}
+
+	@SuppressWarnings({ "unchecked", "hiding" })
+	public <E> E[] toArray(E[] a){
+		int i;
+		E[] result;
+		i=0;
+		result = a  ;
+		for (Node<E> x = (Node<E>) this.head; x != null; x = x.getNext()){
+			result[i++] = x.getElement();
+		}
+		return a;
+	}
+	// public List<E> asList();
 }
+
+
