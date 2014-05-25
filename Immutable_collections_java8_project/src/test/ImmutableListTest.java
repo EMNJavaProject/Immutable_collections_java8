@@ -8,11 +8,10 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Stream;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Stream;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import collections.implementations.ImmutableArrayList;
@@ -20,7 +19,7 @@ import collections.implementations.ImmutableLinkedList;
 import collections.interfaces.ImmutableList;
 
 interface ImmutableListFactory<E> {
-	public ImmutableList<E> create(E... elems);
+	public ImmutableList<E> create(@SuppressWarnings("unchecked") E... elems);
 	public ImmutableList<E> create();
 }
 
@@ -344,7 +343,7 @@ public abstract class ImmutableListTest {
 	public void toarrayTest(){
 		Integer[] array= { 1 ,2 ,3 };
 		Integer[] array2 =  new Integer[array.length];
-		array2=list.toArray(array2);
+		array2=list.toArray(array); //TODO before : array2=list.toArray(array2) -> Check validity
 		assertEquals(array2[0],array[0]);
 		assertEquals(array2[1],array[1]);
 		assertEquals(array2[2],array[2]);

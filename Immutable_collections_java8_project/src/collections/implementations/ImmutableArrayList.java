@@ -1,16 +1,20 @@
 package collections.implementations;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.function.BiFunction;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import collections.interfaces.ImmutableList;
 
@@ -39,11 +43,8 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 	@SuppressWarnings("unchecked")
 	public ImmutableArrayList (E... elems)
 	{
-		if(elems == null )
-		{
-			_array = (E[]) new Object[0];
-			_length = 0;
-		}
+		if (elems == null)
+			throw new NullPointerException();
 		else
 		{
 			_array =  elems;
@@ -60,11 +61,8 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 	@SuppressWarnings("unchecked")
 	public ImmutableArrayList(Collection<E> elems)
 	{
-		if(elems == null )
-		{
-			_array = (E[]) new Object[0];
-			_length = 0;
-		}
+		if (elems == null)
+			throw new NullPointerException();
 		else
 		{
 			_array =  (E[])elems.toArray();
@@ -95,12 +93,12 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 		}
 
 		public boolean hasNext() {
-			return index < size-1 ? true : false;
+			return index <= size-1 ? true : false;
 		}
 
 		public E next() throws NoSuchElementException {
 			if(index >= size)
-				return null;
+					throw new NoSuchElementException();
 
 			E elem = getArray()[index];
 			++index;
@@ -120,18 +118,29 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 	}
 
 
-	public boolean isEmpty() { //TODO A tester
+	public Spliterator<E> spliterator() {
+		return Spliterators.spliterator(iterator(),
+				size(),
+				Spliterator.IMMUTABLE |
+				Spliterator.ORDERED   |
+				Spliterator.SIZED     |
+				Spliterator.SUBSIZED);
+	}
+
+	public boolean isEmpty() {
 		return _length == 0 ? true : false;
 	}
 
 
-	public int size() { //TODO à tester.
+	public int size() {
 		return _length;
 	}
 
 
-	public E get(int index) { //TODO a tester
-		if(index >0 && index < _length)
+	public E get(int index) { 
+		if (index < 0 || index >= size())
+			throw new IndexOutOfBoundsException();
+		if(index >=0 && index < _length)
 			return _array[index];
 		else
 			return null;
@@ -139,144 +148,223 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 
 
 	public int indexOf(E elem) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-
-	public E head() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	public ImmutableList<E> tail() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	public E last() {
-		// TODO Auto-generated method stub
-		return null;
+		int i = 0;
+		for (E other : this)
+			if (equals(elem, other))
+				return i;
+			else
+				++i;
+		return -1;
 	}
 
 
 	@Override
 	public ImmutableList<E> subList(int fromIndex, int toIndex)
 			throws IndexOutOfBoundsException, IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+		if (fromIndex < 0 || toIndex > size())
+			throw new IndexOutOfBoundsException();
+		if (fromIndex > toIndex)
+			throw new IllegalArgumentException();
+		if (fromIndex == toIndex)
+			return new ImmutableLinkedList<E>();
+
+		int j = 0;
+		@SuppressWarnings("unchecked")
+		E[] res = (E[]) new Object[toIndex - fromIndex];
+		for(int i= fromIndex; i < toIndex; ++i)
+		{
+			res[j] = get(i);
+			++j;
+		}
+		return new ImmutableArrayList<E>(res);
 	}
 
 
 	@Override
 	public ImmutableList<E> reverse() {
-		// TODO Auto-generated method stub
-		return null;
+		int j = 0;
+		@SuppressWarnings("unchecked")
+		E[] res = (E[]) new Object[size()];
+		for(int i= size()-1; i >= 0; --i)
+		{
+			res[j] = get(i);
+			++j;
+		}
+		return new ImmutableArrayList<E>(res);
 	}
 
 
 	public ImmutableList<E> sort(Comparator<? super E> comparator) {
-		// TODO Auto-generated method stub
-		return null;
+		E[] a = toArray();
+		Arrays.sort(a,(Comparator<? super E>) comparator);
+		return new ImmutableLinkedList<E>(a);
 	}
 
 
 	public boolean contains(E elem) {
-		// TODO Auto-generated method stub
-		return false;
+		return any((E other) -> equals(elem, other));
 	}
 
 
 	public boolean containsAll(Collection<E> elems) {
-		// TODO Auto-generated method stub
-		return false;
+		return containsAll(new ImmutableArrayList<E>(elems));
 	}
 
 
 	public boolean containsAll(ImmutableList<E> elems) {
-		// TODO Auto-generated method stub
-		return false;
+		return elems.all((E elem) -> contains(elem));
 	}
 
 
 	@SuppressWarnings("unchecked")
 	public boolean containsAll(E... elems) {
-		// TODO Auto-generated method stub
-		return false;
+		return containsAll(new ImmutableArrayList<E>(elems));
 	}
 
 
 	public boolean any(Predicate<? super E> predicate) {
-		// TODO Auto-generated method stub
+		for (E elem : this)
+			if (predicate.test(elem))
+				return true;
 		return false;
 	}
 
 
 	public boolean all(Predicate<? super E> predicate) {
-		// TODO Auto-generated method stub
-		return false;
+		for (E elem : this)
+			if (!predicate.test(elem))
+				return false;
+		return true;
 	}
 
 
 	public ImmutableList<E> cons(E elem) {
-		// TODO Auto-generated method stub
-		return null;
+		@SuppressWarnings("unchecked")
+		E[] elems = (E[]) new Object[size()+1];
+		elems[0] = elem;
+
+		int i = 1;
+		for (E e : this) {
+			elems[i] = e;
+			++i;
+		}
+
+		return new ImmutableArrayList<E>(elems);
 	}
 
 
 	public ImmutableList<E> concat(Collection<E> elems) {
-		// TODO Auto-generated method stub
-		return null;
+		ImmutableList<E> list = this;
+		for (E elem: elems){
+			list = list.concat(elem);
+		}
+		return list;
 	}
 
 
 	public ImmutableList<E> concat(ImmutableList<E> elems) {
-		// TODO Auto-generated method stub
-		return null;
+		ImmutableList<E> list = this;
+		for (int i = 0 ; i <elems.size() ; ++i){
+			list = list.concat(elems.get(i));
+		}
+		return list;
 	}
 
-	// @SuppressWarnings("unchecked")
-	// public ImmutableList<E> concat(E... elems) {
-		// TODO Auto-generated method stub
-		// return null;
-	// }
+	@SuppressWarnings({"unchecked"})
+	public ImmutableList<E> concat(E... elems){
+		ImmutableList<E> list = this;
+		for (int i = 0 ; i <elems.length ; ++i){
+			list = list.concat(elems[i]);
+		}
+		return list;
+	}
 
 
 	public ImmutableList<E> concat(E elem) {
-		// TODO Auto-generated method stub
-		return null;
+		@SuppressWarnings("unchecked")
+		E[] elems = (E[]) new Object[size() + 1];
+		int i = 0;
+		for (E e : this) {
+			elems[i] = e;
+			++i;
+		}
+		elems[size()] = elem;
+		return new ImmutableLinkedList<E>(elems);
 	}
 
 
 	public ImmutableList<E> remove(Collection<E> elems) {
-		// TODO Auto-generated method stub
-		return null;
+		ImmutableList<E> list = this;
+		for (E elem: elems){
+			list = list.remove(elem);
+		}
+		return list;
 	}
 
 
 	public ImmutableList<E> remove(ImmutableList<E> elems) {
-		// TODO Auto-generated method stub
-		return null;
+		ImmutableList<E> list = this;
+		for (int i = 0 ; i <elems.size() ; ++i){
+			list = list.remove(elems.get(i));
+		}
+		return list;
 	}
 
 	@SuppressWarnings("unchecked")
 	public ImmutableList<E> remove(E... elems) {
-		// TODO Auto-generated method stub
-		return null;
+		ImmutableList<E> list = this;
+		for (int i = 0 ; i <elems.length ; ++i){
+			list = list.remove(elems[i]);
+		}
+		return list;
 	}
 
 
+	@SuppressWarnings("unchecked")
 	public ImmutableList<E> remove(E elem) {
-		// TODO Auto-generated method stub
-		return null;
+		E[] newElems;
+		int i;
+		boolean remove;
+		newElems = (E[]) new Object[size() - 1];
+		i = 0;
+		remove = false;
+		for ( E e :this){
+			if(!remove && equals(elem,e))
+				remove = true;
+			else{
+				if (i == this.size()-1)
+					throw new IllegalArgumentException();
+				newElems[i] = e;
+				i++;
+			}
+		}
+
+
+		return new ImmutableLinkedList<E>(newElems);
 	}
 
 
-	public ImmutableList<E> remove(int index) {
-		// TODO Auto-generated method stub
-		return null;
+	@SuppressWarnings("unchecked")
+	public ImmutableList<E> remove(int index) { //TODO
+		E[] newElems;
+		int i;
+		boolean remove;
+
+		if (index >= size() || index < 0)
+			throw new ArrayIndexOutOfBoundsException();
+
+		newElems = (E[]) new Object[size() -1];
+		i = 0;
+		remove = false;
+		for ( E e :this){
+			if(!remove && i==index)
+				remove = true;
+			else{
+				newElems[i] = e;
+				++i;
+			}
+		}
+		return new ImmutableLinkedList<E>(newElems);
 	}
 
 
@@ -318,76 +406,128 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 
 
 	public <F> ImmutableList<F> map(Function<? super E, ? extends F> mapper) {
-		// TODO Auto-generated method stub
-		return null;
+		@SuppressWarnings("unchecked")
+		F[] elems = (F[]) new Object[size()];
+		int i = 0;
+		for (E elem : this) {
+			elems[i] = mapper.apply(elem);
+			++i;
+		}
+
+		return new ImmutableArrayList<F>(elems);
 	}
 
 
 	@Override
 	public ImmutableList<E> filter(Predicate<? super E> predicate) {
-		// TODO Auto-generated method stub
-		return null;
+		ImmutableList<E> res = new ImmutableArrayList<E>();
+		for (E elem : this)
+			if (predicate.test(elem))
+				res = res.concat(elem);
+		return res;
 	}
 
 
 
 	public Optional<E> reduce(BinaryOperator<E> accumulator) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		switch (size()) {
+		case 0 : return Optional.empty();
+		case 1 : return Optional.of(get(0));
+		default :
 
-
-	public E reduce(E identity, BinaryOperator<E> accumulator) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	public <F> F reduce(F identity, BiFunction<F, ? super E, F> accumulator,
-			BinaryOperator<F> combiner) {
-		// TODO Auto-generated method stub
-		return null;
+			E result = get(0);
+			for (E elem : subList(1, size())) {
+				result = accumulator.apply(result, elem);
+			}
+			return Optional.of(result);
+		}
 	}
 
 
 	public Stream<E> stream() {
-		// TODO Auto-generated method stub
-		return null;
+		return StreamSupport.stream(spliterator(), false);
 	}
 
 
 	public Stream<E> parallelStream() {
-		// TODO Auto-generated method stub
-		return null;
+		return StreamSupport.stream(spliterator(), true);
 	}
 
 
 	public ImmutableList<E> clone() {
-		// TODO Auto-generated method stub
-		return null;
+		return subList(0, size());
 	}
 
-
+	/**
+	 * Hash an object.
+	 *
+	 * @param o the object to hash
+	 * @return o1 == null ? 0 : o1.hashCode()
+	 */
+	static final int hashCode(Object o) {
+		return o == null ? 0 : o.hashCode();
+	}
+	
+	public int hashCode() {
+		int hashCode = 1;
+		Iterator<E> itr = iterator();
+		int pos = size();
+		while (--pos >= 0)
+			hashCode = 31 * hashCode + hashCode(itr.next());
+		return hashCode;
+	}
+		
 	public E[] toArray() {
-		// TODO Auto-generated method stub
-		return null;
+		return getArray();
 	}
 
-
-	public List<E> asList() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ImmutableList<E> concat(E... elems) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	@SuppressWarnings("hiding")
 	@Override
 	public <E> E[] toArray(E[] a) {
-		// TODO Auto-generated method stub
-		return null;
+		return a;
 	}
+
+	public List<E> asList() {
+		List<E> al = new ArrayList<E>(size());
+		for(E e : this)
+			al.add(e);
+		return al; 
+	}
+
+	
+	
+	/**
+	 * Compare two objects according to Collection semantics.
+	 *
+	 * @param o1 the first object
+	 * @param o2 the second object
+	 * @return o1 == null ? o2 == null : o1.equals(o2)
+	 */
+	static final boolean equals(Object o1, Object o2) {
+		return o1 == null ? o2 == null : o1.equals(o2);
+	}
+	
+	public boolean equals(Object o) {
+		if (! (o instanceof ImmutableList))
+			return false;
+
+		@SuppressWarnings("rawtypes")
+		ImmutableList other = (ImmutableList) o;
+
+		if (size() != other.size())
+			return false;
+
+		Iterator<E> it1 = iterator();
+		@SuppressWarnings("rawtypes")
+		Iterator it2 = other.iterator();
+
+		while (it1.hasNext()) {
+			if (!equals(it1.next(), it2.next()))
+				return false;
+		}
+
+		return true;
+	}
+
+	
 }

@@ -3,18 +3,18 @@ package collections.implementations;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Spliterators;
-import java.util.Spliterator;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.StreamSupport;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import collections.interfaces.ImmutableList;
 
@@ -245,7 +245,7 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ImmutableList<E> sort(Comparator<? super E> comparator){
 		E[] a = (E[]) new Object[size()];
-		a =this.toArray((E[]) a);
+		a = this.toArray((E[]) a);
 		Arrays.sort((E[]) a,(Comparator) comparator);
 		return new ImmutableLinkedList<E>(a);
 	}
@@ -294,9 +294,9 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 
 	// Factories
 
-	@SuppressWarnings("unchecked")
 	public ImmutableList<E> cons(E elem) {
 
+		@SuppressWarnings("unchecked")
 		E[] elems = (E[]) new Object[size()+1];
 		elems[0] = elem;
 
@@ -306,7 +306,7 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 			++i;
 		}
 
-		return new ImmutableLinkedList(elems);
+		return new ImmutableLinkedList<E>(elems);
 	}
 
 	public ImmutableList<E> concat(Collection<E> elems){
