@@ -41,7 +41,7 @@ public class Benchmarks {
 				x = ll.get(ite%indicetoGet);
 			}
 			end = System.currentTimeMillis();
-			System.out.println("ImmutableLinkedList get Microbenchs "+(i+1) +" done in "+ (end - beg) +" ms - "+maxIterations+" iterations.");	
+			System.out.println("ImmutableLinkedList get Microbenchs "+(i+1) +" done in "+ (end - beg) +" ms - "+maxIterations+" iterations.");
 		}
 
 		for(int i=0; i < warmup; ++i)
@@ -140,8 +140,3 @@ public class Benchmarks {
 	}
 
 }
-
-
-
-
-

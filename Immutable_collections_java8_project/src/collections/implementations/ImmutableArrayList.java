@@ -54,8 +54,12 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 	}
 
 	/**
-	 * <p>Constructs a list containing the elements of the specified collection, in the order they are returned by the collection's iterator.
-	 * <p>If the specified collection is null, constructs an empty ArrayList with a capacity of 0.
+	 * <p>Constructs a list containing the elements of the specified
+	 * collection, in the order they are returned by the collection's
+	 * iterator.
+	 * <p>If the specified collection is null, constructs an empty ArrayList
+	 * with a capacity of 0.
+	 *
 	 * @param elems - the collection whose elements are to be placed into this list
 	 */
 	@SuppressWarnings("unchecked")
@@ -127,17 +131,12 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 				Spliterator.SUBSIZED);
 	}
 
-	public boolean isEmpty() {
-		return _length == 0 ? true : false;
-	}
-
-
 	public int size() {
 		return _length;
 	}
 
 
-	public E get(int index) { 
+	public E get(int index) {
 		if (index < 0 || index >= size())
 			throw new IndexOutOfBoundsException();
 		if(index >=0 && index < _length)
@@ -145,7 +144,6 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 		else
 			return null;
 	}
-
 
 	public int indexOf(E elem) {
 		int i = 0;
@@ -156,7 +154,6 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 				++i;
 		return -1;
 	}
-
 
 	@Override
 	public ImmutableList<E> subList(int fromIndex, int toIndex)
@@ -200,21 +197,17 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 		return new ImmutableLinkedList<E>(a);
 	}
 
-
 	public boolean contains(E elem) {
 		return any((E other) -> equals(elem, other));
 	}
-
 
 	public boolean containsAll(Collection<E> elems) {
 		return containsAll(new ImmutableArrayList<E>(elems));
 	}
 
-
 	public boolean containsAll(ImmutableList<E> elems) {
 		return elems.all((E elem) -> contains(elem));
 	}
-
 
 	@SuppressWarnings("unchecked")
 	public boolean containsAll(E... elems) {
@@ -264,8 +257,8 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 
 	public ImmutableList<E> concat(ImmutableList<E> elems) {
 		ImmutableList<E> list = this;
-		for (int i = 0 ; i <elems.size() ; ++i){
-			list = list.concat(elems.get(i));
+		for (E elem : elems) {
+			list = list.concat(elem);
 		}
 		return list;
 	}
@@ -304,8 +297,8 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 
 	public ImmutableList<E> remove(ImmutableList<E> elems) {
 		ImmutableList<E> list = this;
-		for (int i = 0 ; i <elems.size() ; ++i){
-			list = list.remove(elems.get(i));
+		for (E elem : elems) {
+			list = list.remove(elem);
 		}
 		return list;
 	}
@@ -467,7 +460,7 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 	static final int hashCode(Object o) {
 		return o == null ? 0 : o.hashCode();
 	}
-	
+
 	public int hashCode() {
 		int hashCode = 1;
 		Iterator<E> itr = iterator();
@@ -476,7 +469,7 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 			hashCode = 31 * hashCode + hashCode(itr.next());
 		return hashCode;
 	}
-		
+
 	public E[] toArray() {
 		return getArray();
 	}
@@ -491,11 +484,11 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 		List<E> al = new ArrayList<E>(size());
 		for(E e : this)
 			al.add(e);
-		return al; 
+		return al;
 	}
 
-	
-	
+
+
 	/**
 	 * Compare two objects according to Collection semantics.
 	 *
@@ -506,7 +499,7 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 	static final boolean equals(Object o1, Object o2) {
 		return o1 == null ? o2 == null : o1.equals(o2);
 	}
-	
+
 	public boolean equals(Object o) {
 		if (! (o instanceof ImmutableList))
 			return false;
@@ -529,5 +522,15 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 		return true;
 	}
 
-	
+	public E head() throws NoSuchElementException {
+		return null;
+	}
+
+	public ImmutableList<E> tail() throws UnsupportedOperationException {
+		return null;
+	}
+
+	public E last() throws NoSuchElementException {
+		return null;
+	}
 }

@@ -150,10 +150,6 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 
 	// Operations
 
-	public boolean isEmpty() {
-		return size() == 0;
-	}
-
 	public E get(int index) throws IndexOutOfBoundsException {
 		if (index < 0 || index >= size())
 			throw new IndexOutOfBoundsException();
@@ -178,12 +174,6 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 		return -1;
 	}
 
-	/**
-	 * Returns the first element in the list.
-	 *
-	 * @returns the first element in the list.
-	 * @throws NoSuchElementException if the list is empty
-	 */
 	public E head() throws NoSuchElementException {
 		if (isEmpty())
 			throw new NoSuchElementException();
@@ -191,12 +181,6 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 			return headNode().getElement();
 	}
 
-	/**
-	 * Returns a list with all elements of this list except the first one.
-	 *
-	 * @returns a list with all elements of this list except the first one
-	 * @throws UnsupportedOperationException if this list is empty
-	 */
 	public ImmutableList<E> tail() throws UnsupportedOperationException {
 		if (isEmpty())
 			throw new UnsupportedOperationException();
@@ -204,12 +188,6 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 			return subList(1, size());
 	}
 
-	/**
-	 * Returns the last element of the list.
-	 *
-	 * @returns the last element in the list
-	 * @throws NoSuchElementException if the list is empty
-	 */
 	public E last() throws NoSuchElementException {
 		if (isEmpty())
 			throw new NoSuchElementException();
@@ -318,10 +296,10 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 		}
 		return list;
 	}
-	public ImmutableList<E> concat(ImmutableList<E> elems){
+	public ImmutableList<E> concat(ImmutableList<E> elems) {
 		ImmutableList<E> list = this;
-		for (int i = 0 ; i <elems.size() ; ++i){
-			list = list.concat(elems.get(i));
+		for (E elem : elems) {
+			list = list.concat(elem);
 		}
 		return list;
 	}
@@ -346,7 +324,7 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 		return new ImmutableLinkedList<E>(elems);
 	}
 
-	public ImmutableList<E> remove(Collection<E> elems){
+	public ImmutableList<E> remove(Collection<E> elems) {
 		ImmutableList<E> list = this;
 		for (E elem: elems){
 			list = list.remove(elem);
@@ -355,16 +333,16 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 
 	}
 
-	public ImmutableList<E> remove(ImmutableList<E> elems){
+	public ImmutableList<E> remove(ImmutableList<E> elems) {
 		ImmutableList<E> list = this;
-		for (int i = 0 ; i <elems.size() ; ++i){
-			list = list.remove(elems.get(i));
+		for (E elem : elems) {
+			list = list.remove(elem);
 		}
 		return list;
 	}
 
 	@SuppressWarnings({"unchecked"})
-	public ImmutableList<E> remove(E... elems){
+	public ImmutableList<E> remove(E... elems) {
 		ImmutableList<E> list = this;
 		for (int i = 0 ; i <elems.length ; ++i){
 			list = list.remove(elems[i]);
@@ -373,7 +351,7 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public ImmutableList<E> remove(E elem){
+	public ImmutableList<E> remove(E elem) {
 		E[] newElems;
 		int i;
 		boolean remove;

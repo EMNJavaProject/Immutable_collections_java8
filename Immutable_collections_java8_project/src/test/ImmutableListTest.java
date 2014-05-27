@@ -19,26 +19,26 @@ import collections.implementations.ImmutableLinkedList;
 import collections.interfaces.ImmutableList;
 
 interface ImmutableListFactory<E> {
-	public ImmutableList<E> create(@SuppressWarnings("unchecked") E... elems);
+	@SuppressWarnings("unchecked") public ImmutableList<E> create(E... elems);
 	public ImmutableList<E> create();
 }
 
 class ImmutableLinkedListFactory<E> implements ImmutableListFactory<E> {
 	@SuppressWarnings({"unchecked"})
-	public ImmutableLinkedList<E> create(E... elems) {
+	public ImmutableList<E> create(E... elems) {
 		return new ImmutableLinkedList<E>(elems);
 	}
-	public ImmutableLinkedList<E> create() {
+	public ImmutableList<E> create() {
 		return new ImmutableLinkedList<E>();
 	}
 }
 
 class ImmutableArrayListFactory<E> implements ImmutableListFactory<E> {
 	@SuppressWarnings({"unchecked"})
-	public ImmutableArrayList<E> create(E... elems) {
+	public ImmutableList<E> create(E... elems) {
 		return new ImmutableArrayList<E>(elems);
 	}
-	public ImmutableArrayList<E> create() {
+	public ImmutableList<E> create() {
 		return new ImmutableArrayList<E>();
 	}
 }
@@ -299,7 +299,7 @@ public abstract class ImmutableListTest {
 		List<Integer> otherList = new ArrayList<Integer>();
 		otherList.add(1);
 		otherList.add(3);
-		assertEquals(new ImmutableLinkedList<Integer>(2),list.remove(otherList));
+		assertEquals(new ImmutableLinkedList<Integer>(2), list.remove(otherList));
 	}
 
 	@Test
@@ -348,7 +348,7 @@ public abstract class ImmutableListTest {
 		assertEquals(array2[1],array[1]);
 		assertEquals(array2[2],array[2]);
 	}
-	
+
 	@Test
 	public void asListTest(){
 		List<Integer> myList = new ArrayList<Integer>();
@@ -357,10 +357,10 @@ public abstract class ImmutableListTest {
 		myList.add(2);
 		myList.add(3);
 		myList2= list.asList();
-		
+
 		assertEquals(myList,myList2);
 	}
-	
+
 	@Test
 	public void sortTest(){
 		Comparator<Integer> comp = (Integer x, Integer y) -> x.compareTo(y);
