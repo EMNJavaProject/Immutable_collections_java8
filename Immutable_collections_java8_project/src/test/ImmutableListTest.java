@@ -367,4 +367,36 @@ public abstract class ImmutableListTest {
 		assertEquals(list.sort(comp),list.reverse().sort(comp));
 	}
 
+	@Test
+	public void HeadTest() {
+		assertEquals(1, (int)list.head());
+	}
+
+	@Test(expected=NoSuchElementException.class)
+	public void HeadExceptionTest() {
+		emptyList.head();
+	}
+
+	@Test
+	public void LastTest() {
+		assertEquals(3, (int)list.last());
+	}
+
+	@Test(expected=NoSuchElementException.class)
+	public void LastExceptionTest() {
+		emptyList.last();
+	}
+
+	@Test
+	public void TailTest() {
+		ImmutableList<Integer> tail = list.tail();
+		assertEquals(2, (int)tail.get(0));
+		assertEquals(3, (int)tail.get(1));
+		assertEquals(2, tail.size());
+	}
+
+	@Test(expected=UnsupportedOperationException.class)
+	public void TailExceptionTest() {
+		emptyList.tail();
+	}
 }

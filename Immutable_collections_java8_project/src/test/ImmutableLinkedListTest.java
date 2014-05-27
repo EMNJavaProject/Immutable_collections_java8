@@ -23,38 +23,4 @@ public class ImmutableLinkedListTest extends ImmutableListTest {
 	public void setUp() {
 		super.setUp(new ImmutableLinkedListFactory<Integer>());
 	}
-
-	@Test
-	public void HeadTest() {
-		assertEquals(1, (int)((ImmutableLinkedList<Integer>)list).head());
-	}
-
-	@Test(expected=NoSuchElementException.class)
-	public void HeadExceptionTest() {
-		((ImmutableLinkedList<Integer>)emptyList).head();
-	}
-
-	@Test
-	public void LastTest() {
-		assertEquals(3, (int)((ImmutableLinkedList<Integer>)list).last());
-	}
-
-	@Test(expected=NoSuchElementException.class)
-	public void LastExceptionTest() {
-		((ImmutableLinkedList<Integer>)emptyList).last();
-	}
-
-	@Test
-	public void TailTest() {
-		ImmutableList<Integer> tail = ((ImmutableLinkedList<Integer>)list).tail();
-		assertEquals(2, (int)tail.get(0));
-		assertEquals(3, (int)tail.get(1));
-		assertEquals(2, tail.size());
-	}
-
-	@Test(expected=UnsupportedOperationException.class)
-	public void TailExceptionTest() {
-		((ImmutableLinkedList<Integer>)emptyList).tail();
-	}
-
 }
