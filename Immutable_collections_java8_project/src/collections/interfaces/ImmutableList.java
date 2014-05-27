@@ -4,19 +4,26 @@ package collections.interfaces;
 // http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true
 // http://docs.guava-libraries.googlecode.com/git/javadoc/com/google/common/collect/ImmutableList.html
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public interface ImmutableList<E> extends InductiveList<E>,
 					  IterativeList<E>,
-					  Iterable<E> {
+					  Iterable<E>,
+					  Cloneable {
+
+	ImmutableList<E> create(E[] elems);
 
 	/**
 	 * Returns true if this list contains no elements.
@@ -61,7 +68,11 @@ public interface ImmutableList<E> extends InductiveList<E>,
 	 * @param comparator
 	 * @return the list
 	 */
-	ImmutableList<E> sort(Comparator<? super E> comparator); // Java: sort, Scala: sorted/sortWith
+        default ImmutableList<E> sort(Comparator<? super E> comparator) { // Java: sort, Scala: sorted/sortWith
+		E[] a = toArray();
+		Arrays.sort(a, comparator);
+		return create(a);
+	}
 
 	/**
 	 * Returns whether given predicate is satisfied by at least one element
@@ -243,19 +254,32 @@ public interface ImmutableList<E> extends InductiveList<E>,
 	 */
 	Optional<E> reduce(BinaryOperator<E> accumulator); // Scala: reduce
 
+        default Spliterator<E> spliterator() {
+		return Spliterators.spliterator(iterator(),
+						size(),
+						Spliterator.IMMUTABLE |
+						Spliterator.ORDERED   |
+						Spliterator.SIZED     |
+						Spliterator.SUBSIZED);
+	}
+
 	/**
 	 * Returns a sequential Stream with this collection as its source.
 	 *
 	 * @return a sequential Stream over the elements in this collection
 	 */
-	Stream<E> stream();
+	default Stream<E> stream() {
+		return StreamSupport.stream(spliterator(), false);
+	}
 
 	/**
 	 * Returns a parallel Stream with this collection as its source.
 	 *
 	 * @return a parallel Stream over the elements in this collection
 	 */
-	Stream<E> parallelStream();
+	default Stream<E> parallelStream() {
+		return StreamSupport.stream(spliterator(), true);
+	}
 
 	/**
 	 * Compares the specified object with this list for equality. Returns true
@@ -329,4 +353,5 @@ public interface ImmutableList<E> extends InductiveList<E>,
 	List<E> asList(); // Scala: toList, Guava: asList
 
 	ImmutableList<E> clone();
+
 }

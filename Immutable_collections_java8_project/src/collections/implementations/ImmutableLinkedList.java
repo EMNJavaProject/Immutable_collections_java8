@@ -148,6 +148,10 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 		this.size = elems.length;
 	}
 
+	public ImmutableList<E> create(E[] elems) {
+		return new ImmutableLinkedList<E>(elems);
+	}
+
 	// Operations
 
 	public E get(int index) throws IndexOutOfBoundsException {
@@ -229,25 +233,6 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 			return this;
 		else
 			return tail().reverse().concat(head());
-	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public ImmutableList<E> sort(Comparator<? super E> comparator){
-		E[] a = (E[]) new Object[size()];
-		a = this.toArray((E[]) a);
-		Arrays.sort((E[]) a,(Comparator) comparator);
-		return new ImmutableLinkedList<E>(a);
-	}
-
-	/**
-	 * Compare two objects according to Collection semantics.
-	 *
-	 * @param o1 the first object
-	 * @param o2 the second object
-	 * @return o1 == null ? o2 == null : o1.equals(o2)
-	 */
-	static final boolean equals(Object o1, Object o2) {
-		return o1 == null ? o2 == null : o1.equals(o2);
 	}
 
 	public boolean contains(E elem) {
@@ -395,40 +380,6 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 		return new ImmutableLinkedList<E>(newElems);
 	}
 
-	public ImmutableList<E> union(Collection<E> elems)
-	{
-		//TODO Method
-		return null;
-	}
-	public ImmutableList<E> union(ImmutableList<E> elems)
-	{
-		//TODO Method
-		return null;
-	}
-	@SuppressWarnings({"unchecked"})
-	public ImmutableList<E> union(E... elems)
-	{
-		//TODO Method
-		return null;
-	}
-
-	public ImmutableList<E> intersect(Collection<E> elems)
-	{
-		//TODO Method
-		return null;
-	}
-	public ImmutableList<E> intersect(ImmutableList<E> elems)
-	{
-		//TODO Method
-		return null;
-	}
-	@SuppressWarnings({"unchecked"})
-	public ImmutableList<E> intersect(E... elems)
-	{
-		//TODO Method
-		return null;
-	}
-
 	@SuppressWarnings("unchecked")
 	public <F> ImmutableList<F> map(Function<? super E, ? extends F> mapper) {
 		F[] elems = (F[]) new Object[size()];
@@ -501,29 +452,6 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 		return new ImmutableLinkedListIterator();
 	}
 
-	public Spliterator<E> spliterator() {
-		return Spliterators.spliterator(iterator(),
-				size(),
-				Spliterator.IMMUTABLE |
-				Spliterator.ORDERED   |
-				Spliterator.SIZED     |
-				Spliterator.SUBSIZED);
-	}
-
-	public Stream<E> stream() {
-		return StreamSupport.stream(spliterator(), false);
-	}
-
-	public Stream<E> parallelStream() {
-		return StreamSupport.stream(spliterator(), true);
-	}
-
-	// Object methods
-	public ImmutableList<E> clone() {
-		return subList(0, size());
-	}
-
-
 	public boolean equals(Object o) {
 		if (! (o instanceof ImmutableList))
 			return false;
@@ -547,12 +475,23 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	}
 
 	/**
+	 * Compare two objects according to Collection semantics.
+	 *
+	 * @param o1 the first object
+	 * @param o2 the second object
+	 * @return o1 == null ? o2 == null : o1.equals(o2)
+	 */
+	static boolean equals(Object o1, Object o2) {
+		return o1 == null ? o2 == null : o1.equals(o2);
+	}
+
+	/**
 	 * Hash an object.
 	 *
 	 * @param o the object to hash
 	 * @return o1 == null ? 0 : o1.hashCode()
 	 */
-	static final int hashCode(Object o) {
+	static int hashCode(Object o) {
 		return o == null ? 0 : o.hashCode();
 	}
 
@@ -590,6 +529,10 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 			myList.add(e);
 		}
 		return myList;
+	}
+
+	public ImmutableList<E> clone() {
+		return subList(0, size());
 	}
 
 }

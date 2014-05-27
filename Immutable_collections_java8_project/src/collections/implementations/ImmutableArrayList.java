@@ -50,9 +50,11 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 			_array =  elems;
 			_length = _array.length;
 		}
-
 	}
 
+	public ImmutableList<E> create(E[] elems) {
+		return new ImmutableArrayList<E>(elems);
+	}
 	/**
 	 * <p>Constructs a list containing the elements of the specified
 	 * collection, in the order they are returned by the collection's
@@ -119,16 +121,6 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 	public Iterator<E> iterator() {
 		return new ImmutableArrayListIterator();
 
-	}
-
-
-	public Spliterator<E> spliterator() {
-		return Spliterators.spliterator(iterator(),
-				size(),
-				Spliterator.IMMUTABLE |
-				Spliterator.ORDERED   |
-				Spliterator.SIZED     |
-				Spliterator.SUBSIZED);
 	}
 
 	public int size() {
@@ -436,21 +428,6 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 		}
 	}
 
-
-	public Stream<E> stream() {
-		return StreamSupport.stream(spliterator(), false);
-	}
-
-
-	public Stream<E> parallelStream() {
-		return StreamSupport.stream(spliterator(), true);
-	}
-
-
-	public ImmutableList<E> clone() {
-		return subList(0, size());
-	}
-
 	/**
 	 * Hash an object.
 	 *
@@ -486,8 +463,6 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 			al.add(e);
 		return al;
 	}
-
-
 
 	/**
 	 * Compare two objects according to Collection semantics.
@@ -532,5 +507,10 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 
 	public E last() throws NoSuchElementException {
 		return null;
+	}
+
+
+	public ImmutableList<E> clone() {
+		return subList(0, size());
 	}
 }
