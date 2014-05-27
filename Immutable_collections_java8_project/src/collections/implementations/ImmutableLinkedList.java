@@ -97,12 +97,23 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	// Constructors
 
 	/**
+	 * Internal constructor which create a linked list given its attributes.
+	 *
+	 * @param head The first node of the list
+	 * @param last The last node of the list
+	 * @param size The size of the list
+	 */
+	private ImmutableLinkedList(Node<E> head, Node<E> last, int size) {
+		this.head = head;
+		this.last = last;
+		this.size = size;
+	}
+
+	/**
 	 * Create a empty linked list.
 	 */
 	public ImmutableLinkedList() {
-		this.head = null;
-		this.last = null;
-		this.size = 0;
+		this(null, null, 0);
 	}
 
 	/**
@@ -295,18 +306,9 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	// Factories
 
 	public ImmutableList<E> cons(E elem) {
-
-		@SuppressWarnings("unchecked")
-		E[] elems = (E[]) new Object[size()+1];
-		elems[0] = elem;
-
-		int i = 1;
-		for (E e : this) {
-			elems[i] = e;
-			++i;
-		}
-
-		return new ImmutableLinkedList<E>(elems);
+		return new ImmutableLinkedList<E>(new Node<E>(elem, headNode()),
+						  lastNode(),
+						  size() + 1);
 	}
 
 	public ImmutableList<E> concat(Collection<E> elems){
@@ -389,12 +391,11 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 			}
 		}
 
-
 		return new ImmutableLinkedList<E>(newElems);
 	}
 
 	@SuppressWarnings("unchecked")
-	public ImmutableList<E> remove(int index){
+	public ImmutableList<E> remove(int index) {
 		E[] newElems;
 		int i;
 		boolean remove;
@@ -540,7 +541,7 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	}
 
 	// Object methods
-	public ImmutableList<E> clone(){
+	public ImmutableList<E> clone() {
 		return subList(0, size());
 	}
 
