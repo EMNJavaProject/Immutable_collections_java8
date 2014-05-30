@@ -23,4 +23,21 @@ public class ImmutableLinkedListTest extends ImmutableListTest {
 	public void setUp() {
 		super.setUp(new ImmutableLinkedListFactory<Integer>());
 	}
+
+	@Test
+	public void SubListLinkedListTest() {
+
+		// Test that iterators stop at the right last node for sublists
+		// (since they all share their structures with a superlist)
+
+		ImmutableList<Integer> subList = list.subList(1, list.size()-1);
+		assertEquals(1, subList.size());
+
+		int sizeWhenIterating = 0;
+		for (Integer i : subList)
+			++sizeWhenIterating;
+
+		assertEquals(subList.size(), sizeWhenIterating);
+
+	}
 }

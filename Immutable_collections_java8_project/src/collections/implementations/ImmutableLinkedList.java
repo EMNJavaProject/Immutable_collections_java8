@@ -201,8 +201,8 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 
 	@SuppressWarnings("unchecked")
 	public ImmutableList<E> subList(int fromIndex, int toIndex) throws
-	IndexOutOfBoundsException,
-	IllegalArgumentException {
+		IndexOutOfBoundsException,
+		IllegalArgumentException {
 
 		if (fromIndex < 0 || toIndex > size())
 			throw new IndexOutOfBoundsException();
@@ -217,15 +217,17 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 			node = node.getNext();
 			++i;
 		}
+		Node<E> subListHead = node;
 
-		E[] elems = (E[]) new Object[toIndex - fromIndex];
-		while (i != toIndex) {
-			elems[i - fromIndex] = (E)node.getElement();
+		while (i != toIndex-1) {
 			node = node.getNext();
 			++i;
 		}
+		Node<E> subListLast = node;
 
-		return new ImmutableLinkedList<E>(elems);
+		return new ImmutableLinkedList<E>(subListHead,
+						  subListLast,
+						  toIndex - fromIndex);
 	}
 
 	public ImmutableList<E> reverse() {
@@ -276,7 +278,7 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 
 	public ImmutableList<E> concat(Collection<E> elems){
 		ImmutableList<E> list = this;
-		for (E elem: elems){
+		for (E elem: elems) {
 			list = list.concat(elem);
 		}
 		return list;
@@ -311,7 +313,7 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 
 	public ImmutableList<E> remove(Collection<E> elems) {
 		ImmutableList<E> list = this;
-		for (E elem: elems){
+		for (E elem: elems) {
 			list = list.remove(elem);
 		}
 		return list;
@@ -329,7 +331,7 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 	@SuppressWarnings({"unchecked"})
 	public ImmutableList<E> remove(E... elems) {
 		ImmutableList<E> list = this;
-		for (int i = 0 ; i <elems.length ; ++i){
+		for (int i = 0 ; i < elems.length ; ++i) {
 			list = list.remove(elems[i]);
 		}
 		return list;
@@ -421,23 +423,30 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 		/** Current node pointed by the iterator */
 		private Node<E> currentNode;
 
+		/** Tell whether the iterator can continue or not */
+		private boolean hasNext;
+
 		/**
 		 * Create a new iterator starting from the beginning of the linked list.
 		 */
 		public ImmutableLinkedListIterator() {
 			currentNode = headNode();
+			hasNext = (size() != 0);
 		}
 
 		public boolean hasNext() {
-			return currentNode != null;
+			return hasNext;
 		}
 
 		public E next() throws NoSuchElementException {
-			if (currentNode == null)
+			if (!hasNext())
 				throw new NoSuchElementException();
 
 			E elem = currentNode.getElement();
-			currentNode = currentNode.getNext();
+			if (currentNode == lastNode())
+				hasNext = false;
+			else
+				currentNode = currentNode.getNext();
 			return elem;
 		}
 

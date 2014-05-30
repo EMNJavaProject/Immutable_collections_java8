@@ -350,7 +350,7 @@ public abstract class ImmutableListTest {
 	}
 
 	@Test
-	public void asListTest(){
+	public void asListTest() {
 		List<Integer> myList = new ArrayList<Integer>();
 		List<Integer> myList2 = new ArrayList<Integer>();
 		myList.add(1);
@@ -362,7 +362,7 @@ public abstract class ImmutableListTest {
 	}
 
 	@Test
-	public void sortTest(){
+	public void sortTest() {
 		Comparator<Integer> comp = (Integer x, Integer y) -> x.compareTo(y);
 		assertEquals(list.sort(comp),list.reverse().sort(comp));
 	}
