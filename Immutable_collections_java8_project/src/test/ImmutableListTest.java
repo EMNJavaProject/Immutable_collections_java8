@@ -191,6 +191,24 @@ public abstract class ImmutableListTest {
 		it.remove();
 	}
 
+
+	@Test
+	public void SubListIteratorTest() {
+
+		// Test that iterators stop at the right last node for sublists
+		// (since they all share their structures with a superlist)
+
+		ImmutableList<Integer> subList = list.subList(1, list.size()-1);
+		assertEquals(1, subList.size());
+
+		int sizeWhenIterating = 0;
+		for (Integer i : subList)
+			++sizeWhenIterating;
+
+		assertEquals(subList.size(), sizeWhenIterating);
+
+	}
+
 	@Test
 	public void ContainsTest() {
 		assertTrue(list.contains(1));
