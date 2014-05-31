@@ -5,7 +5,11 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ ImmutableArrayListTest.class, ImmutableLinkedListTest.class })
+@SuiteClasses({
+	ImmutableArrayListTest.class,
+	    ImmutableLinkedListTest.class,
+	    ImmutableReversedArrayListTest.class
+	    })
 public class AllTests {
 
 }

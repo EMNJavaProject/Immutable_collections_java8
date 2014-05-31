@@ -4,7 +4,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Collections;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -40,6 +42,20 @@ class ImmutableArrayListFactory<E> implements ImmutableListFactory<E> {
 	}
 	public ImmutableList<E> create() {
 		return new ImmutableArrayList<E>();
+	}
+}
+
+class ReversedArrayListFactory<E> implements ImmutableListFactory<E> {
+	@SuppressWarnings("unchecked")
+	public ImmutableList<E> create(E... _elems) {
+		List<E> tmp = Arrays.asList(_elems);
+		Collections.reverse(tmp);
+		E[] elems = (E[]) tmp.toArray();
+
+		return new ImmutableArrayList<E>(elems).reverse();
+	}
+	public ImmutableList<E> create() {
+		return new ImmutableArrayList<E>().reverse();
 	}
 }
 
@@ -191,11 +207,10 @@ public abstract class ImmutableListTest {
 		it.remove();
 	}
 
-
 	@Test
 	public void SubListIteratorTest() {
 
-		// Test that iterators stop at the right last node for sublists
+		// Test that iterators stop at the right last element for sublists
 		// (since they all share their structures with a superlist)
 
 		ImmutableList<Integer> subList = list.subList(1, list.size()-1);
@@ -206,7 +221,6 @@ public abstract class ImmutableListTest {
 			++sizeWhenIterating;
 
 		assertEquals(subList.size(), sizeWhenIterating);
-
 	}
 
 	@Test
@@ -310,14 +324,18 @@ public abstract class ImmutableListTest {
 
 	@Test
 	public void removeTest1() {
-		assertEquals(new ImmutableLinkedList<Integer>(2, 3),list.remove(0));
-		assertEquals(new ImmutableLinkedList<Integer>(2, 3),list.remove(new Integer(1)));
-		assertEquals(new ImmutableLinkedList<Integer>(3),list.remove(new Integer(1),new Integer(2)));
-		assertEquals(new ImmutableLinkedList<Integer>(2),list.remove(new ImmutableLinkedList<Integer>(1,3)));
+		Integer second = list.get(1);
+		Integer third  = list.get(2);
+
+		assertEquals(new ImmutableLinkedList<Integer>(second, third),list.remove(0));
+
+		assertEquals(new ImmutableLinkedList<Integer>(second, third),list.remove(new Integer(1)));
+		assertEquals(new ImmutableLinkedList<Integer>(third),list.remove(new Integer(1), new Integer(2)));
+		assertEquals(new ImmutableLinkedList<Integer>(second), list.remove(new ImmutableLinkedList<Integer>(1,3)));
 		List<Integer> otherList = new ArrayList<Integer>();
 		otherList.add(1);
 		otherList.add(3);
-		assertEquals(new ImmutableLinkedList<Integer>(2), list.remove(otherList));
+		assertEquals(new ImmutableLinkedList<Integer>(second), list.remove(otherList));
 	}
 
 	@Test

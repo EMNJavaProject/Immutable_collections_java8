@@ -91,7 +91,7 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 		private int size;
 
 		/**
-		 * Create a new iterator starting from the beginning of the linked list.
+		 * Create a new iterator starting from the beginning of the list.
 		 */
 		public ImmutableArrayListIterator() {
 			index = 0;
@@ -171,15 +171,7 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 
 	@Override
 	public ImmutableList<E> reverse() {
-		int j = 0;
-		@SuppressWarnings("unchecked")
-		E[] res = (E[]) new Object[size()];
-		for(int i= size()-1; i >= 0; --i)
-		{
-			res[j] = get(i);
-			++j;
-		}
-		return new ImmutableArrayList<E>(res);
+		return new ImmutableReversedArrayList<E>(this);
 	}
 
 
@@ -508,7 +500,6 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 	public E last() throws NoSuchElementException {
 		return null;
 	}
-
 
 	public ImmutableList<E> clone() {
 		return subList(0, size());
