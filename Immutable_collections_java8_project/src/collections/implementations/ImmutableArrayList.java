@@ -127,10 +127,9 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 	public E get(int index) {
 		if (index < 0 || index >= size())
 			throw new IndexOutOfBoundsException();
-		if(index >=0 && index < _length)
-			return _array[index];
 		else
-			return null;
+			return _array[index];
+
 	}
 
 	public int indexOf(E elem) {
@@ -153,17 +152,39 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 		if (fromIndex == toIndex)
 			return new ImmutableLinkedList<E>();
 
-		int j = 0;
-		@SuppressWarnings("unchecked")
-		E[] res = (E[]) new Object[toIndex - fromIndex];
-		for(int i= fromIndex; i < toIndex; ++i)
-		{
-			res[j] = get(i);
-			++j;
-		}
-		return new ImmutableArrayList<E>(res);
+		return new SubList(fromIndex, toIndex - fromIndex);
 	}
 
+	class SubList extends ImmutableArrayList<E>
+	{
+		transient final int offset;
+	    transient final int length;
+
+	    SubList(int offset, int length) {
+	      this.offset = offset;
+	      this.length = length;
+	    }
+
+	    @Override
+	    public int size() {
+	      return length;
+	    }
+
+	    @Override
+	    public E get(int index) {
+	    	if (index < 0 || index >= length)
+				throw new IndexOutOfBoundsException();
+	      return ImmutableArrayList.this.get(index + offset);
+	    }
+
+	    @Override
+	    public ImmutableList<E> subList(int fromIndex, int toIndex) {
+	      if (fromIndex < 0 || toIndex < fromIndex || toIndex > length)
+				throw new IndexOutOfBoundsException();
+	      return  ImmutableArrayList.this.subList(fromIndex + offset, toIndex + offset);
+	    }
+	}
+	
 
 	@Override
 	public ImmutableList<E> reverse() {
@@ -319,7 +340,6 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 				i++;
 			}
 		}
-
 
 		return new ImmutableLinkedList<E>(newElems);
 	}
@@ -494,19 +514,21 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 	}
 
 	public E head() throws NoSuchElementException {
-		return null;
+		if(_length == 0)
+			return null;
+		return _array[0];
 	}
 
 	public ImmutableList<E> tail() throws UnsupportedOperationException {
-		return null;
+		return subList(1, _length);
 	}
 
 	public E last() throws NoSuchElementException {
-		return null;
+		return _array[_length-1];
 	}
 
 
 	public ImmutableList<E> clone() {
-		return subList(0, size());
+		return subList(0, _length);
 	}
 }
