@@ -1,8 +1,10 @@
 package collections.interfaces;
 
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.NoSuchElementException;
 
-public interface InductiveList<E> {
+public interface InductiveList<E> extends ImmutableList<E> {
 
 	/**
 	 * Return a new list with the elements of this list appended to given element.
@@ -10,7 +12,7 @@ public interface InductiveList<E> {
 	 * @param elem The first element of the new list
 	 * @return a new list with the elements of this list appended to given element.
 	 */
-	ImmutableList<E> cons(E elem); // Scala: + operator
+	InductiveList<E> cons(E elem);
 
 	/**
 	 * Returns the first element in the list.
@@ -26,7 +28,7 @@ public interface InductiveList<E> {
 	 * @returns a list with all elements of this list except the first one
 	 * @throws UnsupportedOperationException if this list is empty
 	 */
-	ImmutableList<E> tail() throws UnsupportedOperationException;
+	InductiveList<E> tail() throws UnsupportedOperationException;
 
 	/**
 	 * Returns the last element of the list.
@@ -35,4 +37,12 @@ public interface InductiveList<E> {
 	 * @throws NoSuchElementException if the list is empty
 	 */
 	E last() throws NoSuchElementException;
+
+        default <F> InductiveList<F> map(Function<? super E, ? extends F> mapper) {
+		return (InductiveList<F>) ImmutableList.super.map(mapper);
+	}
+
+        default InductiveList<E> filter(Predicate<? super E> predicate) {
+		return (InductiveList<E>) ImmutableList.super.filter(predicate);
+	}
 }

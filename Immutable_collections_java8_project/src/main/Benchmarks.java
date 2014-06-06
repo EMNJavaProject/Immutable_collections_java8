@@ -2,12 +2,12 @@ package main;
 
 import collections.implementations.ImmutableArrayList;
 import collections.implementations.ImmutableLinkedList;
-import collections.interfaces.ImmutableList;
+import collections.interfaces.InductiveIterativeList;
 
 public class Benchmarks {
 
-	ImmutableList<Integer> ll;
-	ImmutableList<Integer> al;
+	InductiveIterativeList<Integer> ll;
+	InductiveIterativeList<Integer> al;
 
 	public Benchmarks()
 	{
@@ -29,7 +29,7 @@ public class Benchmarks {
 		long  end = 0;
 		int indicetoGet = ll.size()-1;
 		Integer x;
-		ImmutableList<Integer> out ;
+		InductiveIterativeList<Integer> out ;
 
 		System.out.println("ImmutableLinkedList Microbenchs started...");
 
@@ -87,7 +87,7 @@ public class Benchmarks {
 		long  end = 0;
 		int indicetoGet = al.size()-1;
 		Integer x = new Integer(0);
-		ImmutableList<Integer> out ;
+		InductiveIterativeList<Integer> out ;
 		System.out.println("ImmutableArrayList Microbenchs started...");
 
 

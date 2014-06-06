@@ -5,8 +5,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import collections.interfaces.ImmutableList;
-
 public class ImmutableReversedArrayList<E> extends ImmutableArrayList<E> {
 
 	/** The encapsulated list we delegate things to. */
@@ -55,7 +53,7 @@ public class ImmutableReversedArrayList<E> extends ImmutableArrayList<E> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public ImmutableList<E> subList(int fromIndex, int toIndex) throws
+	public ImmutableArrayList<E> subList(int fromIndex, int toIndex) throws
 		IndexOutOfBoundsException,
 		IllegalArgumentException {
 		if (fromIndex == toIndex)
@@ -65,12 +63,12 @@ public class ImmutableReversedArrayList<E> extends ImmutableArrayList<E> {
 				    reverseIndex(fromIndex-1)).reverse();
 	}
 
-	public ImmutableList<E> reverse() {
+	public ImmutableArrayList<E> reverse() {
 		return list;
 	}
 
 	@SuppressWarnings("unchecked")
-	public ImmutableList<E> remove(int index) {
+	public ImmutableArrayList<E> remove(int index) {
 		return list.remove(reverseIndex(index)).reverse();
 	}
 

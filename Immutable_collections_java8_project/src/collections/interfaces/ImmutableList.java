@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Spliterator;
 import java.util.Spliterators;
@@ -18,58 +19,27 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public interface ImmutableList<E> extends InductiveList<E>,
-					  IterativeList<E>,
-					  Iterable<E>,
+public interface ImmutableList<E> extends Iterable<E>,
 					  Cloneable {
 
-	ImmutableList<E> create(E[] elems);
+	public ImmutableList<E> create(E[] elems);
+	public <F> ImmutableList<F> create(Collection<F> elems);
 
 	/**
 	 * Returns true if this list contains no elements.
 	 *
 	 * @returns true if this list contains no elements
 	 */
-        default boolean isEmpty() {
-		return size() == 0;
-        }
-
-	/**
-	 * Returns the number of elements in this list.
-	 *
-	 * @returns the number of elements in this list
-	 **/
-	int size();
-
-	/**
-	 * Returns a portion of this list.
-	 *
-	 * @param fromIndex low endpoint (inclusive) of the subList
-	 * @param toIndex high endpoint (exclusive) of the subList
-	 * @returns a portion of this list
-	 * @throws IndexOutOfBoundsException if an endpoint index value is out
-	 * of range (fromIndex < 0 || toIndex > size)
-	 * @throws IllegalArgumentException if the endpoint indices are out of
-	 * order (fromIndex > toIndex)
-	 */
-	ImmutableList<E> subList(int fromIndex, int toIndex) throws
-		IndexOutOfBoundsException,
-		IllegalArgumentException; // Java && Guava
-
-	/**
-	 * Returns a new list with the elements of this list in reverse order.
-	 *
-	 * @return a new list with the elements of this list in reverse order.
-	 */
-	ImmutableList<E> reverse(); // Guava: reverse
+        boolean isEmpty();
 
 	/**
 	 * Sorts this list using the supplied Comparator to compare elements.
 	 * @param comparator
 	 * @return the list
 	 */
-        default ImmutableList<E> sort(Comparator<? super E> comparator) { // Java: sort, Scala: sorted/sortWith
-		E[] a = toArray();
+        default ImmutableList<E> sort(Comparator<? super E> comparator) {
+		@SuppressWarnings({"unchecked"})
+		E[] a = (E[]) toArray();
 		Arrays.sort(a, comparator);
 		return create(a);
 	}
@@ -82,7 +52,12 @@ public interface ImmutableList<E> extends InductiveList<E>,
 	 * @returns true if predicate is satisfied by at least one element of
 	 * the list.
 	 */
-	boolean any(Predicate<? super E> predicate); // Scala: exists/find
+	default boolean any(Predicate<? super E> predicate) {
+		for (E elem : this)
+			if (predicate.test(elem))
+				return true;
+		return false;
+	}
 
 	/**
 	 * Returns whether given predicate is satisfied by all elements of the
@@ -91,101 +66,41 @@ public interface ImmutableList<E> extends InductiveList<E>,
 	 * @param predicate The predicate to be tested on elements of the list.
 	 * @returns true if predicate is satified by all elements of the list.
 	 */
-	boolean all(Predicate<? super E> predicate); // Scala: forall
+	default boolean all(Predicate<? super E> predicate) {
+		for (E elem : this)
+			if (!predicate.test(elem))
+				return false;
+		return true;
+	}
 
 	/**
-	 * Returns a new list containing the elements from this list followed by
-	 * the elements from the given list.
+	 * Returns the first index where the element is located in the list, or -1.
 	 *
-	 * @param elems the list to be concatened with
-	 * @returns a new list containing the elements from this list followed
-	 * by the elements from the given list
+	 * @param o the element to look for
+	 * @return its position, or -1 if not found
 	 */
-	ImmutableList<E> concat(Collection<E> elems);
+         default int indexOf(E elem) {
+		 int i = 0;
+		 for (E other : this)
+			 if (equals(elem, other))
+				 return i;
+			 else
+				 ++i;
+		 return -1;
+	 }
 
-	/**
-	 * Returns a new list containing the elements from this list followed by
-	 * the elements from the given list.
-	 *
-	 * @param elems the list to be concatened with
-	 * @returns a new list containing the elements from this list followed
-	 * by the elements from the given list
-	 */
-	ImmutableList<E> concat(ImmutableList<E> elems);
+	 /**
+	  * Compare two objects according to Collection semantics.
+	  *
+	  * @param o1 the first object
+	  * @param o2 the second object
+	  * @return o1 == null ? o2 == null : o1.equals(o2)
+	  */
+	 static boolean equals(Object o1, Object o2) {
+		 return o1 == null ? o2 == null : o1.equals(o2);
+	 }
 
-	/**
-	 * Returns a new list containing the elements from this list followed by
-	 * the elements from the given list.
-	 *
-	 * @param elems the list to be concatened with
-	 * @returns a new list containing the elements from this list followed
-	 * by the elements from the given list
-	 */
-	@SuppressWarnings({"unchecked"})
-	ImmutableList<E> concat(E... elems);
-
-	/**
-	 * Returns a new list containing the elements from this list followed by
-	 * the elements from the given list.
-	 *
-	 * @param elem the list to be concatened with
-	 * @returns a new list containing the elements from this list followed
-	 * by the elements from the given list
-	 */
-	ImmutableList<E> concat(E elem);
-
-	/**
-	 * Returns a new list without all the elements of the specified
-	 * elements from this list.
-	 *
-	 * @param elems - elements to be removed from this list, if present
-	 * @return  a new list without all the elements of the specified
-	 * elements from this list
-	 */
-	ImmutableList<E> remove(ImmutableList<E> elems);
-
-	/**
-	 * Returns a new list without all the elements of the specified
-	 * elements from this list.
-	 *
-	 * @param elems - elements to be removed from this list, if present
-	 * @return  a new list without all the elements of the specified
-	 * elements from this list
-	 */
-	ImmutableList<E> remove(Collection<E> elems);
-
-	/**
-	 * Returns a new list without all the element of the specified elements
-	 * from this list
-	 *
-	 * @param elems - elements to be removed from this list, if present
-	 * @return  a new list without all the element of the specified elements
-	 * from this list
-	 */
-	@SuppressWarnings({"unchecked"})
-	ImmutableList<E> remove(E... elems);
-
-	/**
-	 * Returns a new list without the first occurrence of the specified
-	 * element from this list.
-	 *
-	 * @param elem - element to be removed from this list, if present
-	 * @return  a new list without the first occurrence of the specified
-	 * element from this list
-	 */
-	ImmutableList<E> remove(E elem) throws IllegalArgumentException;
-
-	/**
-	 * Returns a new list without the element at the specified position in
-	 * this list.
-	 *
-	 * @param index - the index of the element to be removed
-	 * @return  a new list without the element at the specified position in
-	 * this list
-	 */
-	ImmutableList<E> remove(int index) throws ArrayIndexOutOfBoundsException;
-
-	/**
+	 /**
 	 * Returns true if this list contains the specified element. More formally,
 	 * returns true if and only if this list contains at least one element e
 	 * such that <code>(o==null ? e==null : o.equals(e))</code>.
@@ -193,7 +108,9 @@ public interface ImmutableList<E> extends InductiveList<E>,
 	 * @param elem the element to look for
 	 * @return true if it is found
 	 */
-	boolean contains(E elem); // Scala, Java, Guava
+	 default boolean contains(E elem) {
+		 return any((E other) -> equals(elem, other));
+	 }
 
 	/**
 	 * Returns true if this list contains all of the elements of the
@@ -203,7 +120,9 @@ public interface ImmutableList<E> extends InductiveList<E>,
 	 * @return true if this list contains all of the elements of the
 	 * specified collection
 	 */
-	boolean containsAll(Collection<E> elems);
+	 default boolean containsAll(Collection<E> elems) {
+		 return containsAll(create(elems));
+	 }
 
 	/**
 	 * Returns true if this list contains all of the elements of the
@@ -213,7 +132,9 @@ public interface ImmutableList<E> extends InductiveList<E>,
 	 * @return true if this list contains all of the elements of the
 	 * specified list
 	 */
-	boolean containsAll(ImmutableList<E> elems);
+	 default boolean containsAll(ImmutableList<E> elems) {
+		 return elems.all((E elem) -> contains(elem));
+	 }
 
 	/**
 	 * Returns true if this list contains all of the given elements
@@ -222,7 +143,9 @@ public interface ImmutableList<E> extends InductiveList<E>,
 	 * @return true if this list contains all of the given elements
 	 */
 	@SuppressWarnings({"unchecked"})
-	boolean containsAll(E... elems);
+        default boolean containsAll(E... elems) {
+		return containsAll(create(elems));
+	}
 
 	/**
 	 * Returns a new list consisting of the results of applying the given
@@ -231,7 +154,13 @@ public interface ImmutableList<E> extends InductiveList<E>,
 	 * @param mapper a function to apply to each element
 	 * @returns the new list
 	 */
-	<F> ImmutableList<F> map(Function<? super E, ? extends F> mapper); // Scala: map
+	default <F> ImmutableList<F> map(Function<? super E, ? extends F> mapper) {
+		List<F> elems = new ArrayList<F>();
+		for (E elem : this) {
+			elems.add(mapper.apply(elem));
+		}
+		return create(elems);
+	}
 
 	/**
 	 * Returns a list consisting of the elements of this list that match the
@@ -241,7 +170,13 @@ public interface ImmutableList<E> extends InductiveList<E>,
 	 * @return a list consisting of the elements of this list that match the
 	 * given predicate.
 	 */
-	ImmutableList<E> filter(Predicate<? super E> predicate);    // Scala: filter
+	default ImmutableList<E> filter(Predicate<? super E> predicate) {
+		ArrayList<E> list = new ArrayList<E>();
+		for (E elem : this)
+			if (predicate.test(elem))
+				list.add(elem);
+		return create(list);
+	}
 
 	/**
 	 * Performs a reduction on the elements of this list, using an associative
@@ -252,15 +187,21 @@ public interface ImmutableList<E> extends InductiveList<E>,
 	 * @return an Optional describing the result of the reduction
 	 * @throws NullPointerException - if the result of the reduction is null
 	 */
-	Optional<E> reduce(BinaryOperator<E> accumulator); // Scala: reduce
+	default Optional<E> reduce(BinaryOperator<E> accumulator) {
+		Iterator<E> it = iterator();
+		if (!it.hasNext())
+			return Optional.empty();
+
+		E result = it.next();
+		while (it.hasNext())
+			result = accumulator.apply(result, it.next());
+		return Optional.of(result);
+	}
 
         default Spliterator<E> spliterator() {
-		return Spliterators.spliterator(iterator(),
-						size(),
+		return Spliterators.spliteratorUnknownSize(iterator(),
 						Spliterator.IMMUTABLE |
-						Spliterator.ORDERED   |
-						Spliterator.SIZED     |
-						Spliterator.SUBSIZED);
+						Spliterator.ORDERED);
 	}
 
 	/**
@@ -282,21 +223,6 @@ public interface ImmutableList<E> extends InductiveList<E>,
 	}
 
 	/**
-	 * Compares the specified object with this list for equality. Returns true
-	 * if and only if the specified object is also a list, both lists have the
-	 * same size, and all corresponding pairs of elements in the two lists are
-	 * equal. (Two elements e1 and e2 are equal if
-	 * <code>(e1==null ? e2==null : e1.equals(e2)).)</code> In other words, two
-	 * lists are defined to be equal if they contain the same elements in the
-	 * same order. This definition ensures that the equals method works properly
-	 * across different implementations of the ImmutableList interface.
-	 *
-	 * @param o the object to be compared for equality with this list
-	 * @return if the specified object is equal to this list
-	 */
-	boolean equals(Object o);
-
-	/**
 	 * Returns an array containing all of the elements in this list in
 	 * proper sequence (from first to last element).
 	 *
@@ -309,7 +235,13 @@ public interface ImmutableList<E> extends InductiveList<E>,
 	 * @return an array containing all of the elements in this list in
 	 * proper sequence
 	 */
-	E[] toArray(); // Scala && Java: toArray
+	 @SuppressWarnings({ "unchecked"})
+         default E[] toArray() {
+		 int size = 0;
+		 for (E elem : this)
+			 ++size;
+		 return toArray((E[]) new Object[size]);
+	 }
 
 	/**
 	 * Returns an array containing all of the elements in this list in
@@ -341,7 +273,15 @@ public interface ImmutableList<E> extends InductiveList<E>,
 	 * runtime type is allocated for this purpose.
 	 * @return an array containing the elements of the list
 	 */
-	<E> E[] toArray(E[] a);
+	 @SuppressWarnings({ "unchecked", "hiding" })
+	 default E[] toArray(E[] a) {
+		 int i = 0;
+		 for (E elem : this) {
+			 a[i] = elem;
+			 ++i;
+		 }
+		 return a;
+	 }
 
 	/**
 	 * Returns a list containing all of the elements in this list in proper
@@ -350,8 +290,78 @@ public interface ImmutableList<E> extends InductiveList<E>,
 	 * @return a list containing all of the elements in this list in proper
 	 * sequence
 	 */
-	List<E> asList(); // Scala: toList, Guava: asList
+	 default List<E> asList() {
+		 List<E> myList = new ArrayList<E>();
+		 for (E e : this){
+			 myList.add(e);
+		 }
+		 return myList;
+	 }
 
-	ImmutableList<E> clone();
+	 public ImmutableList<E> clone();
 
+	 // To be used for the clone() method in concrete classes (since Object
+	 // methods cannot be overriden with the default keyword)
+	 static <E> ImmutableList<E> clone(ImmutableList<E> list) {
+		 return list.create(list.asList());
+	 }
+
+	/**
+	 * Compares the specified object with this list for equality. Returns true
+	 * if and only if the specified object is also a list, both lists have the
+	 * same size, and all corresponding pairs of elements in the two lists are
+	 * equal. (Two elements e1 and e2 are equal if
+	 * <code>(e1==null ? e2==null : e1.equals(e2)).)</code> In other words, two
+	 * lists are defined to be equal if they contain the same elements in the
+	 * same order. This definition ensures that the equals method works properly
+	 * across different implementations of the ImmutableList interface.
+	 *
+	 * @param o the object to be compared for equality with this list
+	 * @return if the specified object is equal to this list
+	 */
+	boolean equals(Object o);
+
+	// To be used for the equals() method in concrete classes (since Object
+	// methods cannot be overriden with the default keyword)
+	static <E> boolean equals(ImmutableList<E> list, Object o) {
+		 if (! (o instanceof ImmutableList))
+			 return false;
+
+		 @SuppressWarnings("rawtypes")
+		 ImmutableList other = (ImmutableList) o;
+
+		 Iterator<E> it1 = list.iterator();
+		 @SuppressWarnings("rawtypes") Iterator it2 = other.iterator();
+
+		 while (it1.hasNext() && it2.hasNext()) {
+			 if (!equals(it1.next(), it2.next()))
+				 return false;
+		 }
+		 if (it1.hasNext() || it2.hasNext())
+			 return false;
+
+		 return true;
+	 }
+
+	 /**
+	  * Hash an object.
+	  *
+	  * @param o the object to hash
+	  * @return o1 == null ? 0 : o1.hashCode()
+	  */
+	 static int hashCode(Object o) {
+		 return o == null ? 0 : o.hashCode();
+	 }
+
+	 public int hashCode();
+
+	 // To be used for the hashCode() method in concrete classes (since Object
+	 // methods cannot be overriden with the default keyword)
+	 static <E> int hashCode(ImmutableList<E> list) {
+		 int hashCode = 1;
+		 Iterator<E> itr = list.iterator();
+		 while (itr.hasNext())
+			 hashCode = 31 * hashCode + hashCode(itr.next());
+		 return hashCode;
+	 }
 }

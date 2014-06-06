@@ -17,7 +17,7 @@ import org.junit.Test;
 import collections.implementations.ImmutableLinkedList;
 import collections.interfaces.ImmutableList;
 
-public class ImmutableLinkedListTest extends ImmutableListTest {
+public class ImmutableLinkedListTest extends InductiveIterativeListTest {
 
 	@Before
 	public void setUp() {

@@ -3,7 +3,7 @@ package test;
 import org.junit.Before;
 
 
-public class ImmutableReversedArrayListTest extends ImmutableListTest {
+public class ImmutableReversedArrayListTest extends InductiveIterativeListTest {
 
 	@Before
 	public void setUp() {
