@@ -8,7 +8,8 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({
 	ImmutableArrayListTest.class,
 	    ImmutableLinkedListTest.class,
-	    ImmutableReversedArrayListTest.class
+	    ImmutableReversedArrayListTest.class,
+	    DoubleLinkedListProxyTest.class
 	    })
 public class AllTests {
 
