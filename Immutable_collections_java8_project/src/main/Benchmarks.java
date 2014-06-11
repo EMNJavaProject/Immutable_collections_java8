@@ -7,15 +7,15 @@ import java.util.List;
 
 import collections.implementations.ImmutableArrayList;
 import collections.implementations.ImmutableLinkedList;
-import collections.interfaces.ImmutableList;
+import collections.interfaces.InductiveIterativeList;
 
 public class Benchmarks {
 
-	ImmutableList<Integer> ill; /** ImmutableLinkedList implementation */
-	ImmutableList<Integer> ial; /** ImmutableArrayList implementation */
+	InductiveIterativeList<Integer> ill; /** ImmutableLinkedList implementation */
+	InductiveIterativeList<Integer> ial; /** ImmutableArrayList implementation */
 	List<Integer> ll; /** LinkedList implementation */
 	List<Integer> al; /** ArrayList implementation */
-	ImmutableList<Integer> hial; /** Half ImmutableLinkedList implementation */
+	InductiveIterativeList<Integer> hial; /** Half ImmutableLinkedList implementation */
 	List<Integer> dummy; /** List implementation needed to concat */
 
 	public Benchmarks(int size)
@@ -82,7 +82,7 @@ public class Benchmarks {
 	
 	
 	
-	private <E> void execAll(ImmutableList<E> list, int warmup, int maxIterations)
+	private <E> void execAll(InductiveIterativeList<E> list, int warmup, int maxIterations)
 	{
 		long execTime = 0;
 
@@ -121,7 +121,7 @@ public class Benchmarks {
 	
 	
 	
-	private <E> long execGet(ImmutableList<E> list, int warmup, int maxIterations)
+	private <E> long execGet(InductiveIterativeList<E> list, int warmup, int maxIterations)
 	{
 		long  beg = 0;
 		long  end = 0;
@@ -165,7 +165,7 @@ public class Benchmarks {
 		return (execTime/warmup);
 	}
 
-	private <E> long execSize(ImmutableList<E> list, int warmup, int maxIterations)
+	private <E> long execSize(InductiveIterativeList<E> list, int warmup, int maxIterations)
 	{
 		long  beg = 0;
 		long  end = 0;
@@ -207,7 +207,7 @@ public class Benchmarks {
 		return (execTime/warmup);
 	}
 
-	private <E> long execIndexOf(ImmutableList<E> list, int warmup, int maxIterations)
+	private <E> long execIndexOf(InductiveIterativeList<E> list, int warmup, int maxIterations)
 	{
 		long  beg = 0;
 		long  end = 0;
@@ -252,12 +252,12 @@ public class Benchmarks {
 	}
 
 
-	private <E> long execConcat(ImmutableList<E> list, int warmup, int maxIterations)
+	private <E> long execConcat(InductiveIterativeList<E> list, int warmup, int maxIterations)
 	{
 		long  beg = 0;
 		long  end = 0;
 		@SuppressWarnings("unused")
-		ImmutableList<E> out;
+		InductiveIterativeList<E> out;
 		long execTime = 0;
 
 		for(int i=0; i < warmup; ++i)
