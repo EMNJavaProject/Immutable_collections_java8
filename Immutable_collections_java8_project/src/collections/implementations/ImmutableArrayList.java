@@ -4,11 +4,11 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import collections.interfaces.InductiveIterativeList;
-import collections.interfaces.IterativeList;
+import collections.interfaces.ImmutableCoreList;
 import collections.interfaces.ImmutableList;
+import collections.interfaces.IterativeList;
 
-public class ImmutableArrayList<E> implements InductiveIterativeList<E>
+public class ImmutableArrayList<E> implements ImmutableList<E>
 {
 
 	private final E[] _array;
@@ -125,10 +125,10 @@ public class ImmutableArrayList<E> implements InductiveIterativeList<E>
 		return _length;
 	}
 
-	public E get(int index) {
+	public E get(int index) { //TODO create an accessor for the _array and put the code into the absract class.
 		if (index < 0 || index >= size())
 			throw new IndexOutOfBoundsException();
-		if(index >=0 && index < _length)
+		if(index >=0 && index < size())
 			return _array[index];
 		else
 			return null;
@@ -203,11 +203,11 @@ public class ImmutableArrayList<E> implements InductiveIterativeList<E>
 
 
 	public int hashCode() {
-		return ImmutableList.hashCode(this);
+		return ImmutableCoreList.hashCode(this);
 	}
 
-	public InductiveIterativeList<E> clone() {
-		return InductiveIterativeList.clone(this);
+	public ImmutableList<E> clone() {
+		return ImmutableList.clone(this);
 	}
 
 	public boolean equals(Object o) {

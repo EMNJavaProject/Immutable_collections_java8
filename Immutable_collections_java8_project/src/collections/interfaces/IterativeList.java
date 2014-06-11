@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public interface IterativeList<E> extends ImmutableList<E> {
+public interface IterativeList<E> extends ImmutableCoreList<E> {
 
 	default boolean isEmpty() {
 		return size() == 0;
@@ -27,29 +27,30 @@ public interface IterativeList<E> extends ImmutableList<E> {
 	 */
 	E get(int index) throws IndexOutOfBoundsException;
 
-        default Spliterator<E> spliterator() {
+	default Spliterator<E> spliterator() {
 		return Spliterators.spliterator(iterator(),
-						size(),
-						Spliterator.IMMUTABLE |
-						Spliterator.ORDERED   |
-						Spliterator.SIZED     |
-						Spliterator.SUBSIZED);
+				size(),
+				Spliterator.IMMUTABLE |
+				Spliterator.ORDERED   |
+				Spliterator.SIZED     |
+				Spliterator.SUBSIZED);
 	}
 
 	public boolean equals(Object o);
 
 	// To be used for the equals() method in concrete classes (since Object
-	// methods cannot be overriden with the default keyword)
-        static <E> boolean equals(IterativeList<E> list, Object o) {
+	// methods cannot be overridden with the default keyword)
+	@SuppressWarnings("unchecked")
+	static <E> boolean equals(IterativeList<E> list, Object o) {
 		if (o instanceof IterativeList)
-			return list.equals((IterativeList)o);
-		else if (o instanceof ImmutableList)
-			return ImmutableList.equals(list, o);
+			return list.equals((IterativeList<E>)o);
+		else if (o instanceof ImmutableCoreList) 
+			return ImmutableCoreList.equals(list, o);
 		else
 			return false;
 	}
 
-	default public boolean equals(IterativeList other) {
+	default public boolean equals(IterativeList<E> other) {
 		if (size() != other.size())
 			return false;
 
@@ -58,7 +59,7 @@ public interface IterativeList<E> extends ImmutableList<E> {
 		Iterator it2 = other.iterator();
 
 		while (it1.hasNext()) {
-			if (!ImmutableList.equals(it1.next(), it2.next()))
+			if (!ImmutableCoreList.equals(it1.next(), it2.next())) //TODO
 				return false;
 		}
 
@@ -66,15 +67,16 @@ public interface IterativeList<E> extends ImmutableList<E> {
 	}
 
 	@SuppressWarnings({ "unchecked"})
-        default E[] toArray() {
+	default E[] toArray() {
 		return toArray((E[]) new Object[size()]);
 	}
 
-        default <F> IterativeList<F> map(Function<? super E, ? extends F> mapper) {
-		return (IterativeList<F>) ImmutableList.super.map(mapper);
+	@SuppressWarnings("unchecked")
+	default <F> IterativeList<F> map(Function<? super E, ? extends F> mapper) {
+		return (IterativeList<F>) ImmutableCoreList.super.map(mapper);
 	}
 
-        default IterativeList<E> filter(Predicate<? super E> predicate) {
-		return (IterativeList<E>) ImmutableList.super.filter(predicate);
+	default IterativeList<E> filter(Predicate<? super E> predicate) {
+		return (IterativeList<E>) ImmutableCoreList.super.filter(predicate);
 	}
 }

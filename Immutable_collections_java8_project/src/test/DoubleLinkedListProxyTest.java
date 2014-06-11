@@ -3,22 +3,11 @@ package test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Collections;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.stream.Stream;
-
-import org.junit.Test;
-
-import collections.implementations.*;
+import collections.implementations.DoubleLinkedListProxy;
 
 public class DoubleLinkedListProxyTest {
 

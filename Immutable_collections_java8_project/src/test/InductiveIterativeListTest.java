@@ -4,9 +4,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Collections;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -18,51 +18,51 @@ import org.junit.Test;
 
 import collections.implementations.ImmutableArrayList;
 import collections.implementations.ImmutableLinkedList;
-import collections.interfaces.InductiveIterativeList;
+import collections.interfaces.ImmutableList;
 
 interface ImmutableListFactory<E> {
-	@SuppressWarnings("unchecked") public InductiveIterativeList<E> create(E... elems);
-	public InductiveIterativeList<E> create();
+	@SuppressWarnings("unchecked") public ImmutableList<E> create(E... elems);
+	public ImmutableList<E> create();
 }
 
 class ImmutableLinkedListFactory<E> implements ImmutableListFactory<E> {
 	@SuppressWarnings({"unchecked"})
-	public InductiveIterativeList<E> create(E... elems) {
+	public ImmutableList<E> create(E... elems) {
 		return new ImmutableLinkedList<E>(elems);
 	}
-	public InductiveIterativeList<E> create() {
+	public ImmutableList<E> create() {
 		return new ImmutableLinkedList<E>();
 	}
 }
 
 class ImmutableArrayListFactory<E> implements ImmutableListFactory<E> {
 	@SuppressWarnings({"unchecked"})
-	public InductiveIterativeList<E> create(E... elems) {
+	public ImmutableList<E> create(E... elems) {
 		return new ImmutableArrayList<E>(elems);
 	}
-	public InductiveIterativeList<E> create() {
+	public ImmutableList<E> create() {
 		return new ImmutableArrayList<E>();
 	}
 }
 
 class ReversedArrayListFactory<E> implements ImmutableListFactory<E> {
 	@SuppressWarnings("unchecked")
-	public InductiveIterativeList<E> create(E... _elems) {
+	public ImmutableList<E> create(E... _elems) {
 		List<E> tmp = Arrays.asList(_elems);
 		Collections.reverse(tmp);
 		E[] elems = (E[]) tmp.toArray();
 
 		return new ImmutableArrayList<E>(elems).reverse();
 	}
-	public InductiveIterativeList<E> create() {
+	public ImmutableList<E> create() {
 		return new ImmutableArrayList<E>().reverse();
 	}
 }
 
 public abstract class InductiveIterativeListTest {
 
-	protected InductiveIterativeList<Integer> list;
-	protected InductiveIterativeList<Integer> emptyList;
+	protected ImmutableList<Integer> list;
+	protected ImmutableList<Integer> emptyList;
 	protected ImmutableListFactory<Integer> factory;
 
 	public void setUp(ImmutableListFactory<Integer> factory) {
@@ -108,10 +108,10 @@ public abstract class InductiveIterativeListTest {
 
 	@Test
 	public void SubListTest() {
-		InductiveIterativeList<Integer> empty = list.subList(0, 0);
+		ImmutableList<Integer> empty = list.subList(0, 0);
 		assertTrue(empty.isEmpty());
 
-		InductiveIterativeList<Integer> subList = list.subList(1, 3);
+		ImmutableList<Integer> subList = list.subList(1, 3);
 		assertEquals(2, subList.size());
 		assertEquals(2, (int)subList.get(0));
 		assertEquals(3, (int)subList.get(1));
@@ -134,7 +134,7 @@ public abstract class InductiveIterativeListTest {
 
 	@Test
 	public void MapTest() {
-		InductiveIterativeList<Integer> mappedList = list.map((Integer x) -> x * 2);
+		ImmutableList<Integer> mappedList = list.map((Integer x) -> x * 2);
 		assertEquals(mappedList.size(), list.size());
 		assertEquals((int)mappedList.get(0), (int)2 * list.get(0));
 		assertEquals((int)mappedList.get(1), (int)2 * list.get(1));
@@ -143,7 +143,7 @@ public abstract class InductiveIterativeListTest {
 
 	@Test
 	public void FilterTest() {
-		InductiveIterativeList<Integer> filteredList = list.filter((Integer x) -> x % 2 != 0);
+		ImmutableList<Integer> filteredList = list.filter((Integer x) -> x % 2 != 0);
 		assertEquals(filteredList, new ImmutableLinkedList<Integer>(1, 3));
 
 		filteredList = list.filter((Integer x) -> true);
@@ -213,11 +213,11 @@ public abstract class InductiveIterativeListTest {
 		// Test that iterators stop at the right last element for sublists
 		// (since they all share their structures with a superlist)
 
-		InductiveIterativeList<Integer> subList = list.subList(1, list.size()-1);
+		ImmutableList<Integer> subList = list.subList(1, list.size()-1);
 		assertEquals(1, subList.size());
 
 		int sizeWhenIterating = 0;
-		for (Integer i : subList)
+		for (@SuppressWarnings("unused") Integer i : subList)
 			++sizeWhenIterating;
 
 		assertEquals(subList.size(), sizeWhenIterating);
@@ -425,7 +425,7 @@ public abstract class InductiveIterativeListTest {
 
 	@Test
 	public void TailTest() {
-		InductiveIterativeList<Integer> tail = list.tail();
+		ImmutableList<Integer> tail = list.tail();
 		assertEquals(2, (int)tail.get(0));
 		assertEquals(3, (int)tail.get(1));
 		assertEquals(2, tail.size());

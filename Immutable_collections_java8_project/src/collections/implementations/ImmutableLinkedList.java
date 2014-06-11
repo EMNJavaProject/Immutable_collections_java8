@@ -4,9 +4,9 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import collections.interfaces.InductiveIterativeList;
-import collections.interfaces.IterativeList;
+import collections.interfaces.ImmutableCoreList;
 import collections.interfaces.ImmutableList;
+import collections.interfaces.IterativeList;
 
 class Node<E> {
 
@@ -51,7 +51,7 @@ class Node<E> {
 	}
 }
 
-public class ImmutableLinkedList<E> implements InductiveIterativeList<E> {
+public class ImmutableLinkedList<E> implements ImmutableList<E> {
 
 	/** The first node element of the list. */
 	private final Node<E> head;
@@ -183,7 +183,6 @@ public class ImmutableLinkedList<E> implements InductiveIterativeList<E> {
 			return lastNode().getElement();
 	}
 
-	@SuppressWarnings("unchecked")
 	public ImmutableLinkedList<E> subList(int fromIndex, int toIndex) throws
 		IndexOutOfBoundsException,
 		IllegalArgumentException {
@@ -291,11 +290,11 @@ public class ImmutableLinkedList<E> implements InductiveIterativeList<E> {
 	}
 
 	public int hashCode() {
-		return ImmutableList.hashCode(this);
+		return ImmutableCoreList.hashCode(this); //TODO check call to first background interface while ImmutableList<E>
 	}
 
-	public InductiveIterativeList<E> clone() {
-		return InductiveIterativeList.clone(this);
+	public ImmutableList<E> clone() {
+		return ImmutableList.clone(this);
 	}
 
 	public boolean equals(Object o) {

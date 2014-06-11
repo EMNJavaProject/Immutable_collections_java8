@@ -4,7 +4,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.NoSuchElementException;
 
-public interface InductiveList<E> extends ImmutableList<E> {
+public interface InductiveList<E> extends ImmutableCoreList<E> { //TODO ERROR : No isEmpty() method.
 
 	/**
 	 * Return a new list with the elements of this list appended to given element.
@@ -38,11 +38,12 @@ public interface InductiveList<E> extends ImmutableList<E> {
 	 */
 	E last() throws NoSuchElementException;
 
-        default <F> InductiveList<F> map(Function<? super E, ? extends F> mapper) {
-		return (InductiveList<F>) ImmutableList.super.map(mapper);
+	@SuppressWarnings("unchecked")
+	default <F> InductiveList<F> map(Function<? super E, ? extends F> mapper) {
+		return (InductiveList<F>) ImmutableCoreList.super.map(mapper);
 	}
 
-        default InductiveList<E> filter(Predicate<? super E> predicate) {
-		return (InductiveList<E>) ImmutableList.super.filter(predicate);
+	default InductiveList<E> filter(Predicate<? super E> predicate) {
+		return (InductiveList<E>) ImmutableCoreList.super.filter(predicate);
 	}
 }
