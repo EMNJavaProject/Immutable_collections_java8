@@ -52,7 +52,7 @@ public class ImmutableReversedArrayList<E> extends ImmutableArrayList<E> {
 			return list.head();
 	}
 
-	@SuppressWarnings("unchecked")
+
 	public ImmutableArrayList<E> subList(int fromIndex, int toIndex) throws
 		IndexOutOfBoundsException,
 		IllegalArgumentException {
@@ -67,7 +67,7 @@ public class ImmutableReversedArrayList<E> extends ImmutableArrayList<E> {
 		return list;
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	public ImmutableArrayList<E> remove(int index) {
 		return list.remove(reverseIndex(index)).reverse();
 	}

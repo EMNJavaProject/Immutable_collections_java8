@@ -237,7 +237,7 @@ Cloneable {
 	@SuppressWarnings("unchecked")
 	default E[] toArray() { //TODO unused  E elem
 		int size = 0; 
-		for ( E elem : this)
+		for ( @SuppressWarnings("unused") E elem : this)
 			++size;
 		return toArray((E[]) new Object[size]);
 	}
