@@ -6,6 +6,7 @@ import java.util.Iterator;
 import collections.interfaces.ImmutableCoreList;
 import collections.interfaces.IterativeList;
 
+
 public  class ImmutableBaseIterativeList<E> implements IterativeList<E> 
 {
 	

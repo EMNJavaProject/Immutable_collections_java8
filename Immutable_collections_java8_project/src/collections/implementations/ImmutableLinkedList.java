@@ -6,50 +6,8 @@ import java.util.NoSuchElementException;
 
 import collections.interfaces.ImmutableCoreList;
 import collections.interfaces.ImmutableList;
+import collections.interfaces.InductiveList;
 import collections.interfaces.IterativeList;
-
-class Node<E> {
-
-	/** The element in the list */
-	private final E element;
-
-	/** The next list node, null if this is last */
-	private final Node<E> next;
-
-	public Node(E element, Node<E> next) {
-		this.element=element;
-		this.next=next;
-	}
-
-	public Node(E element) {
-		this(element, null);
-	}
-
-	/**
-	 * Returns the element in the node.
-	 *
-	 * @returns the element in the node.
-	 */
-	public E getElement() {
-		return this.element;
-	}
-
-	/** Returns the next list node, null if this is last.
-	 *
-	 * @returns the next list node, null if this is last
-	 */
-	public Node<E> getNext() {
-		return next;
-	}
-
-	/** Returns whether this node is followed by another one.
-	 *
-	 * @returns true if this node is followed by another one.
-	 */
-	public boolean hasNext() {
-		return getNext() != null;
-	}
-}
 
 public class ImmutableLinkedList<E> implements ImmutableList<E> {
 
@@ -244,60 +202,30 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 		return new ImmutableLinkedList<E>(newElems);
 	}
 
-	// Iterators & streams
-
-	class ImmutableLinkedListIterator implements Iterator<E> {
-
-		/** Current node pointed by the iterator */
-		private Node<E> currentNode;
-
-		/** Tell whether the iterator can continue or not */
-		private boolean hasNext;
-
-		/**
-		 * Create a new iterator starting from the beginning of the linked list.
-		 */
-		public ImmutableLinkedListIterator() {
-			currentNode = headNode();
-			hasNext = (size() != 0);
-		}
-
-		public boolean hasNext() {
-			return hasNext;
-		}
-
-		public E next() throws NoSuchElementException {
-			if (!hasNext())
-				throw new NoSuchElementException();
-
-			E elem = currentNode.getElement();
-			if (currentNode == lastNode())
-				hasNext = false;
-			else
-				currentNode = currentNode.getNext();
-			return elem;
-		}
-
-		public void remove() throws
-		UnsupportedOperationException,
-		IllegalStateException {
-			throw new UnsupportedOperationException();
-		}
+	@Override
+	public ImmutableList<E> tail() throws UnsupportedOperationException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
+	@Override
+	public boolean isEmpty() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public ImmutableCoreList<E> clone() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public Iterator<E> iterator() {
-		return new ImmutableLinkedListIterator();
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	public int hashCode() {
-		return ImmutableCoreList.hashCode(this); //TODO check call to first background interface while ImmutableList<E>
-	}
 
-	public ImmutableList<E> clone() {
-		return ImmutableList.clone(this);
-	}
-
-	public boolean equals(Object o) {
-		return IterativeList.equals(this, o);
-	}
+	
 }
