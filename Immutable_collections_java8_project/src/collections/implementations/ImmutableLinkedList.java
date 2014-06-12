@@ -6,7 +6,6 @@ import java.util.NoSuchElementException;
 
 import collections.interfaces.ImmutableCoreList;
 import collections.interfaces.ImmutableList;
-import collections.interfaces.InductiveList;
 import collections.interfaces.IterativeList;
 
 public class ImmutableLinkedList<E> implements ImmutableList<E> {
@@ -202,30 +201,60 @@ public class ImmutableLinkedList<E> implements ImmutableList<E> {
 		return new ImmutableLinkedList<E>(newElems);
 	}
 
-	@Override
-	public ImmutableList<E> tail() throws UnsupportedOperationException {
-		// TODO Auto-generated method stub
-		return null;
+	// Iterators & streams
+
+	class ImmutableLinkedListIterator implements Iterator<E> {
+
+		/** Current node pointed by the iterator */
+		private Node<E> currentNode;
+
+		/** Tell whether the iterator can continue or not */
+		private boolean hasNext;
+
+		/**
+		 * Create a new iterator starting from the beginning of the linked list.
+		 */
+		public ImmutableLinkedListIterator() {
+			currentNode = headNode();
+			hasNext = (size() != 0);
+		}
+
+		public boolean hasNext() {
+			return hasNext;
+		}
+
+		public E next() throws NoSuchElementException {
+			if (!hasNext())
+				throw new NoSuchElementException();
+
+			E elem = currentNode.getElement();
+			if (currentNode == lastNode())
+				hasNext = false;
+			else
+				currentNode = currentNode.getNext();
+			return elem;
+		}
+
+		public void remove() throws
+		UnsupportedOperationException,
+		IllegalStateException {
+			throw new UnsupportedOperationException();
+		}
 	}
 
-	@Override
-	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public ImmutableCoreList<E> clone() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Iterator<E> iterator() {
-		// TODO Auto-generated method stub
-		return null;
+		return new ImmutableLinkedListIterator();
 	}
 
+	public int hashCode() {
+		return ImmutableCoreList.hashCode(this); //TODO check call to first background interface while ImmutableList<E>
+	}
 
-	
+	public ImmutableList<E> clone() {
+		return ImmutableList.clone(this);
+	}
+
+	public boolean equals(Object o) {
+		return IterativeList.equals(this, o);
+	}
 }
