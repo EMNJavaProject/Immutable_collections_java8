@@ -1,27 +1,18 @@
 package collections.implementations;
 
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
 
-import collections.interfaces.ImmutableCoreList;
 import collections.interfaces.ImmutableList;
-import collections.interfaces.IterativeList;
 
-public class ImmutableArrayList<E> implements ImmutableList<E>
+public class ImmutableArrayList<E> extends ImmutableBaseIterativeList<E> implements ImmutableList<E>
 {
-
-	private final E[] _array;
-	private final int _length;
 
 	/**
 	 * Constructs an empty list with an initial capacity of 0.
 	 */
-	@SuppressWarnings("unchecked")
 	public ImmutableArrayList ()
 	{
-		_array = (E[]) new Object[0];
-		_length = 0;
+		super();
 	}
 
 	/**
@@ -32,26 +23,11 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 	@SuppressWarnings("unchecked")
 	public ImmutableArrayList (E... elems)
 	{
-		if (elems == null)
-			throw new NullPointerException();
-		else if (elems.length == 0) {
-			this._array  = (E[]) new Object[0];
-			this._length = 0;
-		}
-		else
-		{
-			_array =  elems;
-			_length = _array.length;
-		}
+		super(elems);
 	}
-
-	public ImmutableArrayList<E> create(E[] elems) {
-		return new ImmutableArrayList<E>(elems);
-	}
-
-	public <F> ImmutableArrayList<F> create(Collection<F> elems) {
-		return new ImmutableArrayList<F>(elems);
-	}
+	
+	
+	
 
 	/**
 	 * <p>Constructs a list containing the elements of the specified
@@ -62,77 +38,24 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 	 *
 	 * @param elems - the collection whose elements are to be placed into this list
 	 */
-	@SuppressWarnings("unchecked")
 	public ImmutableArrayList(Collection<E> elems)
 	{
-		if (elems == null)
-			throw new NullPointerException();
-		else
-		{
-			_array =  (E[])elems.toArray();
-			_length = _array.length;
-		}
+		super(elems);
 	}
 
-	/**
-	 * Private accessor to get the inner array.
-	 * @return the inner array.
-	 */
-	private E[] getArray() {
-		return _array;
+	
+	
+
+	public ImmutableArrayList<E> create(E[] elems) {
+		return new ImmutableArrayList<E>(elems);
 	}
 
-	class ImmutableArrayListIterator implements Iterator<E> {
-
-		/** Current node pointed by the iterator */
-		private int index;
-		private int size;
-
-		/**
-		 * Create a new iterator starting from the beginning of the list.
-		 */
-		public ImmutableArrayListIterator() {
-			index = 0;
-			size = size();
-		}
-
-		public boolean hasNext() {
-			return index <= size-1 ? true : false;
-		}
-
-		public E next() throws NoSuchElementException {
-			if(index >= size)
-					throw new NoSuchElementException();
-
-			E elem = getArray()[index];
-			++index;
-			return elem;
-		}
-
-		public void remove() throws
-		UnsupportedOperationException,
-		IllegalStateException {
-			throw new UnsupportedOperationException();
-		}
+	public <F> ImmutableArrayList<F> create(Collection<F> elems) {
+		return new ImmutableArrayList<F>(elems);
 	}
 
-	public Iterator<E> iterator() {
-		return new ImmutableArrayListIterator();
 
-	}
 
-	public int size() {
-		return _length;
-	}
-
-	public E get(int index) { //TODO create an accessor for the _array and put the code into the absract class.
-		if (index < 0 || index >= size())
-			throw new IndexOutOfBoundsException();
-		if(index >=0 && index < size())
-			return _array[index];
-		else
-			return null;
-	}
 
 	@Override
 	public ImmutableArrayList<E> subList(int fromIndex, int toIndex)
@@ -183,10 +106,7 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 		return new ImmutableArrayList<E>(newElems);
 	}
 
-	public E[] toArray() {
-		return getArray();
-	}
-
+	
 	public ImmutableArrayList<E> cons(E elem) {
 		@SuppressWarnings("unchecked")
 		E[] elems = (E[]) new Object[size()+1];
@@ -202,15 +122,5 @@ public class ImmutableArrayList<E> implements ImmutableList<E>
 	}
 
 
-	public int hashCode() {
-		return ImmutableCoreList.hashCode(this);
-	}
-
-	public ImmutableList<E> clone() {
-		return ImmutableList.clone(this);
-	}
-
-	public boolean equals(Object o) {
-		return IterativeList.equals(this, o);
-	}
+	
 }

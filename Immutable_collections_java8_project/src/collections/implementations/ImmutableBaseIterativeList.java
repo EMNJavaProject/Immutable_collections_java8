@@ -8,18 +8,77 @@ import collections.interfaces.ImmutableCoreList;
 import collections.interfaces.IterativeList;
 
 
-public  class ImmutableBaseIterativeList<E> implements IterativeList<E> 
+public  abstract class ImmutableBaseIterativeList<E> implements IterativeList<E> 
 {
 
-	private final E[] _array;
-	private final int _length;
+	protected final E[] _array;
+	protected final int _length;
 	
+	
+	
+	/**
+	 * Constructs an empty list with an initial capacity of 0.
+	 */
 	@SuppressWarnings("unchecked")
 	public ImmutableBaseIterativeList()
 	{
 		_array = (E[]) new Object[0];
 		_length = 0;
 	}
+	
+	/**
+	 * <p>Constructs a list containing the given elements
+	 * <p>If the specified collection is null, constructs an empty ArrayList with a capacity of 0.
+	 * @param elems - the collection whose elements are to be placed into this list
+	 */
+	@SuppressWarnings("unchecked")
+	public ImmutableBaseIterativeList (E... elems)
+	{
+		if (elems == null)
+			throw new NullPointerException();
+		else if (elems.length == 0) {
+			this._array  = (E[]) new Object[0];
+			this._length = 0;
+		}
+		else
+		{
+			_array =  elems;
+			_length = _array.length;
+		}
+	}
+	
+	
+	/**
+	 * <p>Constructs a list containing the elements of the specified
+	 * collection, in the order they are returned by the collection's
+	 * iterator.
+	 * <p>If the specified collection is null, constructs an empty ArrayList
+	 * with a capacity of 0.
+	 *
+	 * @param elems - the collection whose elements are to be placed into this list
+	 */
+	@SuppressWarnings("unchecked")
+	public ImmutableBaseIterativeList(Collection<E> elems)
+	{
+		if (elems == null)
+			throw new NullPointerException();
+		else
+		{
+			_array =  (E[])elems.toArray();
+			_length = _array.length;
+		}
+	}
+	
+	
+	/**
+	 * Private accessor to get the inner array.
+	 * @return the inner array.
+	 */
+	protected E[] getArray() {
+		return _array;
+	}
+	
+	
 	
 	@Override
 	public E get(int index) throws IndexOutOfBoundsException {
@@ -44,21 +103,6 @@ public  class ImmutableBaseIterativeList<E> implements IterativeList<E>
 	@Override
 	public int hashCode() {
 		return ImmutableCoreList.hashCode(this);
-	}
-
-	@Override
-	public ImmutableCoreList<E> create(E[] elems) {
-		return new ImmutableArrayList<E>(elems);
-	}
-
-	@Override
-	public <F> ImmutableCoreList<F> create(Collection<F> elems) {
-		return new ImmutableArrayList<F>(elems);
-	}
-
-	@Override
-	public boolean isEmpty() {
-		return this._length==0;
 	}
 
 	@Override
