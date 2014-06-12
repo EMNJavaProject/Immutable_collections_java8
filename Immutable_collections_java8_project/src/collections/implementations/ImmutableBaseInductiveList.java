@@ -6,6 +6,9 @@ import java.util.NoSuchElementException;
 
 import collections.interfaces.ImmutableCoreList;
 import collections.interfaces.InductiveList;
+
+
+
 class Node<E> {
 
 	/** The element in the list */
@@ -49,30 +52,87 @@ class Node<E> {
 	}
 }
 
-public  class ImmutableBaseInductiveList <E> implements InductiveList<E> {
-	
+public abstract class ImmutableBaseInductiveList <E> implements InductiveList<E> {
+
 	/** The first node element of the list. */
-	private final Node<E> head;
+	protected final Node<E> head;
 
 	/** The last node element of the list. */
-	private final Node<E> last;
-	
+	protected final Node<E> last;
+
 	/** The number of elements in this list. */
-	private final int size;
+	protected final int size;
 
 
+	/**
+	 * Internal constructor which create a linked list given its attributes.
+	 *
+	 * @param head The first node of the list
+	 * @param last The last node of the list
+	 * @param size The size of the list
+	 */
 	public ImmutableBaseInductiveList(Node<E> head, Node<E> last, int size) {
 		this.head = head;
 		this.last = last;
 		this.size = size;
 	}
-	
+
+	/**
+	 * Create a empty linked list.
+	 */
+	public ImmutableBaseInductiveList() {
+		this(null, null, 0);
+	}
+
+	/**
+	 * Create a linked list containing the given elements in order.
+	 *
+	 * @param elems collection of elements to populate this list from
+	 * @throws NullPointerException if elems is null
+	 */
+	@SuppressWarnings("unchecked")
+	public ImmutableBaseInductiveList(Collection<E> elems) {
+		this((E[])elems.toArray());
+	}
+
+	/**
+	 * Create a linked list containing the given elements in order.
+	 *
+	 * @param elems the elements to populate this list from
+	 * @throws NullPointerException if elems is null
+	 */
+	@SuppressWarnings({"unchecked"})
+	public ImmutableBaseInductiveList(E... elems) {
+		if (elems == null)
+			throw new NullPointerException();
+
+		if (elems.length == 0) {
+			this.head = null;
+			this.last = null;
+			this.size = 0;
+			return;
+		}
+
+		Node<E> head = new Node<E>(elems[elems.length - 1]);
+		this.last = head;
+
+		for (int i = elems.length - 2 ; i >=0 ; --i)
+			head = new Node<E>(elems[i], head);
+
+		this.head = head;
+		this.size = elems.length;
+	}
+
+
+
+
+
 	/**
 	 * Returns the first node element of the list.
 	 *
 	 * @returns the first node element of the list.
 	 **/
-	private Node<E> headNode() {
+	protected Node<E> headNode() {
 		return head;
 	}
 
@@ -81,36 +141,36 @@ public  class ImmutableBaseInductiveList <E> implements InductiveList<E> {
 	 *
 	 * @returns the last node element of the list.
 	 **/
-	private Node<E> lastNode() {
+	protected Node<E> lastNode() {
 		return last;
 	}
 
-	private int size() {
+	protected int size() {
 		return size;
 	}
-	
+
 	@Override
-	public ImmutableCoreList<E> clone() { //TODO check static returned type.
-		return ImmutableCoreList.clone(this); //TODO check call
+	public InductiveList<E> clone() { 
+		return (InductiveList<E>) ImmutableCoreList.clone(this); 
 	}
-	
+
 	@Override
 	public boolean equals(Object o) {
-		return ImmutableCoreList.equals(this, o);//TODO check call to first background interface while InductiveList<E>
+		return ImmutableCoreList.equals(this, o);
 	}
-	
+
 	@Override
 	public int hashCode() {
-		return ImmutableCoreList.hashCode(this); //TODO check call to first background interface while InductiveList<E>
+		return ImmutableCoreList.hashCode(this);
 	}
-	
+
 	@Override
 	public InductiveList<E> cons(E elem) {
-		return new ImmutableBaseInductiveList<E>(new Node<E>(elem, headNode()),
-				  lastNode(),
-				  size() + 1);
+		return  create(new Node<E>(elem, headNode()),
+				lastNode(),
+				size() + 1);
 	} 
-	
+
 	@Override
 	public E head() throws NoSuchElementException { 
 		if (isEmpty())
@@ -118,26 +178,45 @@ public  class ImmutableBaseInductiveList <E> implements InductiveList<E> {
 		else
 			return headNode().getElement();
 	}
-	
-	@SuppressWarnings("unchecked")
+
+
 	@Override
 	public InductiveList<E> tail() {
+		if (isEmpty())
+			throw new UnsupportedOperationException();
+		else
+		{
+			final int fromIndex = 1;
+			final int toIndex = size();
+			if (fromIndex < 0 || toIndex > size())
+				throw new IndexOutOfBoundsException();
+				if (fromIndex > toIndex)
+				throw new IllegalArgumentException();
+				if (fromIndex == toIndex)
+				return new ImmutableLinkedList<E>();
 
-		int i = 1;
-		Node<E> node = headNode().getNext();
-		Node<E> subListHead = headNode().getNext();
+				int i = 0;
+				Node<E> node = headNode();
+				while (i != fromIndex) {
+				node = node.getNext();
+				++i;
+				}
+				Node<E> subListHead = node;
 
-		while (i != this.size-1) {
-			node = node.getNext();
-			++i;
+				while (i != toIndex-1) {
+				node = node.getNext();
+				++i;
+				}
+				Node<E> subListLast = node;
+
+				return create(subListHead,
+				subListLast,
+				toIndex - fromIndex);
 		}
-		Node<E> subListLast = node;
-
-		return new ImmutableBaseInductiveList<E>(subListHead,
-						  subListLast,
-						  this.size - 1);
 	}
-	
+
+	public abstract ImmutableLinkedList<E> create(Node<E> from, Node<E> head, int size);
+
 	@Override
 	public E last() throws NoSuchElementException {
 		if (isEmpty())
@@ -146,29 +225,23 @@ public  class ImmutableBaseInductiveList <E> implements InductiveList<E> {
 			return lastNode().getElement();
 	}
 
-	@Override
-	public ImmutableCoreList<E> create(E[] elems) {
-		return new ImmutableLinkedList<E>(elems);
-	}
 
-	@Override
-	public <F> ImmutableCoreList<F> create(Collection<F> elems) {
-		return new ImmutableLinkedList<F>(elems);
-	}
 
 	@Override
 	public Iterator<E> iterator() {
 		return new ImmutableLinkedListIterator();
 	}
 
+
+
 	@Override
 	public boolean isEmpty() {
 		return head==null;
 	}
-	
+
 	// Iterators & streams
 
-	class ImmutableLinkedListIterator implements Iterator<E> {
+	class ImmutableLinkedListIterator implements Iterator<E> { //TODO change name ?
 
 		/** Current node pointed by the iterator */
 		private Node<E> currentNode;
