@@ -1,11 +1,13 @@
 package collections.implementations;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import collections.interfaces.ImmutableCoreList;
 import collections.interfaces.InductiveList;
 
-public abstract class ImmutableAbstractInductiveList <E> implements InductiveList<E> {
+public  class ImmutableBaseInductiveList <E> implements InductiveList<E> {
 
 	@Override
 	public boolean isEmpty() {
@@ -44,6 +46,24 @@ public abstract class ImmutableAbstractInductiveList <E> implements InductiveLis
 	
 	@Override
 	public E last() throws NoSuchElementException { //TODO implementation class call an accessor method, check it.
+		return null;
+	}
+
+	@Override
+	public ImmutableCoreList<E> create(E[] elems) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <F> ImmutableCoreList<F> create(Collection<F> elems) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Iterator<E> iterator() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 }

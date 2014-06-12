@@ -1,9 +1,12 @@
 package collections.implementations;
 
+import java.util.Collection;
+import java.util.Iterator;
+
 import collections.interfaces.ImmutableCoreList;
 import collections.interfaces.IterativeList;
 
-public abstract class ImmutableAbstractIterativeList<E> implements IterativeList<E> 
+public  class ImmutableBaseIterativeList<E> implements IterativeList<E> 
 {
 	
 	@Override
@@ -24,6 +27,36 @@ public abstract class ImmutableAbstractIterativeList<E> implements IterativeList
 	@Override
 	public int hashCode() {
 		return ImmutableCoreList.hashCode(this);  //TODO check "this" validity (abstract class)
+	}
+
+	@Override
+	public ImmutableCoreList<E> create(E[] elems) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <F> ImmutableCoreList<F> create(Collection<F> elems) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isEmpty() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Iterator<E> iterator() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int size() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }
