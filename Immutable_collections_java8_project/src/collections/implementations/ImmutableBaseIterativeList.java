@@ -2,6 +2,7 @@ package collections.implementations;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import collections.interfaces.ImmutableCoreList;
 import collections.interfaces.IterativeList;
@@ -9,55 +10,99 @@ import collections.interfaces.IterativeList;
 
 public  class ImmutableBaseIterativeList<E> implements IterativeList<E> 
 {
+
+	private final E[] _array;
+	private final int _length;
+	
+	@SuppressWarnings("unchecked")
+	public ImmutableBaseIterativeList()
+	{
+		_array = (E[]) new Object[0];
+		_length = 0;
+	}
 	
 	@Override
 	public E get(int index) throws IndexOutOfBoundsException {
-		return null; //TODO refers to the implementation class
+		if (index < 0 || index >= size())
+			throw new IndexOutOfBoundsException();
+		if(index >=0 && index < size())
+			return _array[index];
+		else
+			return null;
 	}
 	
 	@Override
 	public boolean equals(Object o) {
-		return IterativeList.equals(this, o); //TODO check "this" validity (abstract class)
+		return IterativeList.equals(this, o); 
 	}
 
 	@Override
-	public ImmutableCoreList<E> clone() { //TODO check static returned type
-		return ImmutableCoreList.clone(this); //TODO check "this" validity (abstract class)
+	public ImmutableCoreList<E> clone() { 
+		return ImmutableCoreList.clone(this); 
 	}
 	
 	@Override
 	public int hashCode() {
-		return ImmutableCoreList.hashCode(this);  //TODO check "this" validity (abstract class)
+		return ImmutableCoreList.hashCode(this);
 	}
 
 	@Override
 	public ImmutableCoreList<E> create(E[] elems) {
-		// TODO Auto-generated method stub
-		return null;
+		return new ImmutableArrayList<E>(elems);
 	}
 
 	@Override
 	public <F> ImmutableCoreList<F> create(Collection<F> elems) {
-		// TODO Auto-generated method stub
-		return null;
+		return new ImmutableArrayList<F>(elems);
 	}
 
 	@Override
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return false;
+		return this._length==0;
 	}
 
 	@Override
 	public Iterator<E> iterator() {
-		// TODO Auto-generated method stub
-		return null;
+		return new ImmutableArrayListIterator();
 	}
 
 	@Override
 	public int size() {
-		// TODO Auto-generated method stub
-		return 0;
+		return _length;
 	}
 
+	class ImmutableArrayListIterator implements Iterator<E> {
+
+		/** Current node pointed by the iterator */
+		private int index;
+		private int size;
+
+		/**
+		 * Create a new iterator starting from the beginning of the list.
+		 */
+		public ImmutableArrayListIterator() {
+			index = 0;
+			size = size();
+		}
+
+		public boolean hasNext() {
+			return index <= size-1 ? true : false;
+		}
+
+		public E next() throws NoSuchElementException {
+			if(index >= size)
+					throw new NoSuchElementException();
+
+			E elem = _array[index];
+			++index;
+			return elem;
+		}
+
+		public void remove() throws
+		UnsupportedOperationException,
+		IllegalStateException {
+			throw new UnsupportedOperationException();
+		}
+	}
+	
 }
